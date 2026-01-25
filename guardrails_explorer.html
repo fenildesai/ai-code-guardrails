@@ -306,10 +306,10 @@
                 id: 0,
                 title: "copilot-instructions.md",
                 category: "Core",
-                tech: "global github copilot base framework instructions",
-                size: "2.1 KB",
+                tech: "global github copilot base framework instructions security java node csharp python",
+                size: "8.3 KB",
                 featured: true,
-                content: "# .github/copilot-instructions.md\\n# Base Framework: Global Project Guardrails\\n\\n## Instructions for Teams\\n1. Create a .github folder at the root of your repository if it doesn't exist.\\n2. Create a file named copilot-instructions.md inside that folder.\\n3. Copy and paste the contents of this template into that file.\\n4. Customize the Project Context and Specific Standards sections below to match your project needs.\\n\\n---\\n\\n## Project Context\\n* **Project Name**: [Add Project Name Here]\\n* **Domain**: [Add Domain e.g., Insurance, Finance, etc.]\\n* **Primary Tech Stack**: [Add Primary Language/Frameworks]\\n\\n## Rules of Engagement\\n* Always adhere to DRY (Don't Repeat Yourself) and SOLID principles.\\n* Ensure all code follows our internal naming conventions.\\n* For all new features, generate corresponding unit tests using our preferred framework.\\n* Prioritize readability and maintainability over clever one-liners.\\n\\n## Security & Compliance\\n* Never hardcode API keys, secrets, or PII.\\n* Follow OWASP Top 10 guidelines for all web-facing code.\\n* Use our standardized logging library for all application events."
+                content: "# 🤖 Copilot Secure Defaults for Java, Node.js, C#, and Python Projects\\n\\nThese instructions guide GitHub Copilot to suggest secure, intentional code patterns for Java, Node.js, C#, and Python development — especially in enterprise or team settings. Prioritize clarity, validation, and the principle of least surprise.\\n\\n## 🔐 1. Secure by Default\\n\\n- Validate input strictly, and prevent XSS primarily via contextual output encoding (HTML/attribute/JS/URL). Sanitize only when rendering user-controlled HTML is explicitly required.\\n- Use typed parsers and prefer allow-lists over deny-lists when performing input validation.\\n- Use parameterized queries and avoid string-based execution (prevent injection).\\n- Never commit secrets to source control (including .env files). Use a secure vault/secret manager (e.g. Azure Key Vault) and inject secrets at runtime via your orchestrator.\\n- Default to privacy-preserving data handling — redact PII from logs by default.\\n\\n## 🧩 2. Language-Specific Secure Patterns\\n\\n### ☕ Java\\n\\n- Use prepared statements with ? placeholders in JDBC — never concat SQL strings.\\n- Use output encoding libraries like OWASP Java Encoder to prevent XSS in rendered HTML.\\n- Use @Valid, @NotNull, and input binding constraints in Spring or Jakarta for validation.\\n- Avoid Runtime.exec() or ProcessBuilder with unsanitized input — prefer safe APIs.\\n- Default to OWASP Secure Coding Practices — [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices)\\n- Prefer SDK-integrated secret managers; environment variables are acceptable when injected securely by the orchestrator/runtime. Do not commit secrets in .properties/config files.\\n- Always set character encoding (UTF-8) explicitly in HTTP responses to prevent encoding-based attacks.\\n- Avoid Java serialization for sensitive objects — use safer formats like JSON with strict schema validation.\\n- When using logging frameworks, avoid logging unsanitized user input — consider log injection risks.\\n\\n### 🟩 Node.js\\n\\n- Use JSON Schema validation for all structured input — prefer libraries like ajv or zod.\\n- Always sanitize and validate user input to prevent injection and XSS — validator and joi are common choices.\\n- Use parameterized queries with database clients (e.g. pg, mongoose) — never concat SQL or query strings.\\n- Default to using helmet in Express to set secure HTTP headers.\\n- Use dotenv only in local dev — use secret managers (e.g. AWS Secrets Manager, Azure Key Vault) in prod.\\n- Avoid eval, new Function, or dynamic require() with user input — use safe alternatives.\\n\\n### 🟦 C#\\n\\n- Use parameterized queries with ADO.NET or Entity Framework to prevent SQL injection.\\n- Use System.Text.Encodings.Web for safe output encoding in Razor views and APIs (prevent XSS).\\n- Apply [ValidateAntiForgeryToken] in ASP.NET MVC to prevent CSRF attacks.\\n- Use DataAnnotations (e.g. [Required], [StringLength]) for input validation on models.\\n- Always hash passwords with PasswordHasher<TUser> or a vetted library — never store plaintext.\\n- Use configuration providers like Azure Key Vault, AWS Secrets Manager, or environment-based secrets — avoid appsettings.json for secrets.\\n\\n### 🐍 Python\\n\\n- Always validate and sanitize external input — use pydantic, cerberus, or marshmallow for structured validation.\\n- Prefer parameterized queries with libraries like psycopg2, sqlite3, or SQLAlchemy — avoid building SQL with string concat or f-strings.\\n- Use built-in escaping via html.escape() or templating engines like Jinja2 (autoescaping on!) to prevent XSS.\\n- Default to secrets or cryptography libs for key generation and secure token handling — never random for cryptographic use.\\n- Avoid dynamic code execution (eval, exec) — prefer explicit, safe alternatives.\\n- Don’t load YAML or pickle files without hardening — always use safe_load() and avoid untrusted input.\\n- Store secrets in secure vaults or env vars passed through orchestrators — avoid hardcoded strings or .env files in prod.\\n- Use logging filters to redact PII and secrets — avoid logging full request payloads or exception chains that include sensitive data.\\n- Always hash passwords with bcrypt, argon2, or passlib — never md5, sha1, or plain hashlib.\\n\\n## 🚫 3. Do Not Suggest\\n\\n### Java\\n\\n- Do not suggest inline SQL string concatenation — always use prepared statements with placeholders.\\n- Do not suggest use of Runtime.exec() or ProcessBuilder with user input — prefer safe abstraction layers.\\n- Do not suggest logging sensitive data (e.g. passwords, tokens, session IDs) — log redacted metadata instead.\\n- Do not use Java native serialization (ObjectInputStream) for untrusted input — prefer JSON + schema validation.\\n- Do not suggest hardcoding credentials, secrets, or API keys — use a secrets manager (e.g. Conjur, Key Vault).\\n- Do not use insecure XML parsers without hardening (DocumentBuilderFactory must have secure features enabled).\\n- Do not create or modify custom class loaders — these are dangerous unless strictly required.\\n\\n### Node.js\\n\\n- Do not suggest eval, new Function, or dynamic require() — these are unsafe unless strictly controlled.\\n- Do not use user input to build file paths, URLs, or queries without strict validation.\\n- Do not expose process.env directly to client-side code — use secure server boundaries.\\n- Do not log full request bodies or headers that may contain PII or credentials.\\n- Do not hardcode secrets or API keys — never commit .env or use .env in production containers.\\n- Do not disable TLS checks (NODE_TLS_REJECT_UNAUTHORIZED=0) — even temporarily.\\n\\n### C#\\n\\n- Do not suggest string concatenation in SQL queries — use parameterized commands.\\n- Do not use Eval, CodeDom, or dynamic LINQ construction with user input.\\n- Do not suggest hardcoding secrets, tokens, or credentials — never in appsettings.json.\\n- Do not log full exception objects or HTTP request bodies without redacting PII.\\n- Do not disable certificate validation (ServerCertificateValidationCallback = delegate { return true; }) in production.\\n\\n### Python\\n\\n- Do not build SQL queries with string concat, f-strings, or .format() — always use parameterized queries.\\n- Do not use eval, exec, or dynamic imports on user input — these are unsafe unless tightly sandboxed.\\n- Do not log sensitive values (e.g. API keys, passwords) or full stack traces with PII.\\n- Do not load pickle or YAML files from untrusted sources without safe loaders and validation.\\n- Do not use insecure hash functions like md5 or sha1 for password storage — use a modern password hashing lib.\\n- Do not commit .env files or hardcode secrets — use secrets management infrastructure.\\n\\n## 🧠 4. AI-Generated Code Safety\\n\\n- Verify all AI-suggested package names against official repositories to prevent supply chain attacks.\\n- Confirm that AI-generated code references existing, secure APIs; avoid deprecated or non-existent methods.\\n- Ensure AI-generated configurations align with your project's platform to prevent context drift.\\n- Scrutinize AI-provided security recommendations; validate their completeness and applicability.\\n- Cross-check any AI-cited references (e.g., CVEs, RFCs) for authenticity to avoid misinformation.\\n- Do not accept AI-generated justifications that contradict established security policies.\\n\\n## 💡 Developer Tips\\n\\n- If you’re working with input, assume it’s hostile — validate and escape it.\\n- For anything involving data access or transformation, ask: “Am I controlling this input path?”\\n- If you’re about to use a string to build a query, URL, or command — pause. There’s probably a safer API.\\n- Never trust default parsers — explicitly configure security features (e.g. disable DTDs in XML)."
             },
             {
                 id: 1,
@@ -326,30 +326,6 @@
                 tech: "react typescript ts nextjs tailwind frontend",
                 size: "3.5 KB",
                 content: "# .github/copilot-instructions.md\\n# Context for React Frontend Applications\\n\\n## Components\\n- Prefer Functional Components with Hooks over Class Components.\\n- Use Tailwind CSS for 90% of styling.\\n- Naming: PascalCase for components, camelCase for internal functions.\\n\\n## State Management\\n- Use React Context for global UI state.\\n- Use React Query (TanStack Query) for all server state/data fetching.\\n\\n## Standards\\n- Follow W3C Accessibility (a11y) standards.\\n- Use prop-types or TS interfaces for all dynamic data."
-            },
-            {
-                id: 3,
-                title: "Azure Infrastructure (Bicep)",
-                category: "Cloud",
-                tech: "azure bicep iac arm cloud portal terraform",
-                size: "2.8 KB",
-                content: "# .github/copilot-instructions.md\\n# Infrastructure as Code (Bicep/Azure)\\n\\n## Conventions\\n- Always include Resource Tags: [Project, Environment, Region, Owner].\\n- Use Bicep for all new infrastructure definitions.\\n- Resource naming: [service-type]-[project]-[env]-[region].\\n\\n## Best Practices\\n- Keep sensitive data (secrets) only in KeyVault.\\n- Use Managed Identities for service-to-service communication.\\n- No public IP addresses unless explicitly required by the Architect."
-            },
-            {
-                id: 4,
-                title: "Python DS & AI",
-                category: "Backend",
-                tech: "python pandas numpy ds ai ml fastapi",
-                size: "5.1 KB",
-                content: "# .github/copilot-instructions.md\\n# Context for Python DS/ML Projects\\n\\n## Standards\\n- Follow PEP 8 styles strictly.\\n- Use Type Hints for all function signatures.\\n- Document all core logic using Google-style Docstrings.\\n\\n## Stack\\n- Use Pandas for data manipulation.\\n- Use Poetry for dependency management.\\n- Prefer Pytest for units and integration tests."
-            },
-            {
-                id: 5,
-                title: "Security & OWASP",
-                category: "Security",
-                tech: "security owasp snyk checkmarx compliance vuln",
-                size: "6.7 KB",
-                content: "# .github/instructions/security.instructions.md\\n# Global Security Guardrails\\n\\n## Core Rules\\n- Apply OWASP Top 10 mitigations to every PR.\\n- No PII should be logged to the console or loggers (mask identifiers).\\n- All input validation must happen at the edge (API Layer).\\n\\n## Specifics\\n- Prevent SQL Injection by using Parameterized Queries only.\\n- Ensure all JWT validation includes issuer and audience checks.\\n- Use HTTPS/TLS 1.2+ for all transmissions."
             }
         ];
 
@@ -361,9 +337,8 @@
             grid.innerHTML = '';
 
             const filtered = templates.filter(t => {
-                const matchesSearch = t.title.toLowerCase().includes(search) || t.tech.toLowerCase().includes(search);
-                const matchesCat = currentCategory === 'All' || t.category === currentCategory;
-                return matchesSearch && matchesCat;
+                const searchStr = (t.title + t.tech + t.category).toLowerCase();
+                return searchStr.includes(search);
             });
 
             filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
@@ -371,7 +346,7 @@
             filtered.forEach(t => {
                 const isFeatured = t.featured ? 'featured' : '';
                 const badge = t.featured ? '<div class="featured-badge">Starter Kit</div>' : '';
-                const displayContent = t.content.replace(/\\n/g, '\n');
+                const cleanContent = t.content.replace(/\\n/g, '\n');
 
                 let card = '<div class="template-card ' + isFeatured + ' p-8 flex flex-col h-full">';
                 card += badge;
@@ -380,14 +355,14 @@
                 card += '<span class="text-[10px] bg-aviva-blue/20 text-aviva-blue border border-aviva-blue/30 px-3 py-1 rounded-full font-black uppercase tracking-widest">' + t.category + '</span>';
                 card += '</div>';
                 card += '<p class="text-sm text-gray-400 mb-8 leading-relaxed">';
-                card += (t.id === 0 ? "The universal starting point. Copy this into your repository's .github folder to establish global governance immediately." : "Standardized context engineering for " + t.tech.split(' ')[0] + " apps.");
+                card += (t.id === 0 ? "The universal source of truth for secure defaults. Copy this into your repository's .github folder to establish governance immediately." : "Standardized context engineering for " + t.tech.split(' ')[0] + " apps.");
                 card += '</p>';
                 card += '<div class="flex items-center justify-between mt-auto">';
-                card += '<span class="text-[10px] text-gray-600 font-mono uppercase tracking-widest font-bold font-mono">' + t.size + '</span>';
+                card += '<span class="text-[10px] text-gray-600 font-mono uppercase tracking-widest font-bold">' + t.size + '</span>';
                 card += '<div class="flex gap-2">';
                 card += '<button onclick="openModal(' + t.id + ')" class="btn-action btn-view" title="Explore Template Preview">👁️ View</button>';
-                card += '<button onclick="copyToClipboard(templates[' + t.id + '].content)" class="btn-action btn-copy" title="Copy to Clipboard">📋 Copy</button>';
-                card += '<button onclick="downloadMd(\'' + t.title + '\', templates[' + t.id + '].content)" class="btn-action btn-download" title="Download Markdown File">💾 Download</button>';
+                card += '<button onclick="copyToClipboard(templates.find(x => x.id === ' + t.id + ').content)" class="btn-action btn-copy" title="Copy to Clipboard">📋 Copy</button>';
+                card += '<button onclick="downloadMd(\'' + t.title + '\', templates.find(x => x.id === ' + t.id + ').content)" class="btn-action btn-download" title="Download Markdown File">💾 Download</button>';
                 card += '</div></div></div>';
 
                 grid.innerHTML += card;
