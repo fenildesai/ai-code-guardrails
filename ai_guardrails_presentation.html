@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Guardrails | Context Engineering for the Enterprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #030712;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-highlight {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: -20%;
+            left: 20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #1e1e1e;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 4px solid #a78bfa;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .primitive-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .primitive-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(139, 92, 246, 0.05);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold tracking-tight">AI <span class="text-indigo-400">Code Guardrails</span></div>
+            <div class="hidden md:flex space-x-8 text-sm text-gray-400">
+                <a href="#struggle" class="hover:text-white transition">The Struggle</a>
+                <a href="#primitives" class="hover:text-white transition">Primitives</a>
+                <a href="#usecases" class="hover:text-white transition">Use Cases</a>
+                <a href="#roi" class="hover:text-white transition">ROI</a>
+            </div>
+            <div class="px-4 py-2 bg-indigo-600 rounded-full text-xs font-bold text-white uppercase tracking-widest">
+                Leadership Briefing</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center text-center px-6 pt-20">
+        <div class="hero-glow"></div>
+        <div class="max-w-4xl mx-auto animate__animated animate__fadeInUp">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-bold uppercase tracking-wide mb-8">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Standardize. Secure. Scale.
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight">
+                Context-Driven <span class="gradient-text">Excellence</span>
+            </h1>
+            <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Generic AI is a productivity trap. Transforming generic prompts into
+                <span class="text-white font-semibold">Strategic Guardrails</span> starts with
+                <span class="text-indigo-400 underline decoration-indigo-500/30 underline-offset-8">Context
+                    Engineering</span>.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#struggle"
+                    class="px-8 py-4 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition duration-300 shadow-xl">
+                    See the Challenge
+                </a>
+                <a href="#primitives"
+                    class="px-8 py-4 glass text-white rounded-lg font-bold hover:bg-gray-800 transition duration-300">
+                    Explore Primitives
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- The Reality Sink (Developer Struggle) -->
+    <section id="struggle" class="py-24 relative overflow-hidden bg-gray-900/30">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="md:w-1/2">
+                    <h2 class="text-4xl font-bold mb-6">The <span class="text-red-400">Reality Sink</span></h2>
+                    <p class="text-gray-400 text-lg mb-8">
+                        When developers use "Generic AI", they face a **Productivity Paradox**. The AI suggests code
+                        that is functionally correct but architecturally <u>unacceptable</u>.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass p-6 rounded-xl border-l-4 border-red-500">
+                            <div class="text-3xl mb-2">🐢</div>
+                            <h4 class="font-bold text-white mb-1">Double Work</h4>
+                            <p class="text-xs text-gray-500">Reviewing and correcting AI suggestions takes longer than
+                                writing from scratch.</p>
+                        </div>
+                        <div class="glass p-6 rounded-xl border-l-4 border-red-500">
+                            <div class="text-3xl mb-2">📉</div>
+                            <h4 class="font-bold text-white mb-1">Drift</h4>
+                            <p class="text-xs text-gray-500">Teams slowly diverge from corporate standards as AI
+                                prioritizes generic patterns.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 glass p-8 rounded-3xl border border-gray-800">
+                    <div class="text-center mb-8">
+                        <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">The Quality Trap</h4>
+                        <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-red-500 h-full w-[70%]" title="Generic Accuracy"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-[10px] text-gray-500">
+                            <span>0% TRUST</span>
+                            <span>GENERIC AI (70% CORRECT)</span>
+                            <span>100% GUARDRAILS</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                            <p class="text-xs text-red-200">"AI generated JUnit tests for our xUnit project."</p>
+                            <p class="text-[10px] text-red-500 mt-1">Found in sprint retrospective</p>
+                        </div>
+                        <div class="p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                            <p class="text-xs text-red-200">"AI suggested hardcoded credentials because it didn't know
+                                about our KeyVault policy."</p>
+                            <p class="text-[10px] text-red-500 mt-1">Caught by human review (late)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Context Engineering Primitives Grid -->
+    <section id="primitives" class="py-24 bg-black">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Context Engineering <span class="text-indigo-400">Primitives</span>
+                </h2>
+                <p class="text-gray-500 max-w-2xl mx-auto italic">The strategic components that transform generic AI
+                    into an Enterprise Assistant.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Instructions -->
+                <div class="glass p-8 rounded-2xl primitive-card">
+                    <div class="text-xs font-black text-indigo-400 mb-4 uppercase tracking-tighter">Rules of Engagement
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Custom Instructions</h3>
+                    <p class="text-gray-400 text-sm mb-6">Always-on guidelines that influence every interaction.
+                        Defining the "Constitution" of our code.</p>
+                    <ul class="text-xs space-y-2 text-gray-500 mb-6">
+                        <li>• Coding Standards</li>
+                        <li>• Architectural Layering</li>
+                        <li>• Documentation Specs</li>
+                    </ul>
+                    <div class="text-[10px] font-mono p-2 bg-indigo-500/5 text-indigo-300 rounded">*.instructions.md
+                    </div>
+                </div>
+
+                <!-- Prompts -->
+                <div class="glass p-8 rounded-2xl primitive-card">
+                    <div class="text-xs font-black text-blue-400 mb-4 uppercase tracking-tighter">Executable Commands
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Reusable Prompts</h3>
+                    <p class="text-gray-400 text-sm mb-6">Specific task templates ready for execution. Transforming
+                        complex workflows into single actions.</p>
+                    <ul class="text-xs space-y-2 text-gray-500 mb-6">
+                        <li>• Fix Sonar Code Smells</li>
+                        <li>• Increase Test Coverage</li>
+                        <li>• Atomic Commit Gen</li>
+                    </ul>
+                    <div class="text-[10px] font-mono p-2 bg-blue-500/5 text-blue-300 rounded">*.prompts.md</div>
+                </div>
+
+                <!-- Agents -->
+                <div class="glass p-8 rounded-2xl primitive-card">
+                    <div class="text-xs font-black text-purple-400 mb-4 uppercase tracking-tighter">Personas & Workflows
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Custom Agents</h3>
+                    <p class="text-gray-400 text-sm mb-6">Specialized assistants with unique scopes and tool access for
+                        deep-dive efforts.</p>
+                    <ul class="text-xs space-y-2 text-gray-500 mb-6">
+                        <li>• @API-Architect</li>
+                        <li>• @Security-Auditor</li>
+                        <li>• @SRE-Debugger</li>
+                    </ul>
+                    <div class="text-[10px] font-mono p-2 bg-purple-500/5 text-purple-300 rounded">*.agents.md</div>
+                </div>
+
+                <!-- Skills -->
+                <div class="glass p-8 rounded-2xl primitive-card">
+                    <div class="text-xs font-black text-green-400 mb-4 uppercase tracking-tighter">Specialized Toolkits
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Agent Skills</h3>
+                    <p class="text-gray-400 text-sm mb-6">Extended capabilities teaching the AI to interact with
+                        external enterprise systems.</p>
+                    <ul class="text-xs space-y-2 text-gray-500 mb-6">
+                        <li>• Azure FinOps / NuGet</li>
+                        <li>• Resource Visualizer</li>
+                        <li>• Structural Refactoring</li>
+                    </ul>
+                    <div class="text-[10px] font-mono p-2 bg-green-500/5 text-green-300 rounded">Agent Skills API</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="usecases" class="py-24 glass">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center">Enterprise <span class="gradient-text">Guardrails</span> in
+                Action</h2>
+
+            <div class="grid md:grid-cols-3 gap-12">
+                <!-- Case 1: Code Review -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-3xl">🛡️</div>
+                    <h3 class="text-xl font-bold">Automated Code Review</h3>
+                    <p class="text-gray-400 text-sm italic">"The Virtual Senior Lead"</p>
+                    <p class="text-gray-500 text-xs">AI performs instant first-pass reviews using Project Context. It
+                        catches architectural drift and naming violations before a human reviewer even opens the PR.</p>
+                </div>
+
+                <!-- Case 2: Tech Debt -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-3xl">🧹</div>
+                    <h3 class="text-xl font-bold">Tech Debt Liquidation</h3>
+                    <p class="text-gray-400 text-sm italic">"SonarQube's Best Friend"</p>
+                    <p class="text-gray-500 text-xs">Transform reports into fixes. Use custom prompts to automatically
+                        refactor code smells and technical debt identified by SonarQube.</p>
+                </div>
+
+                <!-- Case 3: Security -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-3xl">🔐</div>
+                    <h3 class="text-xl font-bold">Shift-Left Security</h3>
+                    <p class="text-gray-400 text-sm italic">"Hardening at the Source"</p>
+                    <p class="text-gray-500 text-xs">Enforce Checkmarx and Snyk policies during development. The AI
+                        refuses insecure patterns and auto-suggests patches for identified vulnerabilities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI / Value Proposition -->
+    <section id="roi" class="py-24 bg-gradient-to-t from-indigo-950/20 to-black">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-16 uppercase tracking-widest text-gray-400">The Business Value</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-10 rounded-2xl bg-gray-900/50 border border-gray-800">
+                    <div class="text-5xl font-black text-indigo-400 mb-2">50%</div>
+                    <div class="text-sm font-bold uppercase tracking-widest text-gray-500">Review Efficiency</div>
+                    <p class="text-xs text-gray-600 mt-4">catching basic errors instantly allows human leads to focus on
+                        logic and high-level strategy.</p>
+                </div>
+                <div class="p-10 rounded-2xl bg-gray-900/50 border border-gray-800">
+                    <div class="text-5xl font-black text-green-400 mb-2">ZERO</div>
+                    <div class="text-sm font-bold uppercase tracking-widest text-gray-500">Context Drift</div>
+                    <p class="text-xs text-gray-600 mt-4">Every developer's assistant shares the same "Enterprise
+                        Memory", ensuring uniform code quality across all teams.</p>
+                </div>
+                <div class="p-10 rounded-2xl bg-gray-900/50 border border-gray-800">
+                    <div class="text-5xl font-black text-blue-400 mb-2">95%</div>
+                    <div class="text-sm font-bold uppercase tracking-widest text-gray-500">First-Time Right</div>
+                    <p class="text-xs text-gray-600 mt-4">Moving from generic chat to context-aware commands eliminates
+                        the "Correction Loop".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-900 text-center text-gray-600 text-sm">
+        <p class="mb-2">AI Code Guardrails Initiative • Standardizing the Future</p>
+        <p>&copy; 2026 Enterprise Eng Operations</p>
+    </footer>
+
+</body>
+
+</html>
