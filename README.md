@@ -1,49 +1,36 @@
-# 🏏 AI-Powered PR Reviewer for Azure DevOps
+# AI Code Guardrails: Context Engineering for the Enterprise
 
-[![Azure DevOps](https://img.shields.io/badge/Azure_DevOps-0078D7?style=for-the-badge&logo=azure-devops&logoColor=white)](https://dev.azure.com)
-[![PowerShell](https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
-[![Azure OpenAI](https://img.shields.io/badge/Azure_OpenAI-00A4EF?style=for-the-badge&logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+Welcome to the **AI-Powered Code Guardrails** framework. This repository contains the strategic narrative and the practical tools required to move from "Fragile Prompting" to "Durable Context Engineering".
 
-## 📋 Summary
-An automated Pull Request review system integrated directly into **Azure DevOps pipelines** using **PowerShell**, leveraging **Azure OpenAI** to provide intelligent implementation feedback and code quality checks.
+## 🚀 Key Assets
 
----
+### 1. Leadership Briefing
+*   **File**: `index.html`
+*   **Purpose**: A high-impact presentation designed for stakeholders and engineering leaders.
+*   **Narrative**: Focuses on the "3 Pillars of Context Engineering" and the evolution of AI strategy.
+*   **Live URL**: [https://fenildesai.github.io/ai-code-guardrails/](https://fenildesai.github.io/ai-code-guardrails/)
 
-## 🚩 Problem
-Manual code reviews are essential but face significant challenges:
-*   **Time Consuming:** Delays in feedback loops slow down the entire development cycle.
-*   **Human Fatigue:** Reviewers miss subtle bugs or style violations after long hours.
-*   **Context Switching:** Architectural standards documented in markdown files are frequently overlooked.
-*   **Inconsistency:** Different reviewers apply different standards.
+### 2. Guardrails Explorer
+*   **File**: `guardrails_explorer.html`
+*   **Purpose**: A central hub for developers to explore, copy, and download Guardrail templates.
+*   **Starter Kit**: Includes the universal `copilot-instructions.md` for easy onboarding.
+*   **Supported Tech**: .NET, React, Python, Azure, Security, and more.
 
-## 💡 Solution
-We introduce a **"Direct Pipeline"** integration:
-*   **Runtime:** A lightweight PowerShell script running within the PR validation build.
-*   **Context Aware:** Automatically reads `project_context.md` to understand *your* specific architectural rules.
-*   **Smart Analysis:** Identifies changes via `git diff` and queries Azure OpenAI with a tailored prompt.
-*   **Automated Feedback:** Posts constructive comments directly to the Azure DevOps PR threads.
+## 🛡️ What is Context Engineering?
+Context engineering is the evolution of prompt engineering. It’s focused less on clever phrasing and more on **“bringing the right information (in the right format) to the LLM.”**
 
----
+### The 4 Techniques:
+1.  **Custom Instructions**: The Rules.
+2.  **Reusable Prompts**: The Commands.
+3.  **Custom Agents**: The Personas.
+4.  **Agent Skills**: The Tools.
 
-## 🏗️ High Level Architecture
-
-1.  **Trigger:** 👤 Developer raises a Pull Request in Azure DevOps.
-2.  **Pipeline:** 🚀 The PR Build Pipeline triggers (YAML).
-3.  **Checkout:** 📥 Agent checks out source code & documentation.
-4.  **Analysis:** 🧠 PowerShell script reads context & diffs.
-5.  **AI:** 🤖 Payload sent to Azure OpenAI API.
-6.  **Loop:** 💬 Comments posted back to PR via ADO REST API.
-
-![High Level Architecture](architecture.png)
+## 🛠️ Getting Started (The Base Framework)
+1.  Visit the **[Guardrails Explorer](https://fenildesai.github.io/ai-code-guardrails/guardrails_explorer.html)**.
+2.  Locate the **"Starter Kit"** card.
+3.  Download or Copy the `copilot-instructions.md` file.
+4.  Add it to your repo's `.github/` folder.
+5.  Standardize your AI interactions instantly.
 
 ---
-
-## 🚀 Business Benefits
-
-| Benefit | Impact |
-| :--- | :--- |
-| **Speed** | ⚡ **~30% faster** approval cycles via instant feedback. |
-| **Quality** | 🛡️ **Consistent** application of architectural standards. |
-| **Cost** | 💰 **Low Cost** - uses existing pipeline minutes, no extra Azure resources. |
-| **Context** | 📚 **Smarter than Linting** - understands documentation intent. |
+*Standardize. Secure. Scale.* • **Bamboo-GI 2026**
