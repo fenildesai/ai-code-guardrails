@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Code Guardrails</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --aviva-blue: #004fb6;
+            --aviva-yellow: #ffcc00;
+            --white: #ffffff;
+            --gray-bg: #f8f9fb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gray-bg);
+            color: #2d3748;
+            scroll-behavior: smooth;
+        }
+
+        .bg-aviva-blue {
+            background-color: var(--aviva-blue);
+        }
+
+        .text-aviva-blue {
+            color: var(--aviva-blue);
+        }
+
+        .bg-aviva-yellow {
+            background-color: var(--aviva-yellow);
+        }
+
+        .hero-section {
+            background: var(--aviva-blue);
+            color: var(--white);
+        }
+
+        .accent-bar {
+            width: 80px;
+            height: 8px;
+            background: var(--aviva-yellow);
+            margin-bottom: 2rem;
+        }
+
+        .impact-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-top: 6px solid var(--aviva-yellow);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: transform 0.2s;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .problem-text {
+            color: #e53e3e;
+            font-weight: 600;
+        }
+
+        .check-icon {
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .pill {
+            background: rgba(0, 79, 182, 0.05);
+            color: var(--aviva-blue);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-family: monospace;
+        }
+
+        .solution-highlight {
+            border-left: 4px solid var(--aviva-blue);
+            padding-left: 1.5rem;
+        }
+
+        /* Tab Styles */
+        .tab-btn {
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 4px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: var(--aviva-yellow);
+            color: var(--aviva-blue);
+        }
+
+        .code-container {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 0 0 12px 12px;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav
+        class="bg-white py-6 px-8 md:px-16 border-b-2 border-gray-100 flex justify-between items-center fixed w-full z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-aviva-blue p-2 rounded">
+                <div class="w-5 h-5 bg-aviva-yellow rounded-sm"></div>
+            </div>
+            <span class="font-bold text-xl text-aviva-blue uppercase tracking-tight">AI-Powered Code Guardrails</span>
+        </div>
+        <div class="hidden md:flex gap-6 text-[10px] font-black uppercase tracking-widest text-gray-400">
+            <a href="#struggle" class="hover:text-aviva-blue">Problem</a>
+            <a href="#evolution" class="hover:text-aviva-blue">Evolution</a>
+            <a href="#pillars" class="hover:text-aviva-blue">Techniques</a>
+            <a href="#getstarted" class="hover:text-aviva-blue">Get Started</a>
+        </div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-gray-400"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section min-h-[60vh] flex items-center px-8 md:px-16 pt-24">
+        <div class="max-w-4xl">
+            <div class="accent-bar"></div>
+            <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight">
+                Want better AI outputs? <br>
+                <span class="text-aviva-yellow">Try Context Engineering.</span>
+            </h1>
+            <p class="text-xl md:text-2xl font-light text-blue-100 leading-relaxed max-w-2xl">
+                Context engineering is quickly becoming one of the most important ways developers shape, guide, and
+                improve AI-assisted development.
+            </p>
+        </div>
+    </header>
+
+    <!-- Section 1: The Struggle -->
+    <section id="struggle" class="py-24 px-8 md:px-16 bg-white">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2
+                    class="text-3xl font-bold text-aviva-blue mb-6 underline decoration-aviva-yellow decoration-4 underline-offset-8 uppercase tracking-wide">
+                    The Developer Struggle</h2>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed italic">
+                    "I asked Copilot to write a service, but it used the wrong library version and ignored our security
+                    standards. I spent 20 minutes fixing it."
+                </p>
+                <div class="space-y-4 text-sm text-gray-700">
+                    <p>Generic AI only knows the public internet. It doesn't know <strong>Our</strong> standards,
+                        <strong>Our</strong> architecture, or <strong>Our</strong> unique business logic.
+                    </p>
+                    <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                        <p class="font-semibold text-red-700">The Friction: 30% of AI-assisted time is spent on "Loop
+                            Correction"—telling the AI what it should have already known.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-10 rounded-2xl border border-gray-100 text-center">
+                <div class="text-6xl font-black text-aviva-blue mb-4">90%</div>
+                <div class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">of AI failure is Context
+                    failure</div>
+                <p class="text-sm text-gray-500 italic">"When AI has the wrong context, it solves the wrong problem
+                    flawlessly."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: The Evolution -->
+    <section id="evolution" class="py-24 bg-aviva-blue text-white px-8 md:px-16">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-black mb-10 text-aviva-yellow uppercase tracking-wide">The Evolution of AI Strategy
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 text-left">
+                <div class="opacity-60">
+                    <h4 class="text-aviva-yellow font-bold uppercase text-xs tracking-widest mb-2">Phase 1: Prompt
+                        Engineering</h4>
+                    <p class="text-sm leading-relaxed">Focuses on "Clever Phrasing". It relies on the developer's
+                        ability to ask the right way every single time. <strong>(Fragile & Unscalable)</strong></p>
+                </div>
+                <div class="scale-105 border-l-4 border-aviva-yellow pl-6">
+                    <h4 class="text-aviva-yellow font-bold uppercase text-xs tracking-widest mb-2">Phase 2: Context
+                        Engineering</h4>
+                    <p class="text-sm leading-relaxed">Focuses on "Right Information". Bringing the data, standards, and
+                        rules to the AI in the right format automatically. <strong>(Durable & Trusted)</strong></p>
+                </div>
+            </div>
+            <div class="mt-16 p-8 bg-white/5 rounded-2xl border border-white/10 italic text-lg text-blue-100">
+                "Context engineering is focused less on clever phrasing and more on bringing the right information (in
+                the right format) to the LLM."
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: The 4 Techniques -->
+    <section id="pillars" class="py-24 px-8 md:px-16 container mx-auto">
+        <h2 class="text-3xl font-black text-aviva-blue text-center mb-16 uppercase tracking-wide">The 4 Techniques of
+            Context Engineering</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <!-- Card 1: Instructions -->
+            <div class="impact-card p-8">
+                <div class="text-[10px] font-black text-aviva-blue uppercase mb-4 opacity-40 tracking-widest">The Rules
+                </div>
+                <h3 class="text-xl font-bold mb-2">Custom Instructions</h3>
+                <p class="text-[13px] text-gray-500 mb-6 italic">"Give Copilot the rules it should follow."</p>
+                <div class="flex-grow">
+                    <ul class="text-[13px] space-y-3 text-gray-700 mb-6">
+                        <li><span class="check-icon">✓</span> Coding conventions</li>
+                        <li><span class="check-icon">✓</span> Language/Naming standards</li>
+                        <li><span class="check-icon">✓</span> Documentation style</li>
+                    </ul>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                    <span class="pill">.github/copilot-instructions.md</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Prompts -->
+            <div class="impact-card p-8">
+                <div class="text-[10px] font-black text-aviva-blue uppercase mb-4 opacity-40 tracking-widest">The
+                    Commands</div>
+                <h3 class="text-xl font-bold mb-2">Reusable Prompts</h3>
+                <p class="text-[13px] text-gray-500 mb-6 italic">"Standardize your common workflows."</p>
+                <div class="flex-grow">
+                    <ul class="text-[13px] space-y-3 text-gray-700 mb-6">
+                        <li><span class="check-icon">✓</span> Automated Code Reviews</li>
+                        <li><span class="check-icon">✓</span> Unit Test Generation</li>
+                        <li><span class="check-icon">✓</span> Technical Debt Resolution</li>
+                        <li><span class="check-icon">✓</span> Create Documentation</li>
+                    </ul>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                    <span class="pill">*.prompts.md</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Agents -->
+            <div class="impact-card p-8">
+                <div class="text-[10px] font-black text-aviva-blue uppercase mb-4 opacity-40 tracking-widest">The
+                    Personas</div>
+                <h3 class="text-xl font-bold mb-2">Custom Agents</h3>
+                <p class="text-[13px] text-gray-500 mb-6 italic">"Create task-specific AI personas."</p>
+                <div class="flex-grow">
+                    <ul class="text-[13px] space-y-3 text-gray-700 mb-6">
+                        <li><span class="check-icon">✓</span> Security Review Expert (Checkmarx, Sonar)</li>
+                        <li><span class="check-icon">✓</span> PRD Agent (Requirements → Code)</li>
+                        <li><span class="check-icon">✓</span> Performance Optimizer</li>
+                        <li><span class="check-icon">✓</span> Code Migration Specialist</li>
+                    </ul>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                    <span class="pill">*.agents.md</span>
+                </div>
+            </div>
+
+            <!-- Card 4: Skills -->
+            <div class="impact-card p-8">
+                <div class="text-[10px] font-black text-aviva-blue uppercase mb-4 opacity-40 tracking-widest">The Tools
+                </div>
+                <h3 class="text-xl font-bold mb-2">Agent Skills</h3>
+                <p class="text-[13px] text-gray-500 mb-6 italic">"Bundled resources & specialized task modules."</p>
+                <div class="flex-grow">
+                    <ul class="text-[13px] space-y-3 text-gray-700 mb-6">
+                        <li><span class="check-icon">✓</span> FinOps for AWS & Azure</li>
+                        <li><span class="check-icon">✓</span> NuGet Package Manager</li>
+                        <li><span class="check-icon">✓</span> AWS/Azure Resource Visualizer</li>
+                        <li><span class="check-icon">✓</span> Test Coverage Analyzer</li>
+                    </ul>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                    <span class="pill">SKILL.md</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: How to Get Started -->
+    <section id="getstarted" class="py-24 bg-gray-50 border-t border-gray-100 px-8 md:px-16">
+        <div class="max-w-6xl mx-auto">
+            <h2
+                class="text-3xl font-black text-aviva-blue mb-6 text-center uppercase tracking-wide underline decoration-aviva-yellow decoration-4 underline-offset-8">
+                How to Get Started</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+                We have created a <strong>Base Framework</strong> with production-ready examples for all 4 pillars.
+                Teams can adopt this immediately and customize it based on project DNA.
+            </p>
+
+
+
+            <div class="mt-12 text-center">
+                <a href="guardrails_explorer.html" target="_blank"
+                    class="inline-flex items-center gap-3 bg-aviva-blue text-white px-8 py-4 rounded-full font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl hover:shadow-2xl">
+                    <span>🚀 Visit the Guardrails Explorer</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                <p class="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">A tech-specific template
+                    library for your team</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Line Section -->
+    <section class="py-24 bg-aviva-blue text-white px-8 md:px-16 mb-24 rounded-3xl mx-8 md:mx-16">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-4xl font-black mb-6 uppercase tracking-tighter">Standardize. Secure. Scale.</h2>
+            <p class="text-xl text-blue-200 mb-8 font-light italic">"A high-quality codebase is not an accident—it's a
+                designed environment."</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div class="text-3xl font-bold text-aviva-yellow">95%</div>
+                    <div class="text-[10px] uppercase font-bold text-blue-300">Accuracy</div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div class="text-3xl font-bold text-aviva-yellow">50%</div>
+                    <div class="text-[10px] uppercase font-bold text-blue-300">Speed</div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div class="text-3xl font-bold text-aviva-yellow">ZERO</div>
+                    <div class="text-[10px] uppercase font-bold text-blue-300">Context Drift</div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <div class="text-3xl font-bold text-aviva-yellow">∞</div>
+                    <div class="text-[10px] uppercase font-bold text-blue-300">Scalability</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        class="py-12 bg-white text-center text-gray-300 text-[10px] font-black uppercase tracking-[0.3em] border-t border-gray-100">
+        AI-Powered Code Guardrails
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.getElementById('tab-rules').classList.add('hidden');
+            document.getElementById('tab-commands').classList.add('hidden');
+            document.getElementById('tab-personas').classList.add('hidden');
+
+            // Remove active class from buttons
+            document.getElementById('btn-rules').classList.remove('active');
+            document.getElementById('btn-commands').classList.remove('active');
+            document.getElementById('btn-personas').classList.remove('active');
+
+            // Show target tab and activate button
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            document.getElementById('btn-' + tabName).classList.add('active');
+        }
+    </script>
+
+</body>
+
+</html>
