@@ -33,4 +33,4 @@ Context engineering is the evolution of prompt engineering. It’s focused less 
 5.  Standardize your AI interactions instantly.
 
 ---
-*Standardize. Secure. Scale.* • **Bamboo-GI 2026**
+*Standardize. Secure. Scale.*
