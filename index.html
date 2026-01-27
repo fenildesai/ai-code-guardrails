@@ -300,76 +300,6 @@
                 Teams can adopt this immediately and customize it based on project DNA.
             </p>
 
-            <!-- Base Framework Interface -->
-            <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div class="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
-                    <button onclick="showTab('rules')" class="tab-btn active" id="btn-rules">The Rules (.md)</button>
-                    <button onclick="showTab('commands')" class="tab-btn" id="btn-commands">The Commands (.md)</button>
-                    <button onclick="showTab('personas')" class="tab-btn" id="btn-personas">The Personas (.md)</button>
-                </div>
-
-                <!-- Tab 1: Rules -->
-                <div id="tab-rules" class="p-0">
-                    <div class="code-container">
-                        <pre>
-# .github/copilot-instructions.md
-# Project: Core Services
-
-## Coding Standards
-* Use C# 11+ features (primary constructors, file-scoped namespaces).
-* Follow DRY and SOLID principles.
-* Use NSubstitute for all mocking.
-
-## Security
-* Never hardcode secrets. Use Azure KeyVault integration.
-* All external inputs must be validated using FluentValidation.
-</pre>
-                    </div>
-                </div>
-
-                <!-- Tab 2: Commands -->
-                <div id="tab-commands" class="p-0 hidden">
-                    <div class="code-container">
-                        <pre>
-# .github/prompts/fix-sonar.prompts.md
-# Goal: Automate Technical Debt liquidation
-
-Review the active file for any SonarQube "Code Smells" or "Critical Issues".
-For each issue found:
-1. Explain the violation.
-2. Provide a refactored version of the code that resolves the issue while 
-   maintaining the same external behavior.
-3. Follow our internal architectural guidelines (Private Properties only).
-</pre>
-                    </div>
-                </div>
-
-                <!-- Tab 3: Personas -->
-                <div id="tab-personas" class="p-0 hidden">
-                    <div class="code-container">
-                        <pre>
-# AGENTS.md
-# Persona: @Security-Auditor
-
-You are a Senior Security Engineer at Aviva.
-Your scope: Application Security, Identity, and Data Protection.
-
-Tools:
-- Access to Checkmarx Policy Files.
-- Access to Snyk Scan Results.
-
-Constraints:
-- You only suggest code changes that pass OWASP Top 10 standards.
-- You must flag any unencrypted PII handling instantly.
-</pre>
-                    </div>
-                </div>
-            </div>
-
-            <p class="text-center text-xs text-gray-400 mt-6 italic uppercase tracking-widest font-bold">
-                Deploy these template files to your repository to activate the Guardrails.
-            </p>
-
             <div class="mt-12 text-center">
                 <a href="guardrails_explorer.html" target="_blank"
                     class="inline-flex items-center gap-3 bg-aviva-blue text-white px-8 py-4 rounded-full font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl hover:shadow-2xl">
@@ -438,5 +368,6 @@ Constraints:
 
 </body>
 
-</html>< ! - -   U p d a t e d :   2 0 2 6 - 0 1 - 2 7   2 3 : 3 9 : 1 4   - - >  
+</html>< ! - -   U p d a t e d :   2 0 2 6 - 0 1 - 2 7   2 3 : 3 9 : 1 4   - - > 
+ 
  
