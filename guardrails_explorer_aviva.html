@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardrails Explorer - AI-Powered Code Guardrails</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --aviva-dark-blue: #003d82;
+            --aviva-light-blue: #0052cc;
+            --aviva-yellow: #ffc220;
+            --aviva-gray: #f5f5f5;
+            --aviva-dark-gray: #333333;
+            --white: #ffffff;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--aviva-gray);
+            color: var(--aviva-dark-gray);
+        }
+
+        /* YELLOW HEADER WITH AVIVA LOGO */
+        .aviva-header {
+            background: var(--aviva-yellow);
+            padding: 24px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 100;
+        }
+
+        .aviva-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .aviva-logo {
+            width: 56px;
+            height: 56px;
+            background: var(--aviva-dark-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 61, 130, 0.3);
+        }
+
+        .aviva-logo-inner {
+            width: 32px;
+            height: 32px;
+            background: var(--aviva-yellow);
+            border-radius: 4px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--aviva-dark-blue);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .header-nav a {
+            color: var(--aviva-dark-blue);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .header-nav a:hover {
+            border-bottom-color: var(--aviva-dark-blue);
+        }
+
+        @media (max-width: 768px) {
+            .aviva-header {
+                padding: 16px 24px;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .aviva-logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .aviva-logo-inner {
+                width: 28px;
+                height: 28px;
+            }
+
+            .header-title {
+                font-size: 14px;
+            }
+        }
+
+        .btn-primary {
+            background-color: var(--aviva-dark-blue);
+            color: var(--white);
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--aviva-light-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 61, 130, 0.3);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--aviva-dark-blue) 0%, var(--aviva-light-blue) 100%);
+        }
+
+        .card-template {
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 32px;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-template:hover {
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+            border-color: var(--aviva-yellow);
+            transform: translateY(-6px);
+        }
+
+        .template-tag {
+            display: inline-block;
+            background: var(--aviva-dark-blue);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .template-tag.featured {
+            background: var(--aviva-yellow);
+            color: var(--aviva-dark-blue);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--aviva-dark-blue);
+            box-shadow: 0 0 0 4px rgba(0, 61, 130, 0.1);
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--aviva-dark-blue);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .filter-btn.active {
+            background: var(--aviva-dark-blue);
+            color: var(--white);
+            border-color: var(--aviva-dark-blue);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--aviva-dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .accent-line {
+            height: 4px;
+            background: var(--aviva-yellow);
+            width: 80px;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .section-heading {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--aviva-dark-blue);
+            margin: 0;
+            letter-spacing: -0.3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PROMINENT YELLOW AVIVA HEADER -->
+    <header class="aviva-header">
+        <div class="aviva-logo-container">
+            <div class="aviva-logo">
+                <div class="aviva-logo-inner"></div>
+            </div>
+            <div>
+                <h1 class="header-title">Guardrails Explorer</h1>
+                <p style="margin: 0; font-size: 12px; color: var(--aviva-dark-blue); font-weight: 500; letter-spacing: 0.3px;">Production-Ready Template Library</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="index_aviva.html">Back to Home</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white" style="padding: 80px 40px; min-height: 50vh; display: flex; align-items: center;">
+        <div class="max-w-5xl" style="margin: 0 auto; width: 100%;">
+            <h2 style="font-size: 48px; font-weight: 900; margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px;">
+                Guardrails Explorer
+            </h2>
+            <p style="font-size: 18px; font-weight: 300; margin-bottom: 0; max-width: 600px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                Discover production-ready templates for Custom Instructions, Reusable Prompts, Custom Agents, and Agent Skills across multiple tech stacks.
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section style="background: white; padding: 40px; border-bottom: 1px solid #e0e0e0;">
+        <div class="max-w-5xl" style="margin: 0 auto;">
+            <input type="text" class="search-box" placeholder="🔍 Search templates by name, technology, or category...">
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px;">
+                <button class="filter-btn active" onclick="filterTemplates('all')">All Templates</button>
+                <button class="filter-btn" onclick="filterTemplates('instructions')">Custom Instructions</button>
+                <button class="filter-btn" onclick="filterTemplates('prompts')">Reusable Prompts</button>
+                <button class="filter-btn" onclick="filterTemplates('agents')">Custom Agents</button>
+                <button class="filter-btn" onclick="filterTemplates('skills')">Agent Skills</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Instructions Section -->
+    <section style="padding: 80px 40px;">
+        <div class="max-w-6xl" style="margin: 0 auto;">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2 class="section-heading">Custom Instructions</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Template 1 -->
+                <div class="card-template">
+                    <span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Python Best Practices</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive guidelines for Python development including naming conventions, code style, and testing standards.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Python</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Backend</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 2 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">TypeScript & React Standards</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Frontend development guidelines covering component structure, hooks best practices, and TypeScript strict mode.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">TypeScript</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Frontend</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 3 -->
+                <div class="card-template">
+                    <span class="template-tag">Advanced</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">C# .NET Guidelines</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Enterprise C# development standards for .NET Core applications with async/await patterns and SOLID principles.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">C#/.NET</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Enterprise</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 4 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Go Language Standards</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Go programming standards emphasizing simplicity, concurrent patterns, and error handling best practices.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Go</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Systems</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reusable Prompts Section -->
+    <section style="padding: 80px 40px; background: var(--aviva-gray);">
+        <div class="max-w-6xl" style="margin: 0 auto;">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2 class="section-heading">Reusable Prompts</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Template 1 -->
+                <div class="card-template">
+                    <span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Automated Code Review</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive code review prompt analyzing security, performance, maintainability, and coding standards compliance.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Code Review</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 2 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Unit Test Generation</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Generate comprehensive unit tests with edge cases, mocking strategies, and 100% code coverage targets.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 3 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Technical Debt Resolution</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Identify and refactor technical debt with prioritization strategies and modernization recommendations.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Refactoring</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Template 4 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Documentation Generator</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Create comprehensive technical documentation, API specs, and architectural decision records automatically.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Documentation</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">API</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Agents Section -->
+    <section style="padding: 80px 40px;">
+        <div class="max-w-6xl" style="margin: 0 auto;">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2 class="section-heading">Custom Agents</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Agent 1 -->
+                <div class="card-template">
+                    <span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Security Review Expert</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">AI persona specialized in security analysis using Checkmarx and Sonar patterns for vulnerability detection.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Security</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Analysis</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Agent 2 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">PRD Agent</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Converts product requirements documents into well-structured code with tests, documentation, and architecture.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Requirements</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Development</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Agent 3 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Performance Optimizer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Analyzes code performance bottlenecks and provides optimization strategies with benchmark comparisons.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Performance</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Optimization</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Agent 4 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Migration Specialist</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Guides code migration between frameworks, languages, and platforms with compatibility checks.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Migration</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agent Skills Section -->
+    <section style="padding: 80px 40px; background: var(--aviva-gray);">
+        <div class="max-w-6xl" style="margin: 0 auto;">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2 class="section-heading">Agent Skills</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Skill 1 -->
+                <div class="card-template">
+                    <span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">FinOps for AWS & Azure</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Cloud cost optimization and financial operations analysis for AWS and Azure deployments.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">AWS</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Azure</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Skill 2 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">NuGet Package Manager</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Automated NuGet package management, versioning, and dependency resolution for .NET projects.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">.NET</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Dependencies</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Skill 3 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Resource Visualizer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">AWS and Azure infrastructure visualization and resource topology analysis tools.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Infrastructure</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Cloud</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+
+                <!-- Skill 4 -->
+                <div class="card-template">
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Test Coverage Analyzer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive test coverage analysis, gap identification, and coverage improvement recommendations.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span>
+                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Quality</span>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="hero-gradient text-white" style="padding: 80px 40px;">
+        <div class="max-w-4xl" style="margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 42px; font-weight: 900; margin-bottom: 24px; letter-spacing: -0.3px;">
+                Ready to Get Started?
+            </h2>
+            <p style="font-size: 18px; margin-bottom: 40px; font-weight: 300; line-height: 1.8; color: rgba(255, 255, 255, 0.95); max-width: 600px; margin-left: auto; margin-right: auto;">
+                Choose your first template and begin implementing context engineering across your team today.
+            </p>
+            <a href="index_aviva.html" class="btn-primary" style="font-size: 16px; padding: 18px 48px;">
+                ← Back to Home
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--aviva-dark-blue); color: white; padding: 48px 40px; text-align: center; border-top: 4px solid var(--aviva-yellow);">
+        <p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">© 2026 Guardrails Explorer | Context Engineering Platform</p>
+    </footer>
+
+    <script>
+        function filterTemplates(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter logic would go here
+            console.log('Filtering by:', category);
+        }
+    </script>
+
+</body>
+
+</html>
