@@ -182,6 +182,26 @@
             border-radius: 6px;
             font-size: 15px;
             transition: all 0.3s ease;
+            background: white;
+            /* Ensure background is white */
+            color: var(--aviva-dark-blue);
+            /* Ensure text is visible */
+        }
+
+        select.search-box {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            cursor: pointer;
+            padding: 12px 16px;
+            /* Explicit padding */
+            padding-right: 40px;
+            /* Space for arrow */
+            height: auto;
+            /* Fix truncation */
+            line-height: normal;
         }
 
         .search-box:focus {
@@ -224,8 +244,15 @@
         .section-title {
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
+            /* Changed for button alignment */
             margin-bottom: 40px;
+        }
+
+        .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .section-heading {
@@ -235,11 +262,123 @@
             margin: 0;
             letter-spacing: -0.3px;
         }
+
+
+
+        /* MODAL STYLES ADDED */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--aviva-gray);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--aviva-dark-blue);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex-grow: 1;
+            background: #f8f9fa;
+        }
+
+        .modal-code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: var(--white);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--aviva-dark-blue);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            transform: translateY(100px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
     </style>
+
 </head>
+<script src="data/guardrails_data.js"></script>
 
 <body>
-
     <!-- PROMINENT YELLOW AVIVA HEADER -->
     <header class="aviva-header">
         <div class="aviva-logo-container">
@@ -248,298 +387,698 @@
             </div>
             <div>
                 <h1 class="header-title">Guardrails Explorer</h1>
-                <p style="margin: 0; font-size: 12px; color: var(--aviva-dark-blue); font-weight: 500; letter-spacing: 0.3px;">Production-Ready Template Library</p>
+                <p
+                    style="margin: 0; font-size: 12px; color: var(--aviva-dark-blue); font-weight: 500; letter-spacing: 0.3px;">
+                    Production-Ready Template Library</p>
             </div>
         </div>
-        <nav class="header-nav">
-            <a href="index_aviva.html">Back to Home</a>
-        </nav>
+        <nav class="header-nav"><a href="index_aviva.html">Back to Home</a></nav>
     </header>
-
     <!-- Hero Section -->
-    <section class="hero-gradient text-white" style="padding: 80px 40px; min-height: 50vh; display: flex; align-items: center;">
+    <section class="hero-gradient text-white"
+        style="padding: 80px 40px; min-height: 50vh; display: flex; align-items: center;">
         <div class="max-w-5xl" style="margin: 0 auto; width: 100%;">
-            <h2 style="font-size: 48px; font-weight: 900; margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px;">
-                Guardrails Explorer
-            </h2>
-            <p style="font-size: 18px; font-weight: 300; margin-bottom: 0; max-width: 600px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
-                Discover production-ready templates for Custom Instructions, Reusable Prompts, Custom Agents, and Agent Skills across multiple tech stacks.
-            </p>
+            <h2
+                style="font-size: 48px; font-weight: 900; margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px;">
+                Guardrails Explorer </h2>
+            <p
+                style="font-size: 18px; font-weight: 300; margin-bottom: 0; max-width: 600px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                Discover production-ready templates for Custom Instructions,
+                Reusable Prompts,
+                Custom Agents,
+                and Agent Skills across multiple tech stacks. </p>
         </div>
     </section>
-
     <!-- Search & Filter Section -->
     <section style="background: white; padding: 40px; border-bottom: 1px solid #e0e0e0;">
         <div class="max-w-5xl" style="margin: 0 auto;">
-            <input type="text" class="search-box" placeholder="🔍 Search templates by name, technology, or category...">
-            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px;">
-                <button class="filter-btn active" onclick="filterTemplates('all')">All Templates</button>
-                <button class="filter-btn" onclick="filterTemplates('instructions')">Custom Instructions</button>
-                <button class="filter-btn" onclick="filterTemplates('prompts')">Reusable Prompts</button>
-                <button class="filter-btn" onclick="filterTemplates('agents')">Custom Agents</button>
+            <div style="display: flex; gap: 16px; margin-bottom: 24px; align-items: center;">
+                <input type="text" class="search-box" id="search-input"
+                    placeholder="🔍 Search templates by name, technology, or category..." style="flex: 1;"
+                    onkeyup="renderTemplates()">
+
+                <select id="team-filter" class="search-box" style="width: 250px; cursor: pointer; height: 50px;"
+                    onchange="renderTemplates()">
+                    <option value="all">All Teams</option>
+                    <option value="Core Platform">Core Platform</option>
+                    <option value="Mobile & Web">Mobile & Web</option>
+                    <option value="Security Team">Security Team</option>
+                    <option value="Product Team">Product Team</option>
+                    <option value="Architecture">Architecture</option>
+                    <option value="Cloud Ops">Cloud Ops</option>
+                    <option value="QA Automation">QA Automation</option>
+                </select>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px;"><button class="filter-btn active"
+                    onclick="filterTemplates('all')">All Templates</button><button class="filter-btn"
+                    onclick="filterTemplates('instructions')">Custom
+                    Instructions</button><button class="filter-btn" onclick="filterTemplates('prompts')">Reusable
+                    Prompts</button><button class="filter-btn" onclick="filterTemplates('agents')">Custom
+                    Agents</button>
                 <button class="filter-btn" onclick="filterTemplates('skills')">Agent Skills</button>
+                <!-- <button class="filter-btn"
+                    style="background: #eef2ff; color: #3730a3; border-color: #c7d2fe; margin-left: auto;"
+                    onclick="exportUserResources()">🔄 Sync with Codebase</button> -->
             </div>
         </div>
     </section>
-
     <!-- Custom Instructions Section -->
-    <section style="padding: 80px 40px;">
+    <section id="section-instructions" style="padding: 80px 40px;">
         <div class="max-w-6xl" style="margin: 0 auto;">
             <div class="section-title">
-                <div class="accent-line"></div>
-                <h2 class="section-heading">Custom Instructions</h2>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
-                <!-- Template 1 -->
-                <div class="card-template">
-                    <span class="template-tag featured">Popular</span>
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Python Best Practices</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive guidelines for Python development including naming conventions, code style, and testing standards.</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Python</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Backend</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                <div class="section-header-left">
+                    <div class="accent-line"></div>
+                    <h2 class="section-heading">Custom Instructions</h2>
                 </div>
-
+                <button class="btn-primary" style="padding: 10px 20px; font-size: 14px;"
+                    onclick="openAddModal('instructions')">+ Add Resource</button>
+            </div>
+            <div id="grid-instructions"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Starter Kit Template -->
+                <div class="card-template"><span class="template-tag featured">Featured</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Starter Kit: Copilot Instructions</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        The universal source of truth for secure defaults. Copy this into your repository's .github
+                        folder to establish governance immediately.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Core</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Security</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(0)">View Template</button>
+                </div>
+                <!-- Template 1 -->
+                <div class="card-template"><span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Python Best Practices</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Comprehensive guidelines for Python development including naming
+                        conventions,
+                        code style,
+                        and testing standards.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Python</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Backend</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(100)">View
+                        Template</button>
+                </div>
                 <!-- Template 2 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">TypeScript & React Standards</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Frontend development guidelines covering component structure, hooks best practices, and TypeScript strict mode.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        TypeScript & React Standards</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Frontend development guidelines covering component structure,
+                        hooks best practices,
+                        and TypeScript strict mode.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">TypeScript</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Frontend</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">TypeScript</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Frontend</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(2)">View
+                        Template</button>
                 </div>
-
                 <!-- Template 3 -->
-                <div class="card-template">
-                    <span class="template-tag">Advanced</span>
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">C# .NET Guidelines</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Enterprise C# development standards for .NET Core applications with async/await patterns and SOLID principles.</p>
+                <div class="card-template"><span class="template-tag">Advanced</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        C# .NET Guidelines</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Enterprise C# development standards for .NET Core applications with
+                        async/await patterns and SOLID principles.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">C#/.NET</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Enterprise</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">C#/.NET</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Enterprise</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(1)">View
+                        Template</button>
                 </div>
-
                 <!-- Template 4 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Go Language Standards</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Go programming standards emphasizing simplicity, concurrent patterns, and error handling best practices.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Go Language Standards</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Go programming standards emphasizing simplicity,
+                        concurrent patterns,
+                        and error handling best practices.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Go</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Systems</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Go</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Systems</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(101)">View
+                        Template</button>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- Reusable Prompts Section -->
-    <section style="padding: 80px 40px; background: var(--aviva-gray);">
+    <section id="section-prompts" style="padding: 80px 40px; background: var(--aviva-gray);">
         <div class="max-w-6xl" style="margin: 0 auto;">
             <div class="section-title">
-                <div class="accent-line"></div>
-                <h2 class="section-heading">Reusable Prompts</h2>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
-                <!-- Template 1 -->
-                <div class="card-template">
-                    <span class="template-tag featured">Popular</span>
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Automated Code Review</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive code review prompt analyzing security, performance, maintainability, and coding standards compliance.</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Code Review</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                <div class="section-header-left">
+                    <div class="accent-line"></div>
+                    <h2 class="section-heading">Reusable Prompts</h2>
                 </div>
-
+                <button class="btn-primary" style="padding: 10px 20px; font-size: 14px;"
+                    onclick="openAddModal('prompts')">+ Add Resource</button>
+            </div>
+            <div id="grid-prompts"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Template 1 -->
+                <div class="card-template"><span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Automated Code Review</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Comprehensive code review prompt analyzing security,
+                        performance,
+                        maintainability,
+                        and coding standards compliance.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Code
+                            Review</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(3)">View Template</button>
+                </div>
                 <!-- Template 2 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Unit Test Generation</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Generate comprehensive unit tests with edge cases, mocking strategies, and 100% code coverage targets.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Unit Test Generation</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Generate comprehensive unit tests with edge cases,
+                        mocking strategies,
+                        and 100% code coverage targets.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">QA</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(4)">View Template</button>
                 </div>
-
                 <!-- Template 3 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Technical Debt Resolution</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Identify and refactor technical debt with prioritization strategies and modernization recommendations.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Technical Debt Resolution</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Identify and refactor technical debt with prioritization
+                        strategies and modernization recommendations.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Refactoring</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Refactoring</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(5)">View Template</button>
                 </div>
-
                 <!-- Template 4 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Documentation Generator</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Create comprehensive technical documentation, API specs, and architectural decision records automatically.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Documentation Generator</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Create comprehensive technical documentation,
+                        API specs,
+                        and architectural decision records automatically.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Documentation</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">API</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Documentation</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">API</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(6)">View Template</button>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- Custom Agents Section -->
-    <section style="padding: 80px 40px;">
+    <section id="section-agents" style="padding: 80px 40px;">
         <div class="max-w-6xl" style="margin: 0 auto;">
             <div class="section-title">
-                <div class="accent-line"></div>
-                <h2 class="section-heading">Custom Agents</h2>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
-                <!-- Agent 1 -->
-                <div class="card-template">
-                    <span class="template-tag featured">Popular</span>
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Security Review Expert</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">AI persona specialized in security analysis using Checkmarx and Sonar patterns for vulnerability detection.</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Security</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Analysis</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                <div class="section-header-left">
+                    <div class="accent-line"></div>
+                    <h2 class="section-heading">Custom Agents</h2>
                 </div>
-
+                <button class="btn-primary" style="padding: 10px 20px; font-size: 14px;"
+                    onclick="openAddModal('agents')">+ Add Resource</button>
+            </div>
+            <div id="grid-agents"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Agent 1 -->
+                <div class="card-template"><span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Security Review Expert</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        AI persona specialized in security analysis using Checkmarx and
+                        Sonar patterns for vulnerability detection.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Security</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Analysis</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(7)">View Template</button>
+                </div>
                 <!-- Agent 2 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">PRD Agent</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Converts product requirements documents into well-structured code with tests, documentation, and architecture.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        PRD Agent</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Converts product requirements documents into well-structured
+                        code with tests,
+                        documentation,
+                        and architecture.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Requirements</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Development</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Requirements</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Development</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(8)">View Template</button>
                 </div>
-
                 <!-- Agent 3 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Performance Optimizer</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Analyzes code performance bottlenecks and provides optimization strategies with benchmark comparisons.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Performance Optimizer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Analyzes code performance bottlenecks and provides
+                        optimization strategies with benchmark comparisons.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Performance</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Optimization</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Performance</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Optimization</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(9)">View Template</button>
                 </div>
-
                 <!-- Agent 4 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Migration Specialist</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Guides code migration between frameworks, languages, and platforms with compatibility checks.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Migration Specialist</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Guides code migration between frameworks,
+                        languages,
+                        and platforms with compatibility checks.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Migration</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Migration</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Modernization</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(10)">View
+                        Template</button>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- Agent Skills Section -->
-    <section style="padding: 80px 40px; background: var(--aviva-gray);">
+    <section id="section-skills" style="padding: 80px 40px; background: var(--aviva-gray);">
         <div class="max-w-6xl" style="margin: 0 auto;">
             <div class="section-title">
-                <div class="accent-line"></div>
-                <h2 class="section-heading">Agent Skills</h2>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
-                <!-- Skill 1 -->
-                <div class="card-template">
-                    <span class="template-tag featured">Popular</span>
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">FinOps for AWS & Azure</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Cloud cost optimization and financial operations analysis for AWS and Azure deployments.</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">AWS</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Azure</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                <div class="section-header-left">
+                    <div class="accent-line"></div>
+                    <h2 class="section-heading">Agent Skills</h2>
                 </div>
-
+                <button class="btn-primary" style="padding: 10px 20px; font-size: 14px;"
+                    onclick="openAddModal('skills')">+ Add Resource</button>
+            </div>
+            <div id="grid-skills"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;">
+                <!-- Skill 1 -->
+                <div class="card-template"><span class="template-tag featured">Popular</span>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        FinOps for AWS & Azure</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Cloud cost optimization and financial operations analysis for
+                        AWS and Azure deployments.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">AWS</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Azure</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(11)">View
+                        Template</button>
+                </div>
                 <!-- Skill 2 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">NuGet Package Manager</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Automated NuGet package management, versioning, and dependency resolution for .NET projects.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        NuGet Package Manager</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Automated NuGet package management,
+                        versioning,
+                        and dependency resolution for .NET projects.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">.NET</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Dependencies</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">.NET</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Dependencies</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(12)">View
+                        Template</button>
                 </div>
-
                 <!-- Skill 3 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Resource Visualizer</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">AWS and Azure infrastructure visualization and resource topology analysis tools.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Resource Visualizer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        AWS and Azure infrastructure visualization and resource
+                        topology analysis tools.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Infrastructure</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Cloud</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Infrastructure</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Cloud</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(13)">View
+                        Template</button>
                 </div>
-
                 <!-- Skill 4 -->
                 <div class="card-template">
-                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">Test Coverage Analyzer</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">Comprehensive test coverage analysis, gap identification, and coverage improvement recommendations.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">
+                        Test Coverage Analyzer</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6;">
+                        Comprehensive test coverage analysis,
+                        gap identification,
+                        and coverage improvement recommendations.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span>
-                        <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Quality</span>
-                    </div>
-                    <button class="btn-primary" style="width: 100%;">View Template</button>
+                        <span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Testing</span><span
+                            style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">Quality</span>
+                    </div><button class="btn-primary" style="width: 100%;" onclick="openModal(14)">View
+                        Template</button>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- CTA Section -->
     <section class="hero-gradient text-white" style="padding: 80px 40px;">
         <div class="max-w-4xl" style="margin: 0 auto; text-align: center;">
             <h2 style="font-size: 42px; font-weight: 900; margin-bottom: 24px; letter-spacing: -0.3px;">
-                Ready to Get Started?
-            </h2>
-            <p style="font-size: 18px; margin-bottom: 40px; font-weight: 300; line-height: 1.8; color: rgba(255, 255, 255, 0.95); max-width: 600px; margin-left: auto; margin-right: auto;">
-                Choose your first template and begin implementing context engineering across your team today.
-            </p>
-            <a href="index_aviva.html" class="btn-primary" style="font-size: 16px; padding: 18px 48px;">
-                ← Back to Home
-            </a>
+                Ready to Get Started? </h2>
+            <p
+                style="font-size: 18px; margin-bottom: 40px; font-weight: 300; line-height: 1.8; color: rgba(255, 255, 255, 0.95); max-width: 600px; margin-left: auto; margin-right: auto;">
+                Choose your first template and begin implementing context engineering
+                across your team today. </p><a href="index_aviva.html" class="btn-primary"
+                style="font-size: 16px; padding: 18px 48px;">← Back
+                to Home </a>
         </div>
     </section>
-
     <!-- Footer -->
-    <footer style="background: var(--aviva-dark-blue); color: white; padding: 48px 40px; text-align: center; border-top: 4px solid var(--aviva-yellow);">
-        <p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">© 2026 Guardrails Explorer | Context Engineering Platform</p>
+    <footer
+        style="background: var(--aviva-dark-blue); color: white; padding: 48px 40px; text-align: center; border-top: 4px solid var(--aviva-yellow);">
+        <p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">
+            © 2026 Guardrails Explorer | Context Engineering Platform</p>
     </footer>
 
+
+    <!-- MODAL MARKUP -->
+    <div id="modal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modalTitle" class="modal-title">Template Preview</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalBody" class="modal-code"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="filter-btn" onclick="copyToClipboard()">Copy to
+                    Clipboard</button>
+                <button class="btn-primary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD RESOURCE MODAL -->
+    <div id="addModal" class="modal-overlay" onclick="closeAddModal()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Contribute New Resource</h3>
+                <button class="modal-close" onclick="closeAddModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <p style="margin-bottom: 20px; font-size: 14px; color: #666;">
+                    Contributions follow a GitOps workflow. This form generates the JSON metadata for your Pull Request.
+                </p>
+                <form id="addResourceForm" onsubmit="event.preventDefault(); submitResource();">
+                    <input type="hidden" id="add-section">
+
+                    <div style="margin-bottom: 16px;">
+                        <label
+                            style="display: block; font-weight: 700; margin-bottom: 8px; color: var(--aviva-dark-blue);">Title</label>
+                        <input type="text" id="add-title" class="search-box" style="padding: 12px;"
+                            placeholder="e.g., Python Data Science Standards" required>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label
+                            style="display: block; font-weight: 700; margin-bottom: 8px; color: var(--aviva-dark-blue);">Team</label>
+                        <select id="add-team" class="search-box" style="padding: 12px;" required>
+                            <option value="Core Platform">Core Platform</option>
+                            <option value="Mobile & Web">Mobile & Web</option>
+                            <option value="Security Team">Security Team</option>
+                            <option value="Product Team">Product Team</option>
+                            <option value="Architecture">Architecture</option>
+                            <option value="Cloud Ops">Cloud Ops</option>
+                            <option value="QA Automation">QA Automation</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <label
+                            style="display: block; font-weight: 700; margin-bottom: 8px; color: var(--aviva-dark-blue);">Markdown
+                            Content</label>
+                        <textarea id="add-content" class="search-box"
+                            style="padding: 12px; min-height: 150px; font-family: monospace;"
+                            placeholder="# Your content here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%;">Generate JSON & Preview</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard! 📋</div>
+
     <script>
+        // Initial Templates (Base + User Added)
+        let activeTemplates = [...templates];
+
+        // Load from localStorage on startup
+        function loadUserTemplates() {
+            const stored = localStorage.getItem('aviva_user_templates');
+            if (stored) {
+                const userItems = JSON.parse(stored);
+                // Prepend user items to the active list
+                activeTemplates = [...userItems, ...activeTemplates];
+            }
+        }
+
+        window.onload = function () {
+            loadUserTemplates();
+            renderTemplates();
+        };
+
+
+
+
         function filterTemplates(category) {
             // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Filter logic would go here
-            console.log('Filtering by:', category);
-        }
-    </script>
+            if (event && event.type === 'click') {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.closest('.filter-btn').classList.add('active');
+            }
 
+            // Filter logic
+            const sections = {
+                'instructions': 'section-instructions',
+                'prompts': 'section-prompts',
+                'agents': 'section-agents',
+                'skills': 'section-skills'
+            };
+
+            if (category === 'all') {
+                Object.values(sections).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'block';
+                });
+            } else {
+                Object.entries(sections).forEach(([key, id]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = (key === category) ? 'block' : 'none';
+                });
+            }
+        }
+
+        function renderTemplates() {
+            const teamFilter = document.getElementById('team-filter').value;
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+
+            // Clear all grids
+            const grids = {
+                'instructions': document.getElementById('grid-instructions'),
+                'prompts': document.getElementById('grid-prompts'),
+                'agents': document.getElementById('grid-agents'),
+                'skills': document.getElementById('grid-skills')
+            };
+
+            Object.values(grids).forEach(el => {
+                if (el) el.innerHTML = '';
+            });
+
+            // Filter and Render
+            activeTemplates.forEach(t => {
+                // 1. Team Filter
+                if (teamFilter !== 'all' && t.team !== teamFilter) return;
+
+                // 2. Search Filter
+                if (searchInput) {
+                    const match = t.title.toLowerCase().includes(searchInput) ||
+                        t.content.toLowerCase().includes(searchInput) ||
+                        (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchInput)));
+                    if (!match) return;
+                }
+
+                // 3. Render Card
+                const card = createCard(t);
+
+                // 4. Place in correct grid
+                if (grids[t.section]) {
+                    grids[t.section].appendChild(card);
+                }
+            });
+        }
+
+        function createCard(t) {
+            const div = document.createElement('div');
+            div.className = 'card-template';
+
+            let tagsHtml = '';
+            if (t.id === 0) {
+                tagsHtml += '<span class="template-tag featured">Featured</span>';
+            } else if (t.id > 1000) {
+                tagsHtml += '<span class="template-tag featured">New</span>';
+            }
+
+            const teamBadge = `<span style="font-size: 10px; background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 8px;">${t.team}</span>`;
+
+            div.innerHTML = `
+                ${tagsHtml}
+                ${teamBadge}
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 12px 0;">${t.title}</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${extractDescription(t.content)}
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                    <span style="font-size: 12px; background: var(--aviva-gray); color: var(--aviva-dark-blue); padding: 6px 12px; border-radius: 4px; font-weight: 600;">System</span>
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="openModal(${t.id})">View Template</button>
+            `;
+            return div;
+        }
+
+        function extractDescription(content) {
+            const clean = content.replace(/#+\s.*$/gm, '').trim();
+            return clean.substring(0, 120) + '...';
+        }
+
+        function openAddModal(section) {
+            document.getElementById('add-section').value = section;
+            document.getElementById('add-title').value = '';
+            document.getElementById('add-content').value = '';
+
+            const currentFilter = document.getElementById('team-filter').value;
+            if (currentFilter !== 'all') {
+                document.getElementById('add-team').value = currentFilter;
+            } else {
+                document.getElementById('add-team').value = 'Core Platform';
+            }
+
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        function submitResource() {
+            const section = document.getElementById('add-section').value;
+            const title = document.getElementById('add-title').value;
+            const team = document.getElementById('add-team').value;
+            const content = document.getElementById('add-content').value;
+
+            if (!title || !content) return;
+
+            const newId = Math.floor(Math.random() * 10000) + 1000;
+
+            const newResource = {
+                id: newId,
+                title: title,
+                team: team,
+                section: section,
+                content: content,
+                tags: ["New", team]
+            };
+
+            // 1. Add to local array
+            activeTemplates.unshift(newResource);
+
+            // 2. Persist to localStorage
+            const stored = localStorage.getItem('aviva_user_templates');
+            const userTemplates = stored ? JSON.parse(stored) : [];
+            userTemplates.unshift(newResource);
+            localStorage.setItem('aviva_user_templates', JSON.stringify(userTemplates));
+
+            // 3. Re-render immediately
+            renderTemplates();
+
+            // 4. Close the modal (Simplification)
+            closeAddModal();
+
+            // Optional: Alert success
+            const toast = document.getElementById('toast');
+            toast.innerText = "Resource Added & Persisted! ";
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function openModal(id) {
+            const t = activeTemplates.find(item => item.id == id);
+            if (!t) {
+                console.error("Template not found for id:", id);
+                return;
+            }
+            document.getElementById('modalTitle').innerText = t.title;
+            document.getElementById('modalBody').innerText = t.content;
+            document.getElementById('modal').style.display = 'flex';
+
+            // Store current ID for copy
+            document.getElementById('modal').dataset.currentId = id;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function copyToClipboard() {
+            const id = document.getElementById('modal').dataset.currentId;
+            const t = activeTemplates.find(item => item.id == id);
+            if (t) {
+                navigator.clipboard.writeText(t.content).then(() => {
+                    const toast = document.getElementById('toast');
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2000);
+                });
+            }
+        }
+
+        function exportUserResources() {
+            const stored = localStorage.getItem('aviva_user_templates');
+            if (!stored || JSON.parse(stored).length === 0) {
+                alert("No new resources to sync! Add some first.");
+                return;
+            }
+
+            const userItems = JSON.parse(stored);
+            const snippet = JSON.stringify(userItems, null, 4);
+            const prInstructions = `// ---------------------------------------------------------\n// 🤖 SYNC VIA ASSISTANT: Permanent Storage\n// ---------------------------------------------------------\n// 1. Copy the JSON below.\n// 2. Paste it in our chat and say: "Please sync these to the JS file."\n// 3. I will then update 'guardrails_data.js' permanently.\n\n${snippet}`;
+
+            document.getElementById('modalTitle').innerText = "🔄 Sync with Codebase (via Assistant)";
+            document.getElementById('modalBody').innerText = prInstructions;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // EXPOSE FUNCTIONS GLOBALLY to prevent scope issues
+        window.openAddModal = openAddModal;
+        window.closeAddModal = closeAddModal;
+        window.submitResource = submitResource;
+        window.filterTemplates = filterTemplates;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.copyToClipboard = copyToClipboard;
+        window.exportUserResources = exportUserResources;
+    </script>
 </body>
 
 </html>
