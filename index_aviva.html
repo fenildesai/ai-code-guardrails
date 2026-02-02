@@ -198,7 +198,7 @@
         .card-modern:hover {
             transform: translateY(-6px);
             box-shadow: 0 22px 40px rgba(3, 26, 64, 0.12);
-            border-color: rgba(255,194,32,0.18);
+            border-color: rgba(255, 194, 32, 0.18);
         }
 
         .text-aviva-blue {
@@ -239,7 +239,7 @@
         }
 
         /* Normalize inner card spacing so icon + title align consistently */
-        .card-modern > div {
+        .card-modern>div {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -251,15 +251,25 @@
             line-height: 1.15;
         }
 
-        .card-modern p { margin: 0 0 16px 0; }
+        .card-modern p {
+            margin: 0 0 16px 0;
+        }
 
         /* Baseline grid: 8px multiples for consistent vertical rhythm */
-        .feature-icon { margin-bottom: 16px; }
-        .card-modern ul { margin-top: 16px !important; }
-        .card-cta-row { margin-top: 24px; }
+        .feature-icon {
+            margin-bottom: 16px;
+        }
+
+        .card-modern ul {
+            margin-top: 16px !important;
+        }
 
         .card-cta-row {
-            display:flex;
+            margin-top: 24px;
+        }
+
+        .card-cta-row {
+            display: flex;
             justify-content: center;
             gap: 8px;
             margin-top: 18px;
@@ -267,21 +277,21 @@
 
         /* pill contrast and subtle background */
         .card-cta-row span {
-            background: rgba(255,194,32,0.12);
-            border: 1px solid rgba(0,61,130,0.08);
+            background: rgba(255, 194, 32, 0.12);
+            border: 1px solid rgba(0, 61, 130, 0.08);
             color: var(--aviva-dark-blue);
-            padding:6px 10px;
-            border-radius:6px;
-            font-size:13px;
-            font-family:monospace;
-            font-weight:700;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: monospace;
+            font-weight: 700;
         }
 
         /* Animation helpers */
-        .anim-item { 
+        .anim-item {
             opacity: 0;
             transform: translateY(20px) scale(0.98);
-            transition: opacity 560ms cubic-bezier(.2,.8,.2,1), transform 560ms cubic-bezier(.2,.8,.2,1);
+            transition: opacity 560ms cubic-bezier(.2, .8, .2, 1), transform 560ms cubic-bezier(.2, .8, .2, 1);
             will-change: opacity, transform;
         }
 
@@ -291,7 +301,13 @@
         }
 
         /* Keep lists readable while centered */
-        .card-modern ul { text-align: left; width: 100%; max-width: 420px; margin: 0 auto; }
+        .card-modern ul {
+            text-align: left;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
         /* Techniques grid: 1 column mobile, 2 column tablet/desktop (balanced 2x2) */
         .tech-grid {
             display: grid;
@@ -317,10 +333,21 @@
         }
 
         /* staggered reveal delays for a smoother entrance */
-        #techniques .anim-item:nth-child(1) { transition-delay: 60ms; }
-        #techniques .anim-item:nth-child(2) { transition-delay: 140ms; }
-        #techniques .anim-item:nth-child(3) { transition-delay: 220ms; }
-        #techniques .anim-item:nth-child(4) { transition-delay: 300ms; }
+        #techniques .anim-item:nth-child(1) {
+            transition-delay: 60ms;
+        }
+
+        #techniques .anim-item:nth-child(2) {
+            transition-delay: 140ms;
+        }
+
+        #techniques .anim-item:nth-child(3) {
+            transition-delay: 220ms;
+        }
+
+        #techniques .anim-item:nth-child(4) {
+            transition-delay: 300ms;
+        }
     </style>
 </head>
 
@@ -328,15 +355,17 @@
 
     <!-- PROMINENT YELLOW AVIVA HEADER -->
     <header class="aviva-header">
-        <div class="aviva-logo-container">
+        <a href="index_aviva.html" class="aviva-logo-container" style="text-decoration: none;">
             <div class="aviva-logo">
                 <div class="aviva-logo-inner"></div>
             </div>
             <div>
                 <h1 class="header-title">AI-Powered Code Guardrails</h1>
-                <p style="margin: 0; font-size: 12px; color: var(--aviva-dark-blue); font-weight: 500; letter-spacing: 0.3px;">Context Engineering Platform</p>
+                <p
+                    style="margin: 0; font-size: 12px; color: var(--aviva-dark-blue); font-weight: 500; letter-spacing: 0.3px;">
+                    Context Engineering Platform</p>
             </div>
-        </div>
+        </a>
         <nav class="header-nav">
             <a href="#problem">Problem</a>
             <a href="#evolution">Evolution</a>
@@ -346,19 +375,23 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white" style="padding: 100px 40px; min-height: 70vh; display: flex; align-items: center;">
+    <section class="hero-gradient text-white"
+        style="padding: 100px 40px; min-height: 70vh; display: flex; align-items: center;">
         <div class="max-w-5xl" style="margin: 0 auto; width: 100%;">
             <div class="accent-line"></div>
-            <h2 style="font-size: 52px; font-weight: 900; margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px;">
+            <h2
+                style="font-size: 52px; font-weight: 900; margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px;">
                 Want better AI outputs?<br>
                 <span style="color: var(--aviva-yellow);">Try Context Engineering.</span>
             </h2>
-            <p style="font-size: 20px; font-weight: 300; margin-bottom: 40px; max-width: 600px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
-                Context engineering is quickly becoming one of the most important ways developers shape, guide, and improve AI-assisted development.
+            <p
+                style="font-size: 20px; font-weight: 300; margin-bottom: 40px; max-width: 600px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                Context engineering is quickly becoming one of the most important ways developers shape, guide, and
+                improve AI-assisted development.
             </p>
-            <button class="btn-primary" style="font-size: 16px; padding: 16px 48px;">
+            <a href="guardrails_explorer_aviva.html" class="btn-primary" style="font-size: 16px; padding: 16px 48px;">
                 🚀 Explore Guardrails
-            </button>
+            </a>
         </div>
     </section>
 
@@ -366,26 +399,35 @@
     <section id="problem" style="padding: 100px 40px; background: white;">
         <div class="max-w-5xl" style="margin: 0 auto;">
             <div class="accent-line"></div>
-            <h2 style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 40px; letter-spacing: -0.3px;">
+            <h2
+                style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 40px; letter-spacing: -0.3px;">
                 The Developer Struggle
             </h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
                 <div>
                     <p style="font-size: 18px; font-style: italic; color: #666; margin-bottom: 24px; line-height: 1.8;">
-                        "I asked Copilot to write a service, but it used the wrong library version and ignored our security standards. I spent 20 minutes fixing it."
+                        "I asked Copilot to write a service, but it used the wrong library version and ignored our
+                        security standards. I spent 20 minutes fixing it."
                     </p>
                     <p style="font-size: 16px; color: #666; margin-bottom: 20px; line-height: 1.8;">
-                        Generic AI only knows the public internet. It doesn't know <strong>Our</strong> standards, <strong>Our</strong> architecture, or <strong>Our</strong> unique business logic.
+                        Generic AI only knows the public internet. It doesn't know <strong>Our</strong> standards,
+                        <strong>Our</strong> architecture, or <strong>Our</strong> unique business logic.
                     </p>
-                    <div style="background: #fff3cd; border-left: 4px solid var(--aviva-yellow); padding: 20px; border-radius: 4px; margin-top: 24px;">
+                    <div
+                        style="background: #fff3cd; border-left: 4px solid var(--aviva-yellow); padding: 20px; border-radius: 4px; margin-top: 24px;">
                         <p style="margin: 0; color: var(--aviva-dark-blue); font-weight: 600;">
-                            The Friction: 30% of AI-assisted time is spent on "Loop Correction"—telling the AI what it should have already known.
+                            The Friction: 30% of AI-assisted time is spent on "Loop Correction"—telling the AI what it
+                            should have already known.
                         </p>
                     </div>
                 </div>
-                <div style="background: var(--aviva-gray); padding: 48px; border-radius: 12px; text-align: center; border: 2px solid var(--aviva-yellow);">
-                    <div style="font-size: 72px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 16px;">90%</div>
-                    <p style="font-size: 13px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">of AI failure is Context failure</p>
+                <div
+                    style="background: var(--aviva-gray); padding: 48px; border-radius: 12px; text-align: center; border: 2px solid var(--aviva-yellow);">
+                    <div style="font-size: 72px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 16px;">
+                        90%</div>
+                    <p
+                        style="font-size: 13px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                        of AI failure is Context failure</p>
                     <p style="font-size: 14px; font-style: italic; color: #666; margin: 0;">
                         "When AI has the wrong context, it solves the wrong problem flawlessly."
                     </p>
@@ -397,26 +439,37 @@
     <!-- Evolution Section -->
     <section id="evolution" class="hero-gradient text-white" style="padding: 100px 40px;">
         <div class="max-w-4xl" style="margin: 0 auto;">
-            <h2 style="font-size: 42px; font-weight: 900; margin-bottom: 40px; text-align: center; letter-spacing: -0.3px;">
+            <h2
+                style="font-size: 42px; font-weight: 900; margin-bottom: 40px; text-align: center; letter-spacing: -0.3px;">
                 The Evolution of AI Strategy
             </h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 48px;">
                 <div style="opacity: 0.8;">
-                    <h3 style="color: var(--aviva-yellow); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Phase 1: Prompt Engineering</h3>
+                    <h3
+                        style="color: var(--aviva-yellow); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                        Phase 1: Prompt Engineering</h3>
                     <p style="font-size: 16px; line-height: 1.8;">
-                        Focuses on "Clever Phrasing". It relies on the developer's ability to ask the right way every single time. <strong>(Fragile & Unscalable)</strong>
+                        Focuses on "Clever Phrasing". It relies on the developer's ability to ask the right way every
+                        single time. <strong>(Fragile & Unscalable)</strong>
                     </p>
                 </div>
-                <div style="border-left: 4px solid var(--aviva-yellow); padding-left: 32px; background: rgba(255, 194, 32, 0.1); padding: 32px; border-radius: 8px;">
-                    <h3 style="color: var(--aviva-yellow); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Phase 2: Context Engineering</h3>
+                <div
+                    style="border-left: 4px solid var(--aviva-yellow); padding-left: 32px; background: rgba(255, 194, 32, 0.1); padding: 32px; border-radius: 8px;">
+                    <h3
+                        style="color: var(--aviva-yellow); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                        Phase 2: Context Engineering</h3>
                     <p style="font-size: 16px; line-height: 1.8; margin: 0;">
-                        Focuses on "Right Information". Bringing the data, standards, and rules to the AI in the right format automatically. <strong>(Durable & Trusted)</strong>
+                        Focuses on "Right Information". Bringing the data, standards, and rules to the AI in the right
+                        format automatically. <strong>(Durable & Trusted)</strong>
                     </p>
                 </div>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 8px; text-align: center;">
-                <p style="font-size: 18px; font-style: italic; margin: 0; line-height: 1.8; color: rgba(255, 255, 255, 0.95);">
-                    "Context engineering is focused less on clever phrasing and more on bringing the right information (in the right format) to the LLM."
+            <div
+                style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 8px; text-align: center;">
+                <p
+                    style="font-size: 18px; font-style: italic; margin: 0; line-height: 1.8; color: rgba(255, 255, 255, 0.95);">
+                    "Context engineering is focused less on clever phrasing and more on bringing the right information
+                    (in the right format) to the LLM."
                 </p>
             </div>
         </div>
@@ -426,7 +479,8 @@
     <section id="techniques" style="padding: 100px 40px; background: white;">
         <div class="max-w-6xl" style="margin: 0 auto;">
             <div class="accent-line"></div>
-            <h2 style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 60px; text-align: center; letter-spacing: -0.3px;">
+            <h2
+                style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 60px; text-align: center; letter-spacing: -0.3px;">
                 The 4 Techniques of Context Engineering
             </h2>
             <div class="tech-grid">
@@ -434,75 +488,129 @@
                 <div class="card-modern anim-item">
                     <div>
                         <div class="feature-icon" style="background: #e3f2fd;">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);"><path d="M8 2H24C25.1 2 26 2.9 26 4V28C26 29.1 25.1 30 24 30H8C6.9 30 6 29.1 6 28V4C6 2.9 6.9 2 8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10 8H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M10 14H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M10 20H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);">
+                                <path
+                                    d="M8 2H24C25.1 2 26 2.9 26 4V28C26 29.1 25.1 30 24 30H8C6.9 30 6 29.1 6 28V4C6 2.9 6.9 2 8 2Z"
+                                    stroke="currentColor" stroke-width="1.5" fill="none" />
+                                <path d="M10 8H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M10 14H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M10 20H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
                         </div>
-                        <h3 style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">Custom Instructions</h3>
-                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Give Copilot the rules it should follow.</p>
+                        <h3
+                            style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">
+                            Custom Instructions</h3>
+                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Give Copilot
+                            the rules it should follow.</p>
                         <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
                             <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Coding conventions</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Language/Naming standards</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Language/Naming standards
+                            </li>
                             <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Documentation style</li>
                         </ul>
                     </div>
                     <div class="card-cta-row">
-                        <span style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">.github/copilot-instructions.md</span>
+                        <span
+                            style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">.github/copilot-instructions.md</span>
                     </div>
                 </div>
                 <!-- Card 2 -->
                 <div class="card-modern anim-item">
                     <div>
                         <div class="feature-icon" style="background: #f3e5f5;">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);"><path d="M16 2L26 14H18L16 30L6 18H14L16 2Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);">
+                                <path d="M16 2L26 14H18L16 30L6 18H14L16 2Z" stroke="currentColor" stroke-width="1.5"
+                                    fill="none" stroke-linejoin="round" />
+                            </svg>
                         </div>
-                        <h3 style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">Reusable Prompts</h3>
-                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Standardize your common workflows.</p>
+                        <h3
+                            style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">
+                            Reusable Prompts</h3>
+                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Standardize
+                            your common workflows.</p>
                         <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Automated Code Reviews</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Automated Code Reviews
+                            </li>
                             <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Unit Test Generation</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Technical Debt Resolution</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Technical Debt Resolution
+                            </li>
                             <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Create Documentation</li>
                         </ul>
                     </div>
                     <div class="card-cta-row">
-                        <span style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">*.prompts.md</span>
+                        <span
+                            style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">*.prompts.md</span>
                     </div>
                 </div>
                 <!-- Card 3 -->
                 <div class="card-modern anim-item">
                     <div>
                         <div class="feature-icon" style="background: #e8f5e9;">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);"><rect x="6" y="8" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="12" r="1.5" fill="currentColor"/><circle cx="22" cy="12" r="1.5" fill="currentColor"/><path d="M10 20V24M22 20V24M14 26H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);">
+                                <rect x="6" y="8" width="20" height="16" rx="2" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <circle cx="10" cy="12" r="1.5" fill="currentColor" />
+                                <circle cx="22" cy="12" r="1.5" fill="currentColor" />
+                                <path d="M10 20V24M22 20V24M14 26H18" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
                         </div>
-                        <h3 style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">Custom Agents</h3>
-                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Create task-specific AI personas.</p>
+                        <h3
+                            style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">
+                            Custom Agents</h3>
+                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Create
+                            task-specific AI personas.</p>
                         <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Security Review Expert (Checkmarx, Sonar)</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> PRD Agent (Requirements → Code)</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Performance Optimizer</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Code Migration Specialist</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Security Review Expert
+                                (Checkmarx, Sonar)</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> PRD Agent (Requirements →
+                                Code)</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Performance Optimizer
+                            </li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Code Migration Specialist
+                            </li>
                         </ul>
                     </div>
                     <div class="card-cta-row">
-                        <span style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">*.agents.md</span>
+                        <span
+                            style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">*.agents.md</span>
                     </div>
                 </div>
                 <!-- Card 4 -->
                 <div class="card-modern anim-item">
                     <div>
                         <div class="feature-icon" style="background: #fff3e0;">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);"><circle cx="16" cy="16" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M16 10V22M10 16H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16 10L14 6M16 10L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" style="color:var(--aviva-dark-blue);">
+                                <circle cx="16" cy="16" r="8" stroke="currentColor" stroke-width="1.5" fill="none" />
+                                <path d="M16 10V22M10 16H22" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <path d="M16 10L14 6M16 10L18 6" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
                         </div>
-                        <h3 style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">Agent Skills</h3>
-                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Bundled resources & task modules.</p>
+                        <h3
+                            style="font-size: 20px; font-weight: 700; color: var(--aviva-dark-blue); margin: 0 0 16px 0;">
+                            Agent Skills</h3>
+                        <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">Bundled
+                            resources & task modules.</p>
                         <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> FinOps for AWS & Azure</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> NuGet Package Manager</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> AWS/Azure Resource Visualizer</li>
-                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Test Coverage Analyzer</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> FinOps for AWS & Azure
+                            </li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> NuGet Package Manager
+                            </li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> AWS/Azure Resource
+                                Visualizer</li>
+                            <li style="margin-bottom: 12px;"><span class="check-mark">✓</span> Test Coverage Analyzer
+                            </li>
                         </ul>
                     </div>
                     <div class="card-cta-row">
-                        <span style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">SKILL.md</span>
+                        <span
+                            style="background: rgba(0, 61, 130, 0.05); color: var(--aviva-dark-blue); padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; font-weight:700;">SKILL.md</span>
                     </div>
                 </div>
             </div>
@@ -513,13 +621,17 @@
     <section id="getstarted" style="padding: 100px 40px; background: var(--aviva-gray);">
         <div class="max-w-4xl" style="margin: 0 auto; text-align: center;">
             <div class="accent-line" style="margin-left: auto; margin-right: auto;"></div>
-            <h2 style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 24px; letter-spacing: -0.3px;">
+            <h2
+                style="font-size: 42px; font-weight: 900; color: var(--aviva-dark-blue); margin-bottom: 24px; letter-spacing: -0.3px;">
                 How to Get Started
             </h2>
-            <p style="font-size: 18px; color: #666; margin-bottom: 48px; line-height: 1.8; max-width: 600px; margin-left: auto; margin-right: auto;">
-                We have created a <strong>Base Framework</strong> with production-ready examples for all 4 pillars. Teams can adopt this immediately and customize it.
+            <p
+                style="font-size: 18px; color: #666; margin-bottom: 48px; line-height: 1.8; max-width: 600px; margin-left: auto; margin-right: auto;">
+                We have created a <strong>Base Framework</strong> with production-ready examples for all 4 pillars.
+                Teams can adopt this immediately and customize it.
             </p>
-            <a href="guardrails_explorer_aviva.html" class="btn-primary" style="font-size: 16px; padding: 18px 48px; display: inline-block;">
+            <a href="guardrails_explorer_aviva.html" class="btn-primary"
+                style="font-size: 16px; padding: 18px 48px; display: inline-block;">
                 🚀 Visit the Guardrails Explorer
             </a>
         </div>
@@ -528,49 +640,68 @@
     <!-- Bottom Section -->
     <section class="hero-gradient text-white" style="padding: 80px 40px; margin: 0;">
         <div class="max-w-5xl" style="margin: 0 auto;">
-            <h2 style="font-size: 42px; font-weight: 900; text-align: center; margin-bottom: 24px; letter-spacing: -0.3px;">
+            <h2
+                style="font-size: 42px; font-weight: 900; text-align: center; margin-bottom: 24px; letter-spacing: -0.3px;">
                 Standardize. Secure. Scale.
             </h2>
-            <p style="font-size: 18px; text-align: center; margin-bottom: 48px; font-style: italic; color: rgba(255, 255, 255, 0.9);">
+            <p
+                style="font-size: 18px; text-align: center; margin-bottom: 48px; font-style: italic; color: rgba(255, 255, 255, 0.9);">
                 "A high-quality codebase is not an accident—it's a designed environment."
             </p>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
-                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">95%</div>
-                    <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">Accuracy</p>
+                <div
+                    style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
+                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">95%
+                    </div>
+                    <p
+                        style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">
+                        Accuracy</p>
                 </div>
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
-                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">50%</div>
-                    <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">Speed</p>
+                <div
+                    style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
+                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">50%
+                    </div>
+                    <p
+                        style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">
+                        Speed</p>
                 </div>
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
-                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">ZERO</div>
-                    <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">Context Drift</p>
+                <div
+                    style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
+                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">
+                        ZERO</div>
+                    <p
+                        style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">
+                        Context Drift</p>
                 </div>
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
-                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">∞</div>
-                    <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">Scalability</p>
+                <div
+                    style="background: rgba(255, 255, 255, 0.1); padding: 32px; border-radius: 8px; border: 1px solid rgba(255, 194, 32, 0.3); text-align: center;">
+                    <div style="font-size: 48px; font-weight: 900; color: var(--aviva-yellow); margin-bottom: 12px;">∞
+                    </div>
+                    <p
+                        style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: rgba(255, 255, 255, 0.9);">
+                        Scalability</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer style="background: var(--aviva-dark-blue); color: white; padding: 48px 40px; text-align: center; border-top: 4px solid var(--aviva-yellow);">
+    <footer
+        style="background: var(--aviva-dark-blue); color: white; padding: 48px 40px; text-align: center; border-top: 4px solid var(--aviva-yellow);">
         <p style="margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;">© 2026 All rights reserved.</p>
     </footer>
 
     <script>
         // IntersectionObserver to animate technique cards when they enter the viewport
-        (function(){
+        (function () {
             if (!('IntersectionObserver' in window)) {
                 // fallback: reveal all
-                document.querySelectorAll('.anim-item').forEach(function(el){ el.classList.add('in-view'); });
+                document.querySelectorAll('.anim-item').forEach(function (el) { el.classList.add('in-view'); });
                 return;
             }
 
-            var obs = new IntersectionObserver(function(entries){
-                entries.forEach(function(entry){
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('in-view');
                         obs.unobserve(entry.target);
@@ -578,7 +709,7 @@
                 });
             }, { threshold: 0.18 });
 
-            document.querySelectorAll('#techniques .anim-item').forEach(function(el){
+            document.querySelectorAll('#techniques .anim-item').forEach(function (el) {
                 obs.observe(el);
             });
         })();
