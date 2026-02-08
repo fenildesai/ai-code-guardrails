@@ -38,15 +38,16 @@ It’s continuous, it's automated, and it never sleeps."
 ## Slide 5: The Path to Scale
 **The Strategy:**
 "We’ve already **proven** this with a successful POC in the Platform Team. 
+"We’ve already **proven** this with a successful POC in the Bamboo team. 
 Our next critical step is **Production**. We are currently focusing on the **Oasis (Endpoint Owners)** to ensure our security and governance are airtight.
 Once we have that strategic alignment, we’re ready for a full enterprise-wide rollout."
 
 ---
 
 ## Slide 6: ROI Projection
-**The Money:**
-"Let’s look at the impact on just one team: the Platform Team. With 65 PRs a week, we’re looking at **£18,700 in monthly savings**. 
-Scale that across the organization—over 200 PRs a week—and the numbers become undeniable: **over £690,000 in annual savings**. This isn't just about speed; it's about a massive return on our infrastructure."
+**The Story:**
+"As some of you know, we've been running a pilot with the **Bamboo team**. The results have been eye-opening. We didn't just see a slight improvement; we saw a fundamental shift in how they work. We’re reclaiming over **260 hours every single month**. That is **32.5 man-days** of engineering time put back into building features instead of waiting for reviews. 
+That's **£195,000 in annual savings** for just one team. Scale that across the organization, and we’re looking at nearly half a million pounds in recovered productivity."
 
 ---
 
@@ -68,4 +69,9 @@ Let's stop waiting, and start building. Thank you."
 
 ### Pro-Tips:
 - **Slide 5 (Production):** If asked about Oasis, emphasize that you are working with the *Endpoint Owners* on governance and security to ensure standard compliance.
-- **Slide 6 (ROI):** Be prepared to explain the £500/day estimate—it's a standard conservative average for fully-loaded engineering costs.
+- **Slide 6 (ROI Calculation):** If asked for the math behind the **£195,000**, here is the logic:
+    - **260 Hours saved per month** (60 mins * 65 PRs/week * 4 weeks).
+    - **32.5 Man-days reclaimed per month** (260 hours / 8h day).
+    - **£16,250 Monthly savings** (32.5 days * £500 avg daily cost).
+    - **£195,000 Annual savings** (£16,250 x 12 months).
+- **Bamboo team Scale:** This represents just one focused team; organization-wide impact scales significantly.
