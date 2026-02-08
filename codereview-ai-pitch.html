@@ -50,14 +50,11 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            /* Force content to start from top */
             align-items: center;
-            padding: 80px 60px 40px;
-            /* Consistent top padding for header alignment */
+            padding: clamp(40px, 8vh, 80px) clamp(20px, 5vw, 60px) 60px;
             background: var(--bg-white);
             position: relative;
             overflow-y: auto;
-            /* Allow scroll if content is too tall */
             overflow-x: hidden;
         }
 
@@ -90,21 +87,20 @@
 
         /* Typography - Kawasaki Style: BIG and BOLD */
         .slide h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(2rem, 6vw, 4.5rem);
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 30px;
+            margin-bottom: min(4vh, 30px);
             color: var(--primary-blue);
             text-align: center;
             z-index: 10;
         }
 
         .slide h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(1.6rem, 5vw, 3.5rem);
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 25px;
-            /* Reduced margin */
+            margin-bottom: min(3vh, 25px);
             color: var(--primary-blue);
             text-align: center;
             z-index: 10;
@@ -118,12 +114,12 @@
         }
 
         .slide p {
-            font-size: clamp(1.2rem, 2.5vw, 2rem);
-            line-height: 1.6;
+            font-size: clamp(1rem, 2.5vw, 1.8rem);
+            line-height: 1.5;
             color: var(--text-light);
             max-width: 900px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: min(3vh, 20px);
         }
 
         .tagline {
@@ -171,11 +167,11 @@
         /* Content Layouts */
         .content-box {
             background: #f8f9fa;
-            padding: 50px;
+            padding: clamp(20px, 5vw, 50px);
             border-radius: 20px;
             max-width: 1000px;
             width: 100%;
-            margin: 20px 0;
+            margin: min(3vh, 20px) 0;
         }
 
         .two-column {
@@ -252,10 +248,9 @@
         }
 
         .big-bullets li {
-            font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            /* Reduced */
+            font-size: clamp(1.1rem, 2.5vw, 2rem);
+            line-height: 1.5;
+            margin-bottom: min(2.5vh, 20px);
             padding-left: 40px;
             position: relative;
             color: var(--text-dark);
@@ -335,6 +330,43 @@
         .card p {
             font-size: clamp(1rem, 1.8vw, 1.4rem);
             color: var(--text-light);
+        }
+
+        .card-bullets {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .card-bullets li {
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .card-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-teal);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .card-result {
+            display: block;
+            margin-top: 15px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 10px;
         }
 
         /* Navigation */
@@ -420,6 +452,18 @@
                 font-size: 1.5rem;
             }
 
+            .slide {
+                padding: 40px 20px 60px;
+            }
+
+            .slide h1 {
+                margin-bottom: 20px;
+            }
+
+            .slide h2 {
+                margin-bottom: 15px;
+            }
+
             .two-column {
                 grid-template-columns: 1fr;
                 gap: 30px;
@@ -431,6 +475,12 @@
 
             .flow-arrow {
                 transform: rotate(90deg);
+            }
+
+            .step-list {
+                grid-template-columns: 1fr !important;
+                gap: 5px !important;
+                font-size: 0.65rem !important;
             }
         }
 
@@ -649,10 +699,9 @@
 
                     </svg>
                 </div>
-                <!-- Step Descriptions -->
-                <div style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
-                    <ol
-                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 20px; list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: #444;">
+                <div style="max-width: 1000px; margin: 0 auto; width: 100%;">
+                    <ol class="step-list"
+                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 15px; list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: #444;">
                         <li style="display: flex; align-items: flex-start;"><span
                                 style="flex-shrink: 0; display: inline-block; width: 18px; height: 18px; background: #00A3A1; color: white; border-radius: 50%; text-align: center; line-height: 18px; font-weight: bold; margin-right: 6px; font-size: 0.7rem;">1</span><span>Developer
                                 creates PR: feature branch → main</span></li>
@@ -672,54 +721,35 @@
                 </div>
             </div>
 
-            <!-- Slide 5: Competition -->
+            <!-- Slide 5: The Path to Scale -->
             <div class="slide">
-                <h2>Competitive Advantage</h2>
-                <div class="content-box">
-                    <div class="two-column" style="gap: 40px;">
-                        <div>
-                            <h3 style="color: #999;">❌ Others</h3>
-                            <ul style="list-style: none; padding: 0; font-size: 1.4rem; color: var(--text-light);">
-                                <li style="margin-bottom: 15px;">• Cloud-based (security risk)</li>
-                                <li style="margin-bottom: 15px;">• GitHub-only</li>
-                                <li style="margin-bottom: 15px;">• Generic feedback</li>
-                                <li style="margin-bottom: 15px;">• Expensive per-seat pricing</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 style="color: var(--accent-green);">✓ CodeReview.AI</h3>
-                            <ul style="list-style: none; padding: 0; font-size: 1.4rem; color: var(--text-dark);">
-                                <li style="margin-bottom: 15px;">• Fully internal & secure</li>
-                                <li style="margin-bottom: 15px;">• Azure DevOps native</li>
-                                <li style="margin-bottom: 15px;">• Custom review rules</li>
-                                <li style="margin-bottom: 15px;">• Infrastructure cost only</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 6: The Roadmap to Velocity -->
-            <div class="slide">
-                <h2>The Roadmap to Velocity</h2>
+                <h2>The Path to Scale</h2>
                 <div class="grid-3">
                     <div class="card">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">✅</div>
                         <h3>PROVEN</h3>
-                        <p>POC validated with Platform Team. Core review engine confirmed.<br><strong>Ready to
-                                scale.</strong></p>
+                        <ul class="card-bullets">
+                            <li>POC validated with Platform Team</li>
+                            <li>Core engine architecture confirmed</li>
+                        </ul>
+                        <span class="card-result">Ready to scale</span>
                     </div>
                     <div class="card">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🎯</div>
                         <h3>PRODUCTION</h3>
-                        <p>Establishing production endpoint. Onboarding the full Platform Team.<br><strong>Impact
-                                measurement.</strong></p>
+                        <ul class="card-bullets">
+                            <li>With Platform Team</li>
+                            <li>Security & governance approval</li>
+                        </ul>
+                        <span class="card-result">Strategic Alignment</span>
                     </div>
                     <div class="card">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🚀</div>
                         <h3>EXPANSION</h3>
-                        <p>Enterprise-wide rollout. Custom rules per department.<br><strong>Global developer
-                                velocity.</strong></p>
+                        <ul class="card-bullets">
+                            <li>Enterprise-wide rollout</li>
+                        </ul>
+                        <span class="card-result">Global velocity</span>
                     </div>
                 </div>
             </div>
@@ -758,15 +788,27 @@
                 <div class="grid-3">
                     <div class="card">
                         <h3>🔒 Security First</h3>
-                        <p>Code never leaves internal network. Full compliance with enterprise policies.</p>
+                        <ul class="card-bullets">
+                            <li>Code never leaves internal network</li>
+                            <li>Zero-trust architecture integration</li>
+                        </ul>
+                        <span class="card-result">Full Compliance</span>
                     </div>
                     <div class="card">
                         <h3>⚡ Proven Tech</h3>
-                        <p>Built on Azure DevOps APIs + enterprise LLMs. Battle-tested infrastructure.</p>
+                        <ul class="card-bullets">
+                            <li>Native Azure DevOps API integration</li>
+                            <li>Enterprise-grade LLM reliability</li>
+                        </ul>
+                        <span class="card-result">Battle-Tested</span>
                     </div>
                     <div class="card">
                         <h3>📊 Measurable Impact</h3>
-                        <p>Track review time, quality metrics, developer satisfaction in real-time.</p>
+                        <ul class="card-bullets">
+                            <li>Real-time velocity tracking</li>
+                            <li>Quality & satisfaction metrics</li>
+                        </ul>
+                        <span class="card-result">Data-Driven ROI</span>
                     </div>
                 </div>
             </div>
@@ -794,12 +836,12 @@
         <!-- Navigation Buttons -->
         <button class="nav-btn-left" id="prevBtn" aria-label="Previous">‹</button>
         <button class="nav-btn-right" id="nextBtn" aria-label="Next">›</button>
-        <div class="nav-counter" id="counter">1 / 9</div>
+        <div class="nav-counter" id="counter">1 / 8</div>
     </div>
 
     <script>
         let currentSlide = 0;
-        const totalSlides = 9;
+        const totalSlides = 8;
         const wrapper = document.getElementById('slidesWrapper');
         const counter = document.getElementById('counter');
         const prevBtn = document.getElementById('prevBtn');
