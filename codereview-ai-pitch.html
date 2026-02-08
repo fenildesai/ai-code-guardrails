@@ -379,16 +379,23 @@
 
         .nav-counter {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1rem;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--primary-blue);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 20px;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 6px 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-counter:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            transform: scale(1.05);
         }
 
 
