@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Context Engineering — GitHub Copilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#03060e}
+:root{
+  --bg:#03060e;
+  --bg2:#070d1c;
+  --blue:#2563eb;--blue-l:#3b82f6;--blue-xl:#60a5fa;
+  --cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;
+  --red:#ef4444;--purple:#8b5cf6;--pink:#ec4899;
+  --text:#eef2ff;--dim:#7c8db0;--muted:#334155;
+  --border:rgba(255,255,255,.07);
+  --ff:'Cabinet Grotesk',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--ff);color:var(--text)}
+
+/* ── DECK ── */
+.deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  opacity:0;transform:translateX(40px);
+  transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;overflow:hidden;padding:40px 60px;
+}
+.slide.prev{opacity:0;transform:translateX(-40px)}
+.slide.active{opacity:1;transform:none;pointer-events:all}
+
+/* ── PROGRESS ── */
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue-l),var(--cyan),var(--green));transition:width .4s;z-index:300;border-radius:0 2px 2px 0}
+
+/* ── CONTROLS ── */
+.ctrl{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:200;
+  display:flex;align-items:center;gap:10px;
+  background:rgba(3,6,14,.88);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:40px;padding:8px 16px;
+}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s}
+.dot.on{background:var(--blue-l);width:18px;border-radius:3px}
+.cbtn{background:none;border:1px solid var(--border);border-radius:18px;color:var(--dim);padding:4px 12px;font-size:12px;font-family:var(--ff);cursor:pointer;transition:all .2s;font-weight:600}
+.cbtn:hover{background:var(--blue-l);color:#fff;border-color:var(--blue-l)}
+.cn{font-size:11px;color:var(--muted);font-family:var(--mono);min-width:32px;text-align:center}
+
+/* ── HINT ── */
+.hint{position:fixed;top:12px;right:12px;z-index:200;display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);background:rgba(3,6,14,.75);border:1px solid var(--border);border-radius:6px;padding:5px 10px}
+kbd{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:10px;color:var(--dim)}
+.fsbtn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0}
+
+/* ── GRID ── */
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.glow{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+
+/* ── ANIMATIONS ── */
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}70%{box-shadow:0 0 0 10px rgba(59,130,246,0)}}
+.slide.active .a1{animation:fu .5s ease both .05s}
+.slide.active .a2{animation:fu .5s ease both .2s}
+.slide.active .a3{animation:fu .5s ease both .35s}
+.slide.active .a4{animation:fu .5s ease both .5s}
+.slide.active .a5{animation:fu .5s ease both .65s}
+.slide.active .ap{animation:pop .5s cubic-bezier(.34,1.56,.64,1) both .15s}
+
+
+/* ══════════════════════════
+   S1 — OPENING
+══════════════════════════ */
+#s1{background:radial-gradient(ellipse 90% 70% at 50% 10%,#0a1830 0%,#03060e 70%);text-align:center}
+.s1-big{font-size:clamp(70px,14vw,160px);font-weight:900;line-height:1;letter-spacing:-.06em;color:var(--red);display:block;margin-bottom:4px}
+.s1-context{font-size:clamp(13px,1.8vw,18px);color:var(--dim);letter-spacing:.02em;margin-bottom:32px}
+.s1-line{font-size:clamp(24px,4vw,52px);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:14px}
+.s1-line .hi{background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s1-note{font-size:14px;color:var(--muted)}
+.s1-src{margin-top:8px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+
+/* ══════════════════════════
+   S2 — PERSONAS
+══════════════════════════ */
+#s2{background:#03060e}
+.s2-h{text-align:center;margin-bottom:28px}
+.s2-h h2{font-size:clamp(26px,3.8vw,46px);font-weight:900;letter-spacing:-.035em}
+.s2-h p{font-size:15px;color:var(--dim);margin-top:6px}
+.personas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1060px;width:100%}
+.persona{border-radius:16px;padding:22px 18px;border:1px solid var(--border);background:rgba(255,255,255,.02);position:relative;overflow:hidden}
+.persona::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:2px 2px 0 0}
+.p1::after{background:var(--blue-l)}.p2::after{background:var(--cyan)}.p3::after{background:var(--purple)}.p4::after{background:var(--amber)}
+.p-emoji{font-size:38px;margin-bottom:10px;display:block}
+.p-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px}
+.p1 .p-role{color:var(--blue-l)}.p2 .p-role{color:var(--cyan)}.p3 .p-role{color:var(--purple)}.p4 .p-role{color:var(--amber)}
+.p-ask{font-size:12px;font-style:italic;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:6px;padding:8px 10px;color:#fca5a5;margin-bottom:10px;line-height:1.5}
+.p-fail{font-size:12px;color:var(--dim);line-height:1.6}
+.p-fail .x{color:var(--red);font-weight:800;margin-right:3px}
+
+/* ══════════════════════════
+   S3 — ROOT CAUSE
+══════════════════════════ */
+#s3{background:radial-gradient(ellipse 80% 60% at 50% 50%,#080f24 0%,#03060e 80%);text-align:center}
+.s3-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+.s3-big{font-size:clamp(40px,6.5vw,90px);font-weight:900;letter-spacing:-.045em;line-height:1.0;margin-bottom:32px}
+.s3-big .no{color:var(--red)}.s3-big .yes{color:var(--blue-l)}
+.trio{display:flex;gap:14px;justify-content:center;align-items:center;margin-bottom:28px}
+.tbox{border-radius:14px;padding:18px 24px;border:1px solid;text-align:center;min-width:160px}
+.tbox-1{background:rgba(255,255,255,.02);border-color:var(--border)}
+.tbox-2{background:rgba(37,99,235,.08);border-color:rgba(59,130,246,.3)}
+.tbox-3{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.25)}
+.tbox-em{font-size:28px;margin-bottom:6px}
+.tbox-name{font-size:14px;font-weight:800}
+.tbox-sub{font-size:12px;color:var(--dim);margin-top:3px}
+.trio-plus{font-size:20px;color:var(--muted)}
+
+/* ══════════════════════════
+   S4 — BEFORE / AFTER
+══════════════════════════ */
+#s4{background:#03060e}
+.s4-h{text-align:center;margin-bottom:24px}
+.s4-h h2{font-size:clamp(24px,3.5vw,44px);font-weight:900;letter-spacing:-.035em}
+.s4-h p{font-size:14px;color:var(--dim);margin-top:5px}
+.compare{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:0;max-width:1020px;width:100%}
+.panel{border-radius:16px;padding:26px 24px;border:1px solid}
+.panel-bad{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.2)}
+.panel-good{background:rgba(16,185,129,.04);border-color:rgba(16,185,129,.2)}
+.panel-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.panel-bad .panel-lbl{color:var(--red)}.panel-good .panel-lbl{color:var(--green)}
+.ask-box{border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:15px;font-weight:600;line-height:1.5}
+.ask-bad{background:rgba(239,68,68,.07);color:#fca5a5;border:1px solid rgba(239,68,68,.15)}
+.ask-good{background:rgba(16,185,129,.07);color:#6ee7b7;border:1px solid rgba(16,185,129,.15)}
+.ctx-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;background:rgba(6,182,212,.12);color:#67e8f9;border:1px solid rgba(6,182,212,.2)}
+.result-box{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.7;color:var(--dim);border:1px solid var(--border);background:rgba(255,255,255,.02)}
+.r-bad{color:var(--red)}.r-good{color:var(--green)}
+.compare-arr{display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--blue-l)}
+
+/* ══════════════════════════
+   S5 — CONTEXT ENGINEERING
+══════════════════════════ */
+#s5{background:radial-gradient(ellipse 80% 70% at 50% 50%,#07102a 0%,#03060e 80%);text-align:center}
+.s5-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;border:1px solid rgba(59,130,246,.35);background:rgba(37,99,235,.1);color:#93c5fd;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+.s5-head{font-size:clamp(40px,7vw,96px);font-weight:900;letter-spacing:-.05em;line-height:.95;margin-bottom:24px}
+.s5-head .g1{background:linear-gradient(135deg,#f0f4ff,#7c8db0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s5-head .g2{background:linear-gradient(135deg,#3b82f6,#06b6d4,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s5-def{font-size:clamp(15px,2vw,20px);color:var(--dim);max-width:600px;margin:0 auto 24px;line-height:1.7}
+.s5-def strong{color:var(--text)}
+.s5-src{font-size:11px;color:var(--muted);font-family:var(--mono)}
+
+/* ══════════════════════════
+   S6 — TECHNIQUES
+══════════════════════════ */
+#s6{background:#03060e}
+.s6-h{text-align:center;margin-bottom:28px}
+.s6-h h2{font-size:clamp(24px,3.5vw,44px);font-weight:900;letter-spacing:-.035em;margin-bottom:6px}
+.s6-h p{font-size:14px;color:var(--dim)}
+.techs{display:flex;gap:14px;max-width:1060px;width:100%}
+.tcard{flex:1;border-radius:16px;padding:24px 18px;border:1px solid var(--border);background:rgba(255,255,255,.02);position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+.tcard:hover{transform:translateY(-5px)}
+.tcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tc1::before{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.tc2::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.tc3::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.tc4::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.tc-num{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.tc-icon{font-size:36px;margin-bottom:10px}
+.tc-name{font-size:17px;font-weight:800;margin-bottom:5px}
+.tc-sub{font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:10px}
+.tc-desc{font-size:12.5px;color:var(--dim);line-height:1.65;margin-bottom:12px}
+.tc-examples{display:flex;flex-direction:column;gap:4px}
+.te{font-size:11px;color:var(--muted);display:flex;gap:5px;align-items:flex-start;line-height:1.4}
+.te::before{content:'→';color:var(--blue-l);flex-shrink:0;font-size:10px;margin-top:1px}
+
+/* ══════════════════════════
+   S7 — WHAT WE BUILT
+══════════════════════════ */
+#s7{background:#03060e}
+.s7-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:center;max-width:1100px;width:100%}
+.s7-l .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#93c5fd;margin-bottom:14px}
+.s7-l h2{font-size:clamp(28px,3.8vw,52px);font-weight:900;letter-spacing:-.04em;line-height:1.1;margin-bottom:14px}
+.s7-l h2 em{font-style:normal;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s7-l p{font-size:14px;color:var(--dim);line-height:1.7;margin-bottom:22px}
+.ctrs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ctr{border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);text-align:center}
+.ctr-n{font-size:28px;font-weight:900;font-family:var(--mono);color:var(--blue-l);line-height:1}
+.ctr-l{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* browser mock */
+.browser{border-radius:16px;border:1px solid rgba(255,255,255,.1);overflow:hidden;box-shadow:0 0 60px rgba(37,99,235,.15)}
+.br-bar{background:rgba(255,255,255,.05);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.br-dots{display:flex;gap:5px}
+.brd{width:9px;height:9px;border-radius:50%}
+.brd-r{background:#ef4444}.brd-y{background:#f59e0b}.brd-g{background:#10b981}
+.br-url{flex:1;background:rgba(255,255,255,.04);border-radius:4px;padding:4px 10px;font-family:var(--mono);font-size:10px;color:var(--muted);margin:0 6px}
+.br-body{background:#03060e;padding:14px}
+.br-search-row{display:flex;gap:8px;margin-bottom:10px;align-items:center}
+.br-srch{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-size:11px;color:var(--dim)}
+.br-ctn{font-size:10px;color:var(--muted)}
+.br-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:10px}
+.btab{font-size:10px;padding:5px 9px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.btab.on{color:var(--blue-l);border-bottom-color:var(--blue-l);font-weight:700}
+.br-row{border-radius:8px;border:1px solid var(--border);padding:9px 12px;margin-bottom:7px;background:rgba(255,255,255,.02);display:flex;align-items:center;justify-content:space-between}
+.br-row:last-child{margin-bottom:0}
+.brl{display:flex;align-items:center;gap:8px}
+.bricon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.brn{font-size:11.5px;font-weight:600;color:var(--text)}
+.brt{font-size:9.5px;color:var(--muted);margin-top:1px}
+.brbdg{font-size:8.5px;font-weight:700;padding:2px 5px;border-radius:3px;text-transform:uppercase;margin-left:4px}
+.bdg-a{background:rgba(59,130,246,.15);color:#93c5fd}
+.bdg-p{background:rgba(16,185,129,.15);color:#6ee7b7}
+.bdg-s{background:rgba(139,92,246,.15);color:#c4b5fd}
+.bdg-i{background:rgba(245,158,11,.12);color:#fcd34d}
+.brr{display:flex;gap:5px}
+.br-btn{padding:3px 8px;border-radius:4px;font-size:9.5px;font-weight:700;border:none;cursor:pointer;font-family:var(--ff)}
+.bb-i{background:#10b981;color:#fff}.bb-v{background:#2563eb;color:#fff}
+
+/* ══════════════════════════
+   S8 — BENEFITS
+══════════════════════════ */
+#s8{background:radial-gradient(ellipse 80% 60% at 50% 60%,#04101e 0%,#03060e 80%)}
+.s8-h{text-align:center;margin-bottom:28px}
+.s8-h h2{font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-.04em;margin-bottom:6px}
+.s8-h p{font-size:15px;color:var(--dim)}
+.bene-big{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;width:100%}
+.bene{border-radius:16px;padding:24px 20px;border:1px solid var(--border);background:rgba(255,255,255,.025);transition:all .25s;text-align:center}
+.bene:hover{transform:translateY(-4px);border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.04)}
+.bene-em{font-size:36px;margin-bottom:12px}
+.bene-t{font-size:16px;font-weight:800;margin-bottom:6px}
+.bene-d{font-size:12.5px;color:var(--dim);line-height:1.65}
+.bene-d strong{color:var(--green)}
+
+/* ══════════════════════════
+   S9 — CTA
+══════════════════════════ */
+#s9{background:radial-gradient(ellipse 90% 80% at 50% 50%,#060d22 0%,#03060e 80%);text-align:center}
+.s9-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;border:1px solid rgba(16,185,129,.35);background:rgba(16,185,129,.08);color:#6ee7b7;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+.s9-h{font-size:clamp(34px,6vw,80px);font-weight:900;letter-spacing:-.05em;line-height:.95;margin-bottom:18px}
+.s9-h .l1{background:linear-gradient(135deg,#eef2ff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s9-h .l2{background:linear-gradient(135deg,#3b82f6,#06b6d4,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s9-sub{font-size:16px;color:var(--dim);max-width:480px;margin:0 auto 28px;line-height:1.7}
+.link-grid{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.lcard{
+  display:flex;align-items:center;gap:12px;
+  padding:15px 22px;border-radius:12px;border:1px solid;
+  cursor:pointer;transition:all .25s;min-width:188px;text-align:left;
+  text-decoration:none;background:none;font-family:var(--ff);
+}
+.lc1{background:rgba(37,99,235,.07);border-color:rgba(59,130,246,.3);color:var(--text)}
+.lc1:hover{background:rgba(37,99,235,.15);border-color:rgba(59,130,246,.6);transform:translateY(-3px);box-shadow:0 14px 40px rgba(37,99,235,.25)}
+.lc2{background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.3);color:var(--text)}
+.lc2:hover{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.55);transform:translateY(-3px);box-shadow:0 14px 40px rgba(16,185,129,.2)}
+.lc3{background:rgba(139,92,246,.05);border-color:rgba(139,92,246,.3);color:var(--text)}
+.lc3:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.55);transform:translateY(-3px);box-shadow:0 14px 40px rgba(139,92,246,.2)}
+.lc4{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.3);color:var(--text)}
+.lc4:hover{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.55);transform:translateY(-3px);box-shadow:0 14px 40px rgba(245,158,11,.15)}
+.lcard-icon{font-size:24px;flex-shrink:0}
+.lcard-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.lcard-desc{font-size:11px;color:var(--dim)}
+.s9-credit{display:flex;align-items:center;justify-content:center;gap:10px}
+.s9-label{font-size:12px;color:var(--muted)}
+.avs{display:flex;gap:-4px}
+.av{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;margin-left:-6px}
+.av:first-child{margin-left:0}
+</style>
+</head>
+<body>
+
+<div class="hint">
+  <kbd>←</kbd><kbd>→</kbd>
+  <span id="hnum">1/9</span>
+  <button class="fsbtn" onclick="fs()" title="Fullscreen">⛶</button>
+</div>
+<div id="prog"></div>
+
+<div class="deck">
+
+<!-- ══ S1 ══ -->
+<div class="slide active" id="s1">
+  <div class="grid"></div>
+  <div class="glow" style="width:700px;height:500px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(37,99,235,.2),transparent 70%)"></div>
+  <div class="glow" style="width:300px;height:300px;bottom:0;right:5%;background:radial-gradient(circle,rgba(6,182,212,.1),transparent 70%)"></div>
+
+  <span class="s1-big ap">55%</span>
+  <p class="s1-context a1">faster — what AI tools can make your team, according to GitHub's own research.</p>
+  <h1 class="s1-line a2">So why does it still feel like<br><span class="hi">we're barely getting 5%?</span></h1>
+  <p class="s1-note a3">Today I'll show you exactly why — and what we did about it.</p>
+  <p class="s1-src a4">Source: GitHub Research, 2022 · github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity</p>
+</div>
+
+<!-- ══ S2 ══ -->
+<div class="slide" id="s2">
+  <div class="s2-h a1">
+    <h2>🙋 <span style="color:var(--red)">Recognise this?</span></h2>
+    <p>Different roles. Same frustration. Every. Single. Day.</p>
+  </div>
+  <div class="personas">
+    <div class="persona p1 a2">
+      <span class="p-emoji">👨‍💻</span>
+      <div class="p-role">Developer</div>
+      <div class="p-ask">"Refactor this piece of code"</div>
+      <div class="p-fail"><span class="x">✗</span> Returns the wrong programming language. Wrong patterns. Has to rewrite it anyway.</div>
+    </div>
+    <div class="persona p2 a3">
+      <span class="p-emoji">📋</span>
+      <div class="p-role">Scrum Master</div>
+      <div class="p-ask">"Write story acceptance criteria"</div>
+      <div class="p-fail"><span class="x">✗</span> Generic template. Ignores your team's format, Jira conventions, and DoD.</div>
+    </div>
+    <div class="persona p3 a4">
+      <span class="p-emoji">🧪</span>
+      <div class="p-role">QA / Tester</div>
+      <div class="p-ask">"Generate test scenarios"</div>
+      <div class="p-fail"><span class="x">✗</span> Textbook tests. Misses every domain-specific rule and platform edge case.</div>
+    </div>
+    <div class="persona p4 a5">
+      <span class="p-emoji">📊</span>
+      <div class="p-role">Project Manager</div>
+      <div class="p-ask">"Write a stakeholder update"</div>
+      <div class="p-fail"><span class="x">✗</span> Corporate boilerplate. Wrong tone, wrong format, wrong stakeholders.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S3 ══ -->
+<div class="slide" id="s3">
+  <div class="grid" style="opacity:.4"></div>
+  <div class="glow" style="width:600px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.15),transparent 70%)"></div>
+  <div class="s3-label a1">The real reason</div>
+  <h2 class="s3-big a2">The AI isn't <span class="no">broken.</span><br>The context is <span class="yes">missing.</span></h2>
+  <div class="trio a3">
+    <div class="tbox tbox-1">
+      <div class="tbox-em">🤖</div>
+      <div class="tbox-name">The AI</div>
+      <div class="tbox-sub">= the engine</div>
+    </div>
+    <div class="trio-plus">+</div>
+    <div class="tbox tbox-2">
+      <div class="tbox-em">📦</div>
+      <div class="tbox-name">What you give it</div>
+      <div class="tbox-sub">= the fuel</div>
+    </div>
+    <div class="trio-plus">=</div>
+    <div class="tbox tbox-3">
+      <div class="tbox-em">✨</div>
+      <div class="tbox-name">The result</div>
+      <div class="tbox-sub">= only as good as both</div>
+    </div>
+  </div>
+  <p class="a4" style="font-size:16px;color:var(--dim);max-width:560px;text-align:center;line-height:1.7">A powerful engine with no fuel goes nowhere. We've been giving AI an extraordinary capability — and feeding it almost nothing.</p>
+</div>
+
+<!-- ══ S4 ══ -->
+<div class="slide" id="s4">
+  <div class="s4-h a1">
+    <h2>Same question. <span style="background:linear-gradient(135deg,#ef4444,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Totally different answer.</span></h2>
+    <p>The only thing we changed was the context.</p>
+  </div>
+  <div class="compare">
+    <div class="panel panel-bad a2">
+      <div class="panel-lbl">✗ No context</div>
+      <div class="ask-box ask-bad">"Write a project status update"</div>
+      <div class="result-box">
+        <span class="r-bad">Result:</span> Generic corporate paragraph. No project name, wrong milestones, meaningless RAG status. Unusable. Written again from scratch.
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">→ Time saved: zero.</div>
+      </div>
+    </div>
+    <div class="compare-arr a3">→</div>
+    <div class="panel panel-good a4">
+      <div class="panel-lbl">✓ With context</div>
+      <div class="ask-box ask-good">"Status update"</div>
+      <div class="ctx-chips">
+        <span class="chip">Project Phoenix</span>
+        <span class="chip">Week 6 of 10</span>
+        <span class="chip">70% complete</span>
+        <span class="chip">Risk: vendor delay</span>
+        <span class="chip">Audience: CFO</span>
+      </div>
+      <div class="result-box">
+        <span class="r-good">Result:</span> Accurate, professional, ready to send. Correct format, right stakeholder tone, real risk flags. Used immediately.
+        <div style="margin-top:10px;font-size:11px;color:#6ee7b7">→ Sent in under 2 minutes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S5 ══ -->
+<div class="slide" id="s5">
+  <div class="glow" style="width:600px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.15),transparent 70%)"></div>
+  <div class="glow" style="width:300px;height:300px;top:0;right:0;background:radial-gradient(circle,rgba(139,92,246,.1),transparent 70%)"></div>
+  <div class="s5-tag a1">The new skill that matters</div>
+  <h1 class="s5-head a2">
+    <span class="g1">Context</span>
+    <span class="g2">Engineering.</span>
+  </h1>
+  <p class="s5-def a3">Not just <strong>what you ask</strong> — but <strong>everything the model sees.</strong><br>Your team's standards. Your domain. Your workflow. Your language.</p>
+  <p class="s5-src a4" style="color:var(--muted);font-size:11px;font-family:var(--mono)">Term coined by Tobi Lütke (Shopify CEO) · tobi.lutke on X, 2025 · echoed by Andrej Karpathy (OpenAI co-founder) · x.com/karpathy</p>
+</div>
+
+<!-- ══ S6 ══ -->
+<div class="slide" id="s6">
+  <div class="s6-h a1">
+    <h2>4 ways to engineer context in Copilot</h2>
+    <p>Powered by <strong style="color:#93c5fd">github.com/github/awesome-copilot</strong></p>
+  </div>
+  <div class="techs">
+    <div class="tcard tc1 a2">
+      <div class="tc-num">01</div>
+      <div class="tc-icon">📐</div>
+      <div class="tc-name">Instructions</div>
+      <div class="tc-sub">.github/copilot-instructions.md</div>
+      <div class="tc-desc">Permanent team rules applied to <em>every</em> Copilot suggestion. Set once, works forever.</div>
+      <div class="tc-examples">
+        <div class="te">Coding standards & conventions</div>
+        <div class="te">Architecture patterns</div>
+        <div class="te">Error handling rules</div>
+      </div>
+    </div>
+    <div class="tcard tc2 a3">
+      <div class="tc-num">02</div>
+      <div class="tc-icon">🤖</div>
+      <div class="tc-name">Agents</div>
+      <div class="tc-sub">.github/agents/</div>
+      <div class="tc-desc">Specialist AI modes for specific jobs — invoked by typing @agent-name.</div>
+      <div class="tc-examples">
+        <div class="te">@code-review</div>
+        <div class="te">@security-scan</div>
+        <div class="te">@test-generator</div>
+      </div>
+    </div>
+    <div class="tcard tc3 a4">
+      <div class="tc-num">03</div>
+      <div class="tc-icon">🛠</div>
+      <div class="tc-name">Skills</div>
+      <div class="tc-sub">.github/skills/</div>
+      <div class="tc-desc">Shared pattern libraries Copilot references to generate team-standard output.</div>
+      <div class="tc-examples">
+        <div class="te">Coding pattern libraries</div>
+        <div class="te">Architecture templates</div>
+        <div class="te">Cloud integration guides</div>
+      </div>
+    </div>
+    <div class="tcard tc4 a5">
+      <div class="tc-num">04</div>
+      <div class="tc-icon">🔌</div>
+      <div class="tc-name">Plugins</div>
+      <div class="tc-sub">Integrations</div>
+      <div class="tc-desc">Live connections to your real tools — Jira, Azure DevOps, Confluence — feeding real data in.</div>
+      <div class="tc-examples">
+        <div class="te">Query live work items</div>
+        <div class="te">Fetch project documents</div>
+        <div class="te">Read team wikis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S7 ══ -->
+<div class="slide" id="s7">
+  <div class="s7-wrap">
+    <div class="s7-l">
+      <div class="eyebrow a1">What we built</div>
+      <h2 class="a2">Our own<br><em>AI Assets</em><br>Catalog.</h2>
+      <p class="a3">Inspired by the official GitHub awesome-copilot catalog — built for our teams. Search, install directly into VS Code, and contribute your own.</p>
+      <div class="ctrs a4">
+        <div class="ctr"><div class="ctr-n">21+</div><div class="ctr-l">Total Assets</div></div>
+        <div class="ctr"><div class="ctr-n">7</div><div class="ctr-l">Agents</div></div>
+        <div class="ctr"><div class="ctr-n">4</div><div class="ctr-l">Skills</div></div>
+        <div class="ctr"><div class="ctr-n">∞</div><div class="ctr-l">Shareable</div></div>
+      </div>
+    </div>
+    <div class="browser a5">
+      <div class="br-bar">
+        <div class="br-dots"><div class="brd brd-r"></div><div class="brd brd-y"></div><div class="brd brd-g"></div></div>
+        <div class="br-url">team-ai-assets / catalog</div>
+      </div>
+      <div class="br-body">
+        <div class="br-search-row">
+          <div class="br-srch">🔍 Search assets…</div>
+          <div class="br-ctn">21 assets</div>
+        </div>
+        <div class="br-tabs">
+          <div class="btab on">All</div>
+          <div class="btab">🤖 Agents</div>
+          <div class="btab">🛠 Skills</div>
+          <div class="btab">📋 Instructions</div>
+        </div>
+        <div class="br-row">
+          <div class="brl">
+            <div class="bricon" style="background:rgba(59,130,246,.15)">🔍</div>
+            <div><div style="display:flex;align-items:center"><div class="brn">Code Review Agent</div><div class="brbdg bdg-a">Agent</div></div><div class="brt">Platform Eng · 🔥 Premium</div></div>
+          </div>
+          <div class="brr"><button class="br-btn bb-i">↓ Install</button><button class="br-btn bb-v">VS Code</button></div>
+        </div>
+        <div class="br-row">
+          <div class="brl">
+            <div class="bricon" style="background:rgba(239,68,68,.12)">🛡️</div>
+            <div><div style="display:flex;align-items:center"><div class="brn">Security Review Agent</div><div class="brbdg bdg-a">Agent</div></div><div class="brt">Security Guild · 🔥 Premium</div></div>
+          </div>
+          <div class="brr"><button class="br-btn bb-i">↓ Install</button><button class="br-btn bb-v">VS Code</button></div>
+        </div>
+        <div class="br-row">
+          <div class="brl">
+            <div class="bricon" style="background:rgba(16,185,129,.12)">🧪</div>
+            <div><div style="display:flex;align-items:center"><div class="brn">Test Generation Agent</div><div class="brbdg bdg-a">Agent</div></div><div class="brt">QA · 💛 Either</div></div>
+          </div>
+          <div class="brr"><button class="br-btn bb-i">↓ Install</button><button class="br-btn bb-v">VS Code</button></div>
+        </div>
+        <div class="br-row">
+          <div class="brl">
+            <div class="bricon" style="background:rgba(139,92,246,.12)">⚙️</div>
+            <div><div style="display:flex;align-items:center"><div class="brn">C# Async Patterns Skill</div><div class="brbdg bdg-s">Skill</div></div><div class="brt">Platform Eng · 💛 Either</div></div>
+          </div>
+          <div class="brr"><button class="br-btn bb-i">↓ Install</button><button class="br-btn bb-v">VS Code</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S8 ══ -->
+<div class="slide" id="s8">
+  <div class="glow" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(16,185,129,.08),transparent 70%)"></div>
+  <div class="s8-h a1">
+    <h2>What changes for <span style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">every team</span></h2>
+    <p>Not just developers — every role in this room.</p>
+  </div>
+  <div class="bene-big">
+    <div class="bene a2">
+      <div class="bene-em">⚡</div>
+      <div class="bene-t">Right answer, first time</div>
+      <div class="bene-d">AI outputs that <strong>fit your context</strong> — no rewrites, no corrections, no wasted time.</div>
+    </div>
+    <div class="bene a3">
+      <div class="bene-em">🔁</div>
+      <div class="bene-t">Team knowledge scales</div>
+      <div class="bene-d">What your best people know <strong>flows to everyone</strong> automatically through shared assets.</div>
+    </div>
+    <div class="bene a4">
+      <div class="bene-em">🤝</div>
+      <div class="bene-t">Every role benefits</div>
+      <div class="bene-d">Dev, tester, SM, PM, architect — <strong>all get AI built for their specific workflow</strong>.</div>
+    </div>
+    <div class="bene a5">
+      <div class="bene-em">📈</div>
+      <div class="bene-t">Gets better over time</div>
+      <div class="bene-d">Every team that contributes an asset <strong>makes it better for everyone else.</strong></div>
+    </div>
+    <div class="bene" style="animation:fu .5s ease both .65s">
+      <div class="bene-em">🎯</div>
+      <div class="bene-t">Consistent quality</div>
+      <div class="bene-d">Same standards, <strong>enforced automatically</strong> — across every sprint, every team.</div>
+    </div>
+    <div class="bene" style="animation:fu .5s ease both .8s">
+      <div class="bene-em">🚀</div>
+      <div class="bene-t">Starts today</div>
+      <div class="bene-d">The catalog is live. <strong>Install an agent in under 60 seconds</strong> and feel the difference.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9 — CTA ══ -->
+<div class="slide" id="s9">
+  <div class="grid" style="opacity:.3"></div>
+  <div class="glow" style="width:800px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.18),transparent 70%)"></div>
+  <div class="s9-badge a1">✦ Built by our teams. For every team.</div>
+  <h1 class="s9-h a2">
+    <span class="l1">The AI was always ready.</span>
+    <span class="l2">Now — so are we.</span>
+  </h1>
+  <p class="s9-sub a3">The catalog is live. Browse, install, and contribute your team's assets in minutes.</p>
+  <div class="link-grid a4">
+    <button class="lcard lc1" onclick="openLink('catalog-v3.html')">
+      <span class="lcard-icon">📦</span>
+      <div><div class="lcard-name">AI Assets Catalog</div><div class="lcard-desc">Browse &amp; install all agents and skills</div></div>
+    </button>
+    <button class="lcard lc2" onclick="openLink('catalog-v3.html#workflow')">
+      <span class="lcard-icon">🔄</span>
+      <div><div class="lcard-name">Developer Workflow</div><div class="lcard-desc">Story to merged PR, step by step</div></div>
+    </button>
+    <button class="lcard lc3" onclick="openLink('catalog-v3.html#guide')">
+      <span class="lcard-icon">📖</span>
+      <div><div class="lcard-name">Developer Guide</div><div class="lcard-desc">Model selection, tips &amp; shortcuts</div></div>
+    </button>
+    <button class="lcard lc4" onclick="openLink('catalog-v3.html#contribute')">
+      <span class="lcard-icon">✦</span>
+      <div><div class="lcard-name">Contribute</div><div class="lcard-desc">Upload your team's own assets</div></div>
+    </button>
+  </div>
+  <div class="s9-credit a5">
+    <div class="s9-label">Built with ❤️ by</div>
+    <div class="avs">
+      <div class="av" style="background:linear-gradient(135deg,#2563eb,#1d4ed8)">PE</div>
+      <div class="av" style="background:linear-gradient(135deg,#dc2626,#b91c1c)">SG</div>
+      <div class="av" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">QA</div>
+      <div class="av" style="background:linear-gradient(135deg,#059669,#047857)">AG</div>
+      <div class="av" style="background:linear-gradient(135deg,#d97706,#b45309)">DO</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Platform · Security · QA · API Guild · DevOps</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="ctrl">
+  <button class="cbtn" onclick="prev()">←</button>
+  <div class="dots" id="dots"></div>
+  <button class="cbtn" onclick="next()">→</button>
+  <div class="cn" id="cn">1/9</div>
+</div>
+
+<script>
+const IDS=['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+let cur=0;
+
+function render(){
+  IDS.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('active','prev');
+    if(i===cur)el.classList.add('active');
+    else if(i<cur)el.classList.add('prev');
+  });
+  document.getElementById('dots').innerHTML=IDS.map((_,i)=>`<div class="dot${i===cur?' on':''}" onclick="go(${i})"></div>`).join('');
+  const t=`${cur+1}/${IDS.length}`;
+  document.getElementById('cn').textContent=t;
+  document.getElementById('hnum').textContent=t;
+  document.getElementById('prog').style.width=`${((cur+1)/IDS.length)*100}%`;
+}
+function next(){if(cur<IDS.length-1){cur++;render()}}
+function prev(){if(cur>0){cur--;render()}}
+function go(i){cur=i;render()}
+function openLink(href){window.open(href,'_blank')}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight',' '].includes(e.key)){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev()}
+  else if(e.key==='f'||e.key==='F')fs();
+  else if(e.key==='Escape'&&document.fullscreenElement)document.exitFullscreen();
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50)d>0?next():prev()},{passive:true});
+
+render();
+</script>
+</body>
+</html>
