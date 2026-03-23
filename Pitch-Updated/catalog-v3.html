@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Team AI Assets — GitHub Copilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;color:#1a1f36;background:#ffffff;min-height:100vh}
+a{color:#0969da;text-decoration:none}a:hover{text-decoration:underline}
+button{cursor:pointer;font-family:inherit;font-size:inherit}
+img,svg{display:block}
+
+/* ─── DESIGN TOKENS ─── */
+:root{
+  --white:#ffffff;
+  --gray-50:#f6f8fa;
+  --gray-100:#eaeef2;
+  --gray-200:#d0d7de;
+  --gray-300:#afb8c1;
+  --gray-400:#8c959f;
+  --gray-500:#6e7781;
+  --gray-600:#57606a;
+  --gray-700:#424a53;
+  --gray-800:#32383f;
+  --gray-900:#24292f;
+  --blue-50:#ddf4ff;
+  --blue-100:#cae8ff;
+  --blue-200:#a5d6ff;
+  --blue-500:#0969da;
+  --blue-600:#0550ae;
+  --green-50:#dafbe1;
+  --green-100:#aceebb;
+  --green-500:#1a7f37;
+  --green-600:#116329;
+  --purple-50:#fbefff;
+  --purple-100:#ecd8ff;
+  --purple-500:#8250df;
+  --orange-50:#fff1e5;
+  --orange-100:#ffd8b5;
+  --orange-500:#bc4c00;
+  --red-50:#ffebe9;
+  --red-100:#ffcecb;
+  --red-500:#cf222e;
+  --yellow-50:#fff8c5;
+  --yellow-100:#fae17d;
+  --yellow-500:#9a6700;
+  --teal-50:#e6f6f4;
+  --teal-500:#1a7f64;
+  --r:6px;
+  --shadow-sm:0 1px 0 rgba(27,31,36,.04);
+  --shadow:0 1px 3px rgba(27,31,36,.12),0 8px 24px rgba(66,74,83,.12);
+  --shadow-md:0 3px 6px rgba(140,149,159,.15);
+}
+
+/* ─── ACCESSIBILITY ─── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.skip{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--blue-500);color:#fff;padding:6px 14px;border-radius:var(--r);font-size:12px;font-weight:500;transition:top .15s}
+.skip:focus{top:8px}
+:focus-visible{outline:2px solid var(--blue-500);outline-offset:2px;border-radius:3px}
+
+/* ─── HEADER ─── */
+.header{
+  position:sticky;top:0;z-index:400;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px) saturate(180%);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--gray-200);
+}
+.header-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;gap:8px;
+  padding:0 16px;height:56px;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{
+  width:28px;height:28px;border-radius:6px;
+  background:linear-gradient(135deg,#0969da,#8250df);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:12px;color:#fff;letter-spacing:-.5px;
+  font-family:'Fira Code',monospace;
+}
+.logo-text{font-weight:600;font-size:14px;color:var(--gray-900);display:none}
+@media(min-width:480px){.logo-text{display:block}}
+
+.nav-tabs{display:none;align-items:center}
+@media(min-width:768px){.nav-tabs{display:flex}}
+.nt{
+  padding:4px 10px;border-radius:var(--r);
+  font-size:13px;font-weight:500;color:var(--gray-600);
+  background:none;border:none;transition:all .15s;white-space:nowrap;
+}
+.nt:hover{background:var(--gray-50);color:var(--gray-900)}
+.nt.on{background:var(--gray-100);color:var(--gray-900);font-weight:600}
+
+.header-end{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search-trigger{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 12px;border:1px solid var(--gray-200);border-radius:var(--r);
+  background:var(--gray-50);color:var(--gray-500);font-size:12px;
+  transition:all .15s;min-width:160px;cursor:pointer;
+}
+.search-trigger:hover{border-color:var(--blue-500);background:#fff}
+.search-trigger .slash{
+  margin-left:auto;background:var(--gray-100);border:1px solid var(--gray-200);
+  border-radius:3px;padding:1px 5px;font-size:11px;display:none;font-family:'Fira Code',monospace;
+}
+@media(min-width:600px){.search-trigger .slash{display:block}}
+
+.btn-contribute{
+  padding:5px 12px;border-radius:var(--r);font-size:13px;font-weight:500;
+  background:linear-gradient(180deg,#2da44e,#218a3d);color:#fff;border:1px solid rgba(31,35,40,.15);
+  box-shadow:0 1px 0 rgba(31,35,40,.1),inset 0 1px 0 rgba(255,255,255,.12);
+  transition:filter .15s;white-space:nowrap;
+}
+.btn-contribute:hover{filter:brightness(1.05)}
+
+/* hamburger */
+.ham{display:flex;flex-direction:column;gap:4px;padding:6px;background:none;border:none;border-radius:var(--r)}
+.ham span{display:block;width:18px;height:2px;background:var(--gray-600);border-radius:1px;transition:all .25s}
+.ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media(min-width:768px){.ham{display:none}}
+
+/* mobile nav */
+.mob-menu{display:none;border-bottom:1px solid var(--gray-200);background:#fff}
+.mob-menu.open{display:block}
+.mob-item{display:block;width:100%;text-align:left;padding:11px 16px;border:none;background:none;font-size:14px;font-weight:500;color:var(--gray-700);border-bottom:1px solid var(--gray-100);transition:background .1s}
+.mob-item:last-child{border-bottom:none}
+.mob-item:hover,.mob-item.on{background:var(--gray-50);color:var(--blue-500)}
+
+/* ─── PAGES ─── */
+.page{display:none}
+.page.on{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px 80px}
+@media(min-width:768px){.wrap{padding:0 24px 80px}}
+
+/* ─── HERO ─── */
+.hero{
+  padding:48px 0 40px;
+  border-bottom:1px solid var(--gray-100);
+  background:linear-gradient(180deg,var(--gray-50) 0%,#fff 100%);
+}
+.hero-inner{max-width:1280px;margin:0 auto;padding:0 24px}
+.hero-label{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:20px;
+  background:var(--blue-50);color:var(--blue-500);
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  border:1px solid var(--blue-100);margin-bottom:16px;
+}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px;color:var(--gray-900)}
+.hero h1 em{font-style:normal;color:var(--blue-500)}
+.hero-sub{font-size:16px;color:var(--gray-600);max-width:560px;line-height:1.7;margin-bottom:28px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px}
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;
+  background:#fff;border:1px solid var(--gray-200);color:var(--gray-600);
+  box-shadow:var(--shadow-sm);
+}
+.hero-stats{display:flex;flex-wrap:wrap;gap:32px;padding-top:24px;border-top:1px solid var(--gray-100)}
+.hs{display:flex;align-items:baseline;gap:8px}
+.hs-n{font-size:30px;font-weight:700;color:var(--blue-500);font-family:'Fira Code',monospace;line-height:1}
+.hs-l{font-size:12px;color:var(--gray-500)}
+
+/* ─── CATEGORY TABS (like awesome-copilot) ─── */
+.cat-tabs{border-bottom:1px solid var(--gray-200);background:#fff;position:sticky;top:56px;z-index:200}
+.cat-tabs-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.cat-tabs-inner::-webkit-scrollbar{display:none}
+.ctab{
+  padding:12px 16px;border:none;border-bottom:2px solid transparent;
+  background:none;font-size:13px;font-weight:500;color:var(--gray-500);
+  white-space:nowrap;transition:all .15s;cursor:pointer;margin-bottom:-1px;
+}
+.ctab:hover{color:var(--gray-900)}
+.ctab.on{color:var(--blue-500);border-bottom-color:var(--blue-500);font-weight:600}
+.ctab .n{margin-left:5px;font-size:11px;padding:1px 6px;border-radius:20px;background:var(--gray-100);color:var(--gray-500);font-family:'Fira Code',monospace}
+.ctab.on .n{background:var(--blue-50);color:var(--blue-500)}
+
+/* ─── TOOLBAR ─── */
+.toolbar{padding:16px 0;display:flex;flex-direction:column;gap:10px}
+@media(min-width:640px){.toolbar{flex-direction:row;align-items:center}}
+.search-bar-wrap{position:relative;flex:1}
+.sbi{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none}
+.search-bar{
+  width:100%;height:36px;padding:0 10px 0 32px;
+  border:1px solid var(--gray-200);border-radius:var(--r);
+  background:#fff;font-family:inherit;font-size:13px;color:var(--gray-900);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.search-bar::placeholder{color:var(--gray-400)}
+.search-bar:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(9,105,218,.12)}
+.sort-select{
+  padding:5px 10px;border:1px solid var(--gray-200);border-radius:var(--r);
+  background:#fff;font-family:inherit;font-size:12px;color:var(--gray-600);
+  outline:none;cursor:pointer;
+}
+.rcount-bar{font-size:12px;color:var(--gray-500);display:flex;align-items:center;justify-content:space-between;padding-bottom:4px}
+
+/* ─── ASSET LIST (awesome-copilot style) ─── */
+.asset-list{display:flex;flex-direction:column;gap:1px;background:var(--gray-200);border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden}
+.asset-item{
+  background:#fff;padding:20px 20px 16px;
+  transition:background .1s;cursor:pointer;
+  display:flex;flex-direction:column;gap:10px;
+}
+.asset-item:hover{background:var(--gray-50)}
+
+.ai-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ai-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ai-name{font-size:15px;font-weight:600;color:var(--blue-500);line-height:1.3}
+.ai-name:hover{text-decoration:underline}
+.ai-model-badge{
+  padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;
+  display:inline-flex;align-items:center;gap:3px;
+}
+.mb-free{background:var(--green-50);color:var(--green-600);border:1px solid var(--green-100)}
+.mb-premium{background:var(--blue-50);color:var(--blue-600);border:1px solid var(--blue-100)}
+.mb-either{background:var(--yellow-50);color:var(--yellow-500);border:1px solid var(--yellow-100)}
+
+.type-badge{
+  padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+}
+.tb-agent{background:var(--blue-50);color:var(--blue-500)}
+.tb-prompt{background:var(--green-50);color:var(--green-500)}
+.tb-skill{background:var(--purple-50);color:var(--purple-500)}
+.tb-instruction{background:var(--yellow-50);color:var(--yellow-500)}
+
+.ai-team{font-size:12px;color:var(--gray-500);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.team-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+
+.ai-desc{font-size:13px;color:var(--gray-600);line-height:1.6;max-width:720px}
+
+.ai-tags{display:flex;flex-wrap:wrap;gap:4px}
+.ai-tag{
+  padding:1px 7px;border-radius:20px;font-size:11px;
+  background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-500);
+  transition:all .15s;
+}
+.asset-item:hover .ai-tag{background:var(--blue-50);border-color:var(--blue-100);color:var(--blue-500)}
+
+.ai-inv{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--r);
+  font-family:'Fira Code',monospace;font-size:11.5px;color:var(--gray-700);
+  transition:border-color .15s;cursor:pointer;
+}
+.ai-inv:hover{border-color:var(--blue-500);background:var(--blue-50)}
+.ai-inv-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-iv{background:none;border:none;padding:0;color:var(--gray-400);font-size:13px;transition:color .15s}
+.ai-inv:hover .copy-iv{color:var(--blue-500)}
+
+.ai-footer{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  padding-top:10px;border-top:1px solid var(--gray-100);
+}
+.ai-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.btn-install{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:var(--r);font-size:12px;font-weight:500;
+  background:linear-gradient(180deg,#2da44e,#218a3d);color:#fff;
+  border:1px solid rgba(31,35,40,.15);
+  box-shadow:0 1px 0 rgba(31,35,40,.1),inset 0 1px 0 rgba(255,255,255,.12);
+  transition:filter .15s;text-decoration:none;
+}
+.btn-install:hover{filter:brightness(1.05);text-decoration:none}
+.btn-vscode{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:var(--r);font-size:12px;font-weight:500;
+  background:#fff;color:var(--gray-700);border:1px solid var(--gray-200);
+  box-shadow:var(--shadow-sm);transition:all .15s;
+}
+.btn-vscode:hover{border-color:var(--gray-300);background:var(--gray-50);text-decoration:none}
+.btn-vscode.ins{color:#0065b3;border-color:#bee3fd}
+.btn-view-more{
+  padding:5px 10px;border-radius:var(--r);font-size:12px;font-weight:500;
+  background:#fff;color:var(--gray-600);border:1px solid var(--gray-200);
+  transition:all .15s;box-shadow:var(--shadow-sm);
+}
+.btn-view-more:hover{background:var(--gray-50);border-color:var(--gray-300)}
+.ai-updated{font-size:11px;color:var(--gray-400)}
+
+/* empty */
+.empty{text-align:center;padding:64px 24px;background:#fff;border-radius:var(--r);border:1px solid var(--gray-200)}
+.empty-em{font-size:40px;margin-bottom:12px}
+.empty p{font-size:14px;color:var(--gray-500)}
+
+/* ─── MODAL ─── */
+.overlay{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(1,4,9,.5);backdrop-filter:blur(4px);
+  padding:16px;overflow-y:auto;
+}
+.overlay.on{display:flex;align-items:flex-start;justify-content:center}
+.modal{
+  background:#fff;border:1px solid var(--gray-200);border-radius:12px;
+  width:100%;max-width:760px;box-shadow:0 24px 64px rgba(1,4,9,.3);
+  animation:slideUp .2s cubic-bezier(.25,.8,.25,1);overflow:hidden;margin:auto;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.modal-hd{
+  padding:16px 20px;border-bottom:1px solid var(--gray-200);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+}
+.modal-title-area h3{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:6px}
+.modal-meta-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.modal-x{
+  background:none;border:none;color:var(--gray-400);font-size:20px;line-height:1;
+  padding:4px;border-radius:4px;transition:background .1s;flex-shrink:0;
+}
+.modal-x:hover{background:var(--gray-100);color:var(--gray-700)}
+
+.modal-toolbar{
+  padding:10px 20px;border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  background:var(--gray-50);
+}
+.view-toggle{
+  display:flex;border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;
+  background:#fff;
+}
+.vt{
+  padding:5px 14px;border:none;font-size:12px;font-weight:500;
+  color:var(--gray-500);background:transparent;transition:all .15s;
+}
+.vt:not(:last-child){border-right:1px solid var(--gray-200)}
+.vt.on{background:var(--blue-500);color:#fff}
+.modal-btns{display:flex;gap:6px;flex-wrap:wrap}
+.modal-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:var(--r);font-size:12px;font-weight:500;
+  border:1px solid var(--gray-200);background:#fff;color:var(--gray-700);
+  transition:all .15s;
+}
+.modal-btn:hover{border-color:var(--gray-300);background:var(--gray-50)}
+.modal-btn.green{background:linear-gradient(180deg,#2da44e,#218a3d);color:#fff;border-color:rgba(31,35,40,.15)}
+.modal-btn.green:hover{filter:brightness(1.05)}
+.modal-btn.vsc{background:#007acc;color:#fff;border-color:#007acc}
+.modal-btn.vsc:hover{filter:brightness(1.1)}
+
+.modal-body{padding:20px;max-height:62vh;overflow-y:auto}
+
+/* Rendered markdown */
+.md h1{font-size:22px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--gray-200);color:var(--gray-900)}
+.md h2{font-size:18px;font-weight:600;margin:20px 0 10px;color:var(--gray-900)}
+.md h3{font-size:15px;font-weight:600;margin:16px 0 8px;color:var(--gray-900)}
+.md p{font-size:13px;color:var(--gray-700);line-height:1.7;margin-bottom:12px}
+.md ul,.md ol{padding-left:20px;margin-bottom:12px}
+.md li{font-size:13px;color:var(--gray-700);line-height:1.6;margin-bottom:4px}
+.md code{background:var(--gray-50);padding:2px 5px;border-radius:4px;font-family:'Fira Code',monospace;font-size:11.5px;color:var(--gray-800);border:1px solid var(--gray-200)}
+.md pre{background:#0d1117;border-radius:var(--r);padding:16px;margin-bottom:14px;overflow-x:auto}
+.md pre code{background:none;border:none;color:#e6edf3;font-size:12px;padding:0}
+.md table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:12px}
+.md th{background:var(--gray-50);padding:8px 12px;text-align:left;border:1px solid var(--gray-200);font-weight:600;color:var(--gray-700)}
+.md td{padding:8px 12px;border:1px solid var(--gray-200);color:var(--gray-700)}
+.md tr:hover td{background:var(--gray-50)}
+.md blockquote{border-left:4px solid var(--blue-500);padding:8px 14px;background:var(--blue-50);border-radius:0 4px 4px 0;margin-bottom:12px}
+.md blockquote p{color:var(--gray-700);margin:0}
+.md strong{color:var(--gray-900);font-weight:600}
+.md hr{border:none;border-top:1px solid var(--gray-200);margin:16px 0}
+.md a{color:var(--blue-500)}
+
+/* Raw view */
+.raw-view{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--r);padding:16px;overflow-x:auto}
+.raw-view pre{font-family:'Fira Code',monospace;font-size:12px;color:var(--gray-700);white-space:pre-wrap;word-break:break-word;line-height:1.7}
+
+/* ─── WORKFLOW PAGE ─── */
+.wf-hero{padding:40px 0 32px;background:linear-gradient(135deg,#f6f8fa 0%,#eff2ff 50%,#f6f8fa 100%);border-bottom:1px solid var(--gray-200)}
+.wf-hero-inner{max-width:1280px;margin:0 auto;padding:0 24px}
+
+.wf-layout{display:grid;grid-template-columns:1fr;gap:24px;padding-top:32px}
+@media(min-width:960px){.wf-layout{grid-template-columns:230px 1fr;gap:40px}}
+
+/* sidebar */
+.wf-sidebar{display:none}
+@media(min-width:960px){.wf-sidebar{display:block;position:sticky;top:88px;align-self:start}}
+.wf-toc-header{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);padding:0 10px;margin-bottom:6px}
+.wf-toc-list{list-style:none}
+.wf-toc-item a{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);
+  font-size:12px;font-weight:500;color:var(--gray-600);text-decoration:none;transition:all .15s;
+}
+.wf-toc-item a:hover{background:var(--gray-50);color:var(--gray-900)}
+.wf-toc-item a.on{background:var(--blue-50);color:var(--blue-500)}
+.toc-step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+
+/* steps */
+.steps-container{position:relative}
+.steps-container::before{
+  content:'';position:absolute;left:19px;top:40px;bottom:40px;
+  width:2px;background:linear-gradient(to bottom,var(--blue-500),var(--purple-500),var(--green-500));
+  opacity:.25;border-radius:1px;
+}
+
+.wf-step{display:flex;gap:20px;padding-bottom:36px;position:relative}
+.wf-step:last-child{padding-bottom:0}
+.wf-step:last-child .steps-container::before{display:none}
+
+.step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:40px}
+.step-circle{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;border:2px solid var(--gray-200);background:#fff;
+  box-shadow:0 0 0 4px #fff;z-index:1;flex-shrink:0;
+  transition:all .2s;
+}
+.wf-step:hover .step-circle{border-color:var(--blue-500);box-shadow:0 0 0 4px var(--blue-50)}
+
+.step-body{flex:1;padding-top:8px;min-width:0}
+.step-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.step-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.step-phase{
+  padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.sp-plan{background:var(--blue-50);color:var(--blue-500)}
+.sp-setup{background:var(--gray-100);color:var(--gray-600)}
+.sp-dev{background:var(--green-50);color:var(--green-500)}
+.sp-test{background:var(--purple-50);color:var(--purple-500)}
+.sp-quality{background:var(--blue-50);color:var(--blue-500)}
+.sp-security{background:var(--red-50);color:var(--red-500)}
+.sp-pr{background:var(--orange-50);color:var(--orange-500)}
+.sp-auto{background:var(--purple-50);color:var(--purple-500)}
+.sp-merge{background:var(--green-50);color:var(--green-500)}
+
+.step-desc{font-size:13px;color:var(--gray-600);line-height:1.7;margin-bottom:12px}
+.step-desc strong{color:var(--gray-900)}
+
+/* asset ref pills */
+.asset-refs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.aref{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;
+  border:1px solid;transition:all .15s;cursor:pointer;text-decoration:none;
+}
+.aref:hover{text-decoration:none;transform:translateY(-1px)}
+.aref-agent{background:var(--blue-50);color:var(--blue-500);border-color:var(--blue-100)}
+.aref-agent:hover{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}
+.aref-prompt{background:var(--green-50);color:var(--green-500);border-color:var(--green-100)}
+.aref-prompt:hover{background:var(--green-500);color:#fff;border-color:var(--green-500)}
+.aref-skill{background:var(--purple-50);color:var(--purple-500);border-color:var(--purple-100)}
+.aref-skill:hover{background:var(--purple-500);color:#fff;border-color:var(--purple-500)}
+.aref-instr{background:var(--yellow-50);color:var(--yellow-500);border-color:var(--yellow-100)}
+
+/* code block */
+.cblock{
+  background:#0d1117;border-radius:var(--r);margin-bottom:12px;overflow:hidden;
+  border:1px solid var(--gray-200);
+}
+.cblock-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);
+}
+.cb-dots{display:flex;gap:5px}
+.cbd{width:10px;height:10px;border-radius:50%}
+.cbd-r{background:#ff5f57}.cbd-y{background:#febc2e}.cbd-g{background:#28c840}
+.cb-label{font-size:11px;color:rgba(255,255,255,.4);font-family:'Fira Code',monospace}
+.cblock pre{padding:14px 16px;font-family:'Fira Code',monospace;font-size:12px;color:#e6edf3;line-height:1.7;overflow-x:auto;white-space:pre}
+.c-va{color:#79c0ff}.c-str{color:#a5d6a7}.c-cmt{color:#8b949e;font-style:italic}.c-kw{color:#ff7b72}.c-hi{color:#ffa657}
+
+/* callout */
+.callout{border-radius:var(--r);padding:10px 14px;margin-bottom:12px;border:1px solid;display:flex;gap:10px;align-items:flex-start}
+.callout-tip{background:#f0fff4;border-color:#aceebb}
+.callout-warn{background:var(--yellow-50);border-color:var(--yellow-100)}
+.callout-info{background:var(--blue-50);border-color:var(--blue-100)}
+.callout-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.callout p{font-size:12px;color:var(--gray-700);line-height:1.6;margin:0}
+.callout strong{color:var(--gray-900)}
+
+/* PR rules table */
+.pr-rules{
+  border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;
+  margin:12px 0;display:block;overflow-x:auto;
+}
+.pr-rules table{width:100%;border-collapse:collapse;font-size:12px;min-width:600px}
+.pr-rules th{background:var(--gray-50);padding:9px 14px;text-align:left;border-bottom:1px solid var(--gray-200);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-500);white-space:nowrap}
+.pr-rules td{padding:10px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);vertical-align:top}
+.pr-rules tr:last-child td{border-bottom:none}
+.pr-rules tr:hover td{background:var(--gray-50)}
+.pr-rules code{font-family:'Fira Code',monospace;font-size:11px;background:var(--gray-100);padding:1px 4px;border-radius:3px;color:var(--gray-800)}
+.sev{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.sev-e{background:var(--red-50);color:var(--red-500)}
+.sev-w{background:var(--yellow-50);color:var(--yellow-500)}
+.sev-i{background:var(--blue-50);color:var(--blue-500)}
+
+/* ─── GUIDE PAGE ─── */
+.guide-layout{display:grid;grid-template-columns:1fr;gap:24px;padding-top:28px}
+@media(min-width:900px){.guide-layout{grid-template-columns:200px 1fr;gap:40px}}
+.guide-sidebar{display:none}
+@media(min-width:900px){.guide-sidebar{display:block;position:sticky;top:88px;align-self:start}}
+.toc-hd{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);padding:0 10px;margin-bottom:6px}
+.toc-list{list-style:none}
+.toc-a{display:block;padding:6px 10px;border-radius:var(--r);font-size:12px;font-weight:500;color:var(--gray-600);text-decoration:none;transition:all .15s}
+.toc-a:hover{background:var(--gray-50);color:var(--gray-900)}
+.toc-a.on{background:var(--blue-50);color:var(--blue-500)}
+.gsec{margin-bottom:48px;scroll-margin-top:100px}
+.gsec-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-500);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.gsec-label::before{content:'';display:block;width:16px;height:2px;background:var(--blue-500);border-radius:1px}
+.gsec h2{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.015em;margin-bottom:16px;color:var(--gray-900)}
+
+.model-row{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+@media(min-width:540px){.model-row{grid-template-columns:1fr 1fr}}
+.mcard{border:1px solid var(--gray-200);border-radius:var(--r);background:#fff;overflow:hidden;box-shadow:var(--shadow-sm)}
+.mcard.free{border-top:3px solid var(--green-500)}
+.mcard.premium{border-top:3px solid var(--blue-500)}
+.mcard-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--gray-100)}
+.mcard h3{font-size:15px;font-weight:700;color:var(--gray-900)}
+.mcard-body{padding:14px 16px}
+.mname{display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--gray-50);border-radius:var(--r);margin-bottom:5px;font-size:12px}
+.mnd{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.mnd-g{background:var(--teal-500)}.mnd-b{background:var(--blue-500)}.mnd-p{background:var(--purple-500)}.mnd-a{background:var(--orange-500)}
+.mn{flex:1;font-weight:500;color:var(--gray-800)}
+.mnn{font-size:11px;color:var(--gray-400)}
+.mtasks{list-style:none;margin-top:10px;padding:0}
+.mtasks li{font-size:12px;color:var(--gray-600);padding:3px 0 3px 14px;position:relative;line-height:1.5}
+.mtasks li::before{content:'→';position:absolute;left:0;color:var(--blue-500);font-size:11px}
+
+.dm-table{border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;margin-top:14px;display:block;overflow-x:auto}
+.dm-table table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
+.dm-table th{background:var(--gray-50);padding:8px 14px;text-align:left;border-bottom:1px solid var(--gray-200);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-500)}
+.dm-table td{padding:9px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700)}
+.dm-table tr:last-child td{border-bottom:none}
+.dm-table tr:hover td{background:var(--gray-50)}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600}
+.badge-free{background:var(--green-50);color:var(--green-600)}
+.badge-premium{background:var(--blue-50);color:var(--blue-500)}
+.badge-either{background:var(--yellow-50);color:var(--yellow-500)}
+
+.dd-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+@media(min-width:560px){.dd-grid{grid-template-columns:1fr 1fr}}
+.dd-p{border-radius:var(--r);padding:16px;border:1px solid}
+.dd-dos{background:#f0fff4;border-color:#aceebb}
+.dd-donts{background:#fff5f5;border-color:var(--red-100)}
+.dd-hd{display:flex;align-items:center;gap:7px;font-weight:700;font-size:14px;margin-bottom:12px}
+.dd-dos .dd-hd{color:var(--green-500)}
+.dd-donts .dd-hd{color:var(--red-500)}
+.dd-list{list-style:none}
+.dd-item{display:flex;gap:8px;font-size:12px;color:var(--gray-600);line-height:1.6;padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,.05);margin-bottom:10px}
+.dd-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ddm{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.dd-dos .ddm{background:#dcfce7;color:var(--green-500)}
+.dd-donts .ddm{background:var(--red-50);color:var(--red-500)}
+
+.tips-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+@media(min-width:560px){.tips-grid{grid-template-columns:1fr 1fr}}
+.tip-card{border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;background:#fff}
+.tip-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--gray-50);border-bottom:1px solid var(--gray-200)}
+.tip-n{width:20px;height:20px;background:var(--blue-500);border-radius:3px;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tip-title{font-size:12px;font-weight:600;color:var(--gray-900)}
+.tip-body{padding:12px 14px}
+.tip-body p{font-size:12px;color:var(--gray-600);margin-bottom:8px;line-height:1.6}
+
+.sc-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+@media(min-width:560px){.sc-grid{grid-template-columns:1fr 1fr}}
+.sc-p{border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;background:#fff}
+.sc-hd{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200)}
+.sc-ide-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sc-name{font-size:13px;font-weight:600;color:var(--gray-900)}
+.sc-ver{font-size:11px;color:var(--gray-400)}
+.sc-list{list-style:none}
+.sc-row{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--gray-100);font-size:12px}
+.sc-row:last-child{border-bottom:none}
+.sc-d{color:var(--gray-600)}
+.kbd-row{display:flex;align-items:center;gap:2px}
+kbd{display:inline-block;padding:2px 6px;background:#fff;border:1px solid var(--gray-200);border-bottom:2px solid var(--gray-300);border-radius:3px;font-family:'Fira Code',monospace;font-size:10px;color:var(--gray-700);box-shadow:var(--shadow-sm)}
+.kp{font-size:10px;color:var(--gray-400)}
+
+/* ─── SUBMIT PAGE ─── */
+.submit-wrap{max-width:580px;margin:0 auto;padding:40px 0}
+.submit-hero{margin-bottom:24px}
+.submit-hero h2{font-size:24px;font-weight:700;letter-spacing:-.015em;margin-bottom:8px;color:var(--gray-900)}
+.submit-hero p{font-size:14px;color:var(--gray-600);line-height:1.7}
+.form-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fl{font-size:12px;font-weight:600;color:var(--gray-700)}
+.fl span{color:var(--red-500)}
+.fi,.fs,.ft{
+  width:100%;padding:7px 10px;border:1px solid var(--gray-200);border-radius:var(--r);
+  background:var(--gray-50);font-family:inherit;font-size:13px;color:var(--gray-900);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(9,105,218,.12);background:#fff}
+.ft{resize:vertical;min-height:70px}
+.fmono{font-family:'Fira Code',monospace;font-size:12px}
+.fhint{font-size:11px;color:var(--gray-400)}
+.form-row-2{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:480px){.form-row-2{grid-template-columns:1fr 1fr}}
+.type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.topt{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;border:2px solid var(--gray-200);border-radius:var(--r);cursor:pointer;font-size:11px;color:var(--gray-500);transition:all .15s;background:var(--gray-50)}
+.topt:hover{border-color:var(--blue-500)}
+.topt.sel{border-color:var(--blue-500);background:var(--blue-50);color:var(--blue-500);font-weight:600}
+.topt-em{font-size:20px}
+.btn-submit-form{
+  width:100%;padding:10px;border-radius:var(--r);
+  background:linear-gradient(180deg,#2da44e,#218a3d);color:#fff;
+  border:1px solid rgba(31,35,40,.15);font-size:14px;font-weight:500;
+  box-shadow:0 1px 0 rgba(31,35,40,.1),inset 0 1px 0 rgba(255,255,255,.12);
+  transition:filter .15s;margin-top:6px;
+}
+.btn-submit-form:hover{filter:brightness(1.05)}
+.fnote{font-size:11px;color:var(--gray-400);text-align:center;margin-top:12px;line-height:1.6}
+.fnote a{color:var(--blue-500)}
+
+/* ─── SEARCH OVERLAY ─── */
+.search-overlay{
+  display:none;position:fixed;inset:0;z-index:700;
+  background:rgba(1,4,9,.5);backdrop-filter:blur(4px);
+  align-items:flex-start;justify-content:center;
+  padding:80px 16px;
+}
+.search-overlay.on{display:flex}
+.sd{background:#fff;border:1px solid var(--gray-200);border-radius:10px;width:100%;max-width:540px;box-shadow:var(--shadow);overflow:hidden}
+.so-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--gray-200)}
+.so-in{flex:1;background:none;border:none;outline:none;font-size:15px;font-family:inherit;color:var(--gray-900)}
+.so-in::placeholder{color:var(--gray-400)}
+.so-esc{background:none;border:1px solid var(--gray-200);border-radius:4px;padding:2px 7px;font-size:11px;color:var(--gray-500);font-family:'Fira Code',monospace}
+.so-results{max-height:380px;overflow-y:auto}
+.so-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--gray-100);cursor:pointer;transition:background .1s}
+.so-item:hover{background:var(--gray-50)}
+.so-item:last-child{border-bottom:none}
+.so-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.so-n{font-size:13px;font-weight:600;color:var(--gray-900)}
+.so-sub{font-size:11px;color:var(--gray-400)}
+.so-empty{padding:40px;text-align:center;color:var(--gray-400);font-size:13px}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:var(--gray-900);color:#fff;padding:8px 16px;border-radius:20px;
+  font-size:12px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
+  display:flex;align-items:center;gap:6px;
+}
+.toast.on{transform:translateX(-50%) translateY(0)}
+
+/* ─── DIVIDER ─── */
+.divider{height:1px;background:var(--gray-100);margin:32px 0}
+
+/* ─── FOOTER ─── */
+.footer{border-top:1px solid var(--gray-200);padding:20px 24px;background:var(--gray-50)}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
+@media(min-width:640px){.footer-inner{flex-direction:row;justify-content:space-between;text-align:left}}
+.footer-text{font-size:12px;color:var(--gray-500)}
+.footer-links{display:flex;gap:16px}
+.footer-links a{font-size:12px;color:var(--gray-500);text-decoration:none}
+.footer-links a:hover{color:var(--blue-500)}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to content</a>
+<div class="toast" id="toast">✓ Copied to clipboard</div>
+
+<!-- ═══════ HEADER ═══════ -->
+<div class="header" role="banner">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-mark">AI</div>
+      <span class="logo-text">Team AI Assets</span>
+    </a>
+    <nav class="nav-tabs" aria-label="Main navigation">
+      <button class="nt on" data-p="catalog" onclick="goPage('catalog',this)">Catalog</button>
+      <button class="nt" data-p="workflow" onclick="goPage('workflow',this)">Developer Workflow</button>
+      <button class="nt" data-p="guide" onclick="goPage('guide',this)">Guide</button>
+      <button class="nt" data-p="submit" onclick="goPage('submit',this)">Contribute</button>
+    </nav>
+    <div class="header-end">
+      <button class="search-trigger" onclick="openSearch()" aria-label="Search (Ctrl+K)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Search assets…
+        <span class="slash">Ctrl K</span>
+      </button>
+      <button class="btn-contribute" onclick="goPage('submit',null)">+ Contribute</button>
+      <button class="ham" id="ham" onclick="toggleMob()" aria-expanded="false" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mob-menu" id="mob-menu" aria-label="Mobile nav">
+    <button class="mob-item on" data-p="catalog" onclick="goPage('catalog',this);closeMob()">📦 Catalog</button>
+    <button class="mob-item" data-p="workflow" onclick="goPage('workflow',this);closeMob()">🔄 Developer Workflow</button>
+    <button class="mob-item" data-p="guide" onclick="goPage('guide',this);closeMob()">📖 Guide</button>
+    <button class="mob-item" data-p="submit" onclick="goPage('submit',this);closeMob()">✦ Contribute</button>
+  </nav>
+</div>
+
+<!-- ═══════ SEARCH OVERLAY ═══════ -->
+<div class="search-overlay" id="so" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="sd">
+    <div class="so-row">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" stroke="#8c959f" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#8c959f" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="so-in" id="so-in" placeholder="Search agents, prompts, skills, instructions…" oninput="soSearch()" autocomplete="off" aria-label="Search"/>
+      <button class="so-esc" onclick="closeSearch()">Esc</button>
+    </div>
+    <div class="so-results" id="so-results" role="listbox"></div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL ═══════ -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="m-title">
+  <div class="modal" id="modal">
+    <div class="modal-hd">
+      <div class="modal-title-area">
+        <h3 id="m-title"></h3>
+        <div class="modal-meta-row" id="m-meta"></div>
+      </div>
+      <button class="modal-x" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-toolbar">
+      <div class="view-toggle" role="tablist">
+        <button class="vt on" id="vt-render" onclick="setView('render')" role="tab">Rendered</button>
+        <button class="vt" id="vt-raw" onclick="setView('raw')" role="tab">Raw</button>
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn" onclick="mCopy()">⎘ Copy</button>
+        <button class="modal-btn" onclick="mDownload()">⬇ Download</button>
+        <button class="modal-btn vsc" onclick="mVSCode()">⚡ VS Code</button>
+        <button class="modal-btn green" onclick="mInstall()">↓ Install</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body" role="tabpanel"></div>
+  </div>
+</div>
+
+<!-- ═══════ MAIN ═══════ -->
+<div id="main">
+
+<!-- ══════════════════════════════════
+     CATALOG PAGE
+══════════════════════════════════ -->
+<div class="page on" id="page-catalog">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-label">✦ Awesome GitHub Copilot — Team Edition</div>
+      <h1>AI Assets<br><em>Catalog</em></h1>
+      <p class="hero-sub">Community-contributed agents, prompts, skills, and custom instructions to enhance your GitHub Copilot experience across VS 2026 and VS Code.</p>
+      <div class="hero-chips">
+        <span class="chip">🧠 Visual Studio 2026</span>
+        <span class="chip">💙 VS Code</span>
+        <span class="chip">🤖 Copilot Enterprise</span>
+        <span class="chip">⚡ Free + Premium Models</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-n" id="st-total">0</span><span class="hs-l">Total Assets</span></div>
+        <div class="hs"><span class="hs-n" id="st-agent">0</span><span class="hs-l">Agents</span></div>
+        <div class="hs"><span class="hs-n" id="st-prompt">0</span><span class="hs-l">Prompts</span></div>
+        <div class="hs"><span class="hs-n" id="st-skill">0</span><span class="hs-l">Skills</span></div>
+        <div class="hs"><span class="hs-n" id="st-instr">0</span><span class="hs-l">Instructions</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-tabs">
+    <div class="cat-tabs-inner" role="tablist" aria-label="Filter by type">
+      <button class="ctab on" data-t="all" onclick="setType('all',this)" role="tab" aria-selected="true">All <span class="n" id="ct-all">0</span></button>
+      <button class="ctab" data-t="agent" onclick="setType('agent',this)" role="tab" aria-selected="false">🤖 Agents <span class="n" id="ct-agent">0</span></button>
+      <button class="ctab" data-t="prompt" onclick="setType('prompt',this)" role="tab" aria-selected="false">💬 Prompts <span class="n" id="ct-prompt">0</span></button>
+      <button class="ctab" data-t="skill" onclick="setType('skill',this)" role="tab" aria-selected="false">🛠 Skills <span class="n" id="ct-skill">0</span></button>
+      <button class="ctab" data-t="instruction" onclick="setType('instruction',this)" role="tab" aria-selected="false">📋 Instructions <span class="n" id="ct-instr">0</span></button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="search-bar-wrap">
+        <svg class="sbi" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input class="search-bar" type="search" id="cat-search" placeholder="Filter assets…" oninput="doFilter()" aria-label="Filter assets">
+      </div>
+      <select class="sort-select" onchange="doSort(this.value)" aria-label="Sort assets">
+        <option value="name">Name (A–Z)</option>
+        <option value="type">Type</option>
+        <option value="model">Model</option>
+      </select>
+    </div>
+    <div class="rcount-bar"><span id="rcount"></span></div>
+    <div class="asset-list" id="asset-list" role="list" aria-label="Asset list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     WORKFLOW PAGE
+══════════════════════════════════ -->
+<div class="page" id="page-workflow">
+  <div class="wf-hero">
+    <div class="wf-hero-inner">
+      <div class="hero-label">🔄 Developer Journey</div>
+      <h1 style="font-size:clamp(24px,4vw,40px);font-weight:700;letter-spacing:-.025em;margin-bottom:10px;color:var(--gray-900)">From Story to Merged PR</h1>
+      <p style="font-size:15px;color:var(--gray-600);max-width:580px;line-height:1.7">A complete AI-assisted developer workflow — every step from Jira story creation through to a merged Azure DevOps pull request, using our team's custom agents and prompts.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="wf-layout">
+      <aside class="wf-sidebar" aria-label="Workflow navigation">
+        <div class="wf-toc-header">Workflow Steps</div>
+        <ul class="wf-toc-list">
+          <li class="wf-toc-item"><a href="#ws1" class="on"><span class="toc-step-dot" style="background:#0969da">1</span>Story Creation</a></li>
+          <li class="wf-toc-item"><a href="#ws2"><span class="toc-step-dot" style="background:#6e7781">2</span>Branch &amp; Setup</a></li>
+          <li class="wf-toc-item"><a href="#ws3"><span class="toc-step-dot" style="background:#1a7f37">3</span>Development</a></li>
+          <li class="wf-toc-item"><a href="#ws4"><span class="toc-step-dot" style="background:#8250df">4</span>Unit Testing</a></li>
+          <li class="wf-toc-item"><a href="#ws5"><span class="toc-step-dot" style="background:#0969da">5</span>Self Review</a></li>
+          <li class="wf-toc-item"><a href="#ws6"><span class="toc-step-dot" style="background:#cf222e">6</span>Security Review</a></li>
+          <li class="wf-toc-item"><a href="#ws7"><span class="toc-step-dot" style="background:#bc4c00">7</span>Create PR (ADO)</a></li>
+          <li class="wf-toc-item"><a href="#ws8"><span class="toc-step-dot" style="background:#8250df">8</span>AI PR Pipeline</a></li>
+          <li class="wf-toc-item"><a href="#ws9"><span class="toc-step-dot" style="background:#1a7f37">9</span>Peer Review &amp; Merge</a></li>
+        </ul>
+      </aside>
+
+      <article>
+        <div class="steps-container">
+
+          <div class="wf-step" id="ws1">
+            <div class="step-left"><div class="step-circle">📋</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Story Creation in Jira</span><span class="step-phase sp-plan">Planning</span></div>
+              <p class="step-desc">Start every story right. Use the <strong>Jira Story Creator prompt</strong> to generate a well-structured story with acceptance criteria in BDD format, story points estimate, and a definition of done — in your team's exact Jira format.</p>
+              <div class="asset-refs">
+                <span class="aref aref-prompt" onclick="openModal(9)">💬 Jira Story Creator</span>
+                <span class="aref aref-instr" onclick="openModal(18)">📋 Team Standards Instruction</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Copilot Chat</span></div>
+                <pre><span class="c-cmt">// Use in Copilot Chat — switch to Free model</span>
+<span class="c-va">@jira-story</span> <span class="c-str">Create a Jira story for: user email verification
+Include: title, user story, min 3 BDD acceptance criteria,
+story points, definition of done, technical notes</span></pre>
+              </div>
+              <div class="callout callout-tip"><span class="callout-icon">💡</span><p><strong>Tip:</strong> Include the epic name and target sprint in the prompt so the story context is complete from the start and links correctly in Jira.</p></div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws2">
+            <div class="step-left"><div class="step-circle">🌿</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Create Branch &amp; Configure</span><span class="step-phase sp-setup">Setup</span></div>
+              <p class="step-desc">Create your feature branch from Azure DevOps linked to the Jira story. Your <code style="font-family:'Fira Code',monospace;font-size:11px;background:var(--gray-100);padding:1px 5px;border-radius:3px">.github/copilot-instructions.md</code> is auto-applied to every Copilot suggestion in this repo — no setup needed each session.</p>
+              <div class="asset-refs">
+                <span class="aref aref-instr" onclick="openModal(18)">📋 C# 12 Standards</span>
+                <span class="aref aref-instr" onclick="openModal(19)">📋 Error Handling Standards</span>
+                <span class="aref aref-instr" onclick="openModal(20)">📋 API Response Standards</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Terminal</span></div>
+                <pre><span class="c-cmt"># Branch naming: feature/PROJ-{id}-short-description</span>
+git checkout -b <span class="c-str">feature/PROJ-123-email-verification</span>
+
+<span class="c-cmt"># Your custom instructions are active automatically</span>
+<span class="c-cmt"># .github/copilot-instructions.md applies to all suggestions</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws3">
+            <div class="step-left"><div class="step-circle">💻</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Development</span><span class="step-phase sp-dev">Dev</span></div>
+              <p class="step-desc">Use <strong>Free model</strong> for all inline Tab completions, boilerplate, and routine logic. Switch to <strong>Premium model</strong> for architecture questions, cross-file reasoning, and anything touching critical business logic. Use skills to scaffold standard patterns.</p>
+              <div class="asset-refs">
+                <span class="aref aref-skill" onclick="openModal(14)">🛠 C# Async/Await Patterns</span>
+                <span class="aref aref-skill" onclick="openModal(17)">🛠 Repository Pattern</span>
+                <span class="aref aref-skill" onclick="openModal(15)">🛠 Azure SDK Integration</span>
+                <span class="aref aref-skill" onclick="openModal(16)">🛠 REST API Design</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Good inline prompt (comment above method)</span></div>
+                <pre><span class="c-cmt">// IUserRepository.GetActiveUsersAsync()
+// EF Core async, CancellationToken, returns List&lt;UserDto&gt;
+// AsNoTracking, filter isActive=true, never return entities</span></pre>
+              </div>
+              <div class="callout callout-info"><span class="callout-icon">ℹ️</span><p><strong>Model rule:</strong> Free for Tab. Premium for <code style="font-family:'Fira Code',monospace;font-size:11px">#file</code> context chat, cross-service design, auth, payments, or data pipeline logic.</p></div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws4">
+            <div class="step-left"><div class="step-circle">🧪</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Unit &amp; Integration Testing</span><span class="step-phase sp-test">Testing</span></div>
+              <p class="step-desc">Run the <strong>Test Generation Agent</strong> against your implementation to generate a full suite with happy path, edge cases, null inputs, and exception scenarios. Review every generated test — especially mock setups. All tests must pass on CI before proceeding.</p>
+              <div class="asset-refs">
+                <span class="aref aref-agent" onclick="openModal(4)">🤖 Test Generation Agent</span>
+                <span class="aref aref-prompt" onclick="openModal(10)">💬 EF Core Query Analyser</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Copilot Chat</span></div>
+                <pre><span class="c-va">@test-gen</span> <span class="c-str">Generate full xUnit test suite for UserService.
+Include: happy path, null inputs, not-found, DB exceptions.
+Use Moq. CancellationToken in all async tests.</span>
+
+<span class="c-cmt">// Then verify locally</span>
+dotnet test <span class="c-hi">--filter</span> Category=Unit</pre>
+              </div>
+              <div class="callout callout-warn"><span class="callout-icon">⚠️</span><p><strong>Never commit untested AI-generated tests.</strong> Generated tests can compile and run but test the wrong behaviour. Read the assertion logic — it must genuinely exercise your code.</p></div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws5">
+            <div class="step-left"><div class="step-circle">🔍</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Self Code Review</span><span class="step-phase sp-quality">Quality</span></div>
+              <p class="step-desc">Before touching the PR button, run the <strong>Code Review Agent</strong> on your complete diff. Catches structural issues, SOLID violations, and error handling gaps that shouldn't land in peer review. Also run the <strong>Performance Agent</strong> if you've touched any data access layer.</p>
+              <div class="asset-refs">
+                <span class="aref aref-agent" onclick="openModal(1)">🤖 Code Review Agent</span>
+                <span class="aref aref-prompt" onclick="openModal(8)">💬 SOLID Refactor Prompt</span>
+                <span class="aref aref-agent" onclick="openModal(6)">🤖 Performance Review Agent</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Copilot Chat — Premium model</span></div>
+                <pre><span class="c-va">@code-review</span> <span class="c-str">Review this diff: SOLID violations, missing error
+handling, naming, code smells. Be specific and actionable.</span>
+
+<span class="c-cmt">// If you changed data access:</span>
+<span class="c-va">@perf-review</span> <span class="c-str">Check for N+1 queries and async blocking calls</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws6">
+            <div class="step-left"><div class="step-circle">🛡️</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Security Review</span><span class="step-phase sp-security">Security</span></div>
+              <p class="step-desc">Run <strong>both</strong> security agents on any PR touching auth, data access, API endpoints, or configuration. <strong>Premium model only</strong> — free models lack the depth for reliable security analysis and can produce false confidence.</p>
+              <div class="asset-refs">
+                <span class="aref aref-agent" onclick="openModal(2)">🤖 Security Agent (Checkmarx)</span>
+                <span class="aref aref-agent" onclick="openModal(3)">🤖 SonarQube Agent</span>
+                <span class="aref aref-prompt" onclick="openModal(13)">💬 Auth Flow Reviewer</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Copilot Chat — Premium model REQUIRED</span></div>
+                <pre><span class="c-va">@security-cx</span> <span class="c-str">Review this controller for injection vulnerabilities,
+missing auth checks, and insecure deserialization.</span>
+
+<span class="c-va">@sonar</span> <span class="c-str">Fix the cognitive complexity and null reference
+warnings flagged in UserService.ProcessRequest()</span></pre>
+              </div>
+              <div class="callout callout-warn"><span class="callout-icon">⚠️</span><p><strong>Premium model is mandatory for all security agents.</strong> A missed vulnerability costs far more than the extra token usage.</p></div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws7">
+            <div class="step-left"><div class="step-circle">📤</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Create Pull Request in Azure DevOps</span><span class="step-phase sp-pr">PR</span></div>
+              <p class="step-desc">Use the <strong>PR Summary Prompt</strong> to generate a structured PR description from your diff. Link to the Jira story, assign reviewers, and ensure your branch policies are configured to trigger the AI review pipeline on creation.</p>
+              <div class="asset-refs">
+                <span class="aref aref-prompt" onclick="openModal(11)">💬 PR Summary Prompt</span>
+                <span class="aref aref-agent" onclick="openModal(7)">🤖 Azure DevOps Agent</span>
+              </div>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">PR Description prompt (Free model)</span></div>
+                <pre><span class="c-str">Write a PR description for this diff.
+Include: Summary, Changes Made, Testing Done,
+Risk (Low/Med/High), Breaking Changes (Yes/No)
+Jira: PROJ-123</span>
+
+<span class="c-cmt"># ADO PR checklist before submitting:</span>
+<span class="c-kw">✓</span> Linked work item: PROJ-123
+<span class="c-kw">✓</span> Target branch correct (main / develop)
+<span class="c-kw">✓</span> Reviewers assigned (min 1 required)
+<span class="c-kw">✓</span> Branch policy auto-triggers AI pipeline</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws8">
+            <div class="step-left"><div class="step-circle">🤖</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Automated AI PR Review Pipeline</span><span class="step-phase sp-auto">Automated</span></div>
+              <p class="step-desc">When a PR is created or pushed to in Azure DevOps, the AI review pipeline runs automatically as a branch policy. It posts inline comments on the diff and sets the build to <strong>pass</strong> (warnings only) or <strong>fail</strong> (errors found). Here are the exact rules it enforces:</p>
+              <div class="callout callout-info"><span class="callout-icon">🤖</span><p>The AI pipeline is a build policy step in ADO. Re-trigger by pushing a new commit. Fix <span class="sev sev-e">Error</span> items before peer reviewers are asked to approve.</p></div>
+
+              <div class="pr-rules">
+                <table>
+                  <thead><tr><th>Rule</th><th>What it checks</th><th>Severity</th><th>Example violation</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Null Check Enforcement</strong></td><td>Missing null guards on parameters, unsafe dereference, missing <code>?.</code> usage</td><td><span class="sev sev-e">Error</span></td><td><code>void Fn(User u) { u.Name.ToUpper(); }</code> — no null guard</td></tr>
+                    <tr><td><strong>Async/Await Patterns</strong></td><td><code>async void</code> (non-event), <code>.Result</code> / <code>.Wait()</code> blocking, missing <code>CancellationToken</code>, fire-and-forget</td><td><span class="sev sev-e">Error</span></td><td><code>var r = GetDataAsync().Result;</code> — deadlock risk</td></tr>
+                    <tr><td><strong>Hardcoded Secrets</strong></td><td>Connection strings, API keys, passwords, tokens embedded in source — pattern matches <code>password=</code>, <code>apikey=</code>, long base64, known key formats</td><td><span class="sev sev-e">Error</span></td><td><code>string c = "Server=prod;Pwd=Abc123!";</code></td></tr>
+                    <tr><td><strong>Exception Swallowing</strong></td><td>Empty <code>catch { }</code> blocks, catches without logging, catching <code>Exception</code> and ignoring it</td><td><span class="sev sev-e">Error</span></td><td><code>catch (Exception) { }</code> — silently swallowed</td></tr>
+                    <tr><td><strong>Missing ConfigureAwait</strong></td><td>In library / infrastructure code, <code>await</code> without <code>.ConfigureAwait(false)</code> risks context capture deadlocks</td><td><span class="sev sev-w">Warning</span></td><td><code>await ctx.SaveChangesAsync();</code> in class library</td></tr>
+                    <tr><td><strong>Commented-Out Code</strong></td><td>Blocks of commented code &gt; 3 lines — use version control, not comments, for history</td><td><span class="sev sev-w">Warning</span></td><td>5+ lines of <code>// old impl...</code> left in</td></tr>
+                    <tr><td><strong>Magic Numbers / Strings</strong></td><td>Hard-coded numeric literals and string constants not assigned to named constants or config</td><td><span class="sev sev-w">Warning</span></td><td><code>if (retries &gt; 3)</code> — should be a named constant</td></tr>
+                    <tr><td><strong>TODO / FIXME in code</strong></td><td>TODOs in production paths should be work items, not code comments</td><td><span class="sev sev-i">Info</span></td><td><code>// TODO: add validation here</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p style="font-size:13px;font-weight:600;color:var(--gray-800);margin:16px 0 8px">Fixing AI pipeline comments with agents</p>
+              <div class="cblock">
+                <div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div><span class="cb-label">Copilot Chat</span></div>
+                <pre><span class="c-cmt">// Fix null check errors:</span>
+<span class="c-va">@security-cx</span> <span class="c-str">Add null guards to all parameters and use
+?. operator appropriately in this method</span>
+
+<span class="c-cmt">// Fix async violations:</span>
+<span class="c-va">@code-review</span> <span class="c-str">Fix async void and .Result blocking calls.
+Apply CancellationToken and ConfigureAwait(false).</span>
+
+<span class="c-cmt">// Fix hardcoded secret — move to Key Vault:</span>
+<span class="c-str">Replace this connection string with IKeyVaultService
+using our Azure Key Vault reference pattern.</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-step" id="ws9">
+            <div class="step-left"><div class="step-circle">✅</div></div>
+            <div class="step-body">
+              <div class="step-hd"><span class="step-title">Peer Review &amp; Merge</span><span class="step-phase sp-merge">Merge</span></div>
+              <p class="step-desc">Peer reviewers focus on <strong>business logic, domain knowledge, and architecture decisions</strong> — not syntax or style. The AI pipeline handles those. Once AI checks pass and approvals are in, merge via squash commit per team convention.</p>
+              <div class="asset-refs">
+                <span class="aref aref-agent" onclick="openModal(5)">🤖 Doc Writer Agent</span>
+                <span class="aref aref-prompt" onclick="openModal(12)">💬 Confluence Doc Generator</span>
+              </div>
+              <div class="callout callout-tip"><span class="callout-icon">💡</span><p><strong>After merge:</strong> Use <code style="font-family:'Fira Code',monospace;font-size:11px">@doc-writer</code> to auto-generate Confluence pages for any new services, APIs, or architectural decisions introduced in this story. Link the page to the Jira ticket.</p></div>
+            </div>
+          </div>
+
+        </div><!-- /steps-container -->
+      </article>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     GUIDE PAGE
+══════════════════════════════════ -->
+<div class="page" id="page-guide">
+  <div class="wrap">
+    <div style="padding:40px 0 24px">
+      <div class="hero-label" style="margin-bottom:14px">📖 Developer Guide</div>
+      <h1 style="font-size:clamp(24px,4vw,40px);font-weight:700;letter-spacing:-.025em;margin-bottom:8px;color:var(--gray-900)">GitHub Copilot Playbook 2026</h1>
+      <p style="font-size:15px;color:var(--gray-600);max-width:560px;line-height:1.7">Quick reference for model selection, dos &amp; don'ts, prompt tips, and keyboard shortcuts across both IDEs.</p>
+    </div>
+    <div class="guide-layout">
+      <aside class="guide-sidebar">
+        <div class="toc-hd">Contents</div>
+        <ul class="toc-list">
+          <li><a href="#g1" class="toc-a on">Model Selection</a></li>
+          <li><a href="#g2" class="toc-a">Decision Matrix</a></li>
+          <li><a href="#g3" class="toc-a">Dos &amp; Don'ts</a></li>
+          <li><a href="#g4" class="toc-a">Prompt Tips</a></li>
+          <li><a href="#g5" class="toc-a">Keyboard Shortcuts</a></li>
+        </ul>
+      </aside>
+      <article>
+        <div class="gsec" id="g1">
+          <div class="gsec-label">01 — Models</div>
+          <h2>Right model. Right task.</h2>
+          <div class="model-row">
+            <div class="mcard free">
+              <div class="mcard-hd"><h3>⚡ Free Tier</h3><span class="badge badge-free">Free</span></div>
+              <div class="mcard-body">
+                <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Fast completions, boilerplate, routine edits</p>
+                <div class="mname"><div class="mnd mnd-g"></div><span class="mn">GPT-4o mini</span><span class="mnn">Default</span></div>
+                <div class="mname"><div class="mnd mnd-g"></div><span class="mn">Claude Haiku</span><span class="mnn">Fast</span></div>
+                <div class="mname"><div class="mnd mnd-g"></div><span class="mn">Gemini Flash</span><span class="mnn">Long context</span></div>
+                <ul class="mtasks">
+                  <li>Tab completions, boilerplate</li><li>Simple unit test stubs</li>
+                  <li>Docstrings and comments</li><li>Work item &amp; PR descriptions</li><li>Short docs, renaming</li>
+                </ul>
+              </div>
+            </div>
+            <div class="mcard premium">
+              <div class="mcard-hd"><h3>🔥 Premium</h3><span class="badge badge-premium">Premium</span></div>
+              <div class="mcard-body">
+                <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Architecture, security, complex reasoning</p>
+                <div class="mname"><div class="mnd mnd-b"></div><span class="mn">GPT-4o / GPT-4.1</span><span class="mnn">General</span></div>
+                <div class="mname"><div class="mnd mnd-p"></div><span class="mn">Claude Sonnet / Opus</span><span class="mnn">Best for code</span></div>
+                <div class="mname"><div class="mnd mnd-b"></div><span class="mn">o3 / o3-mini</span><span class="mnn">Reasoning</span></div>
+                <div class="mname"><div class="mnd mnd-a"></div><span class="mn">Gemini 2.0 Pro</span><span class="mnn">Large files</span></div>
+                <ul class="mtasks">
+                  <li>All custom agents (required)</li><li>Security analysis</li>
+                  <li>Architecture &amp; refactoring</li><li>Multi-file debugging</li><li>Legacy code understanding</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="gsec" id="g2">
+          <div class="gsec-label">02 — Decision Matrix</div>
+          <h2>Quick reference.</h2>
+          <div class="dm-table"><table><thead><tr><th>Task</th><th>Model</th><th>Notes</th></tr></thead><tbody>
+            <tr><td>Autocomplete / Tab</td><td><span class="badge badge-free">Free</span></td><td>Speed &gt; depth here</td></tr>
+            <tr><td>Boilerplate / scaffolding</td><td><span class="badge badge-free">Free</span></td><td>Repetitive pattern generation</td></tr>
+            <tr><td>Simple unit tests</td><td><span class="badge badge-free">Free</span></td><td>Isolated functions only</td></tr>
+            <tr><td>All custom agents</td><td><span class="badge badge-premium">Premium</span></td><td>No exceptions</td></tr>
+            <tr><td>Security / Checkmarx</td><td><span class="badge badge-premium">Premium</span></td><td>Free = false confidence risk</td></tr>
+            <tr><td>Architecture decisions</td><td><span class="badge badge-premium">Premium</span></td><td>Cross-file reasoning</td></tr>
+            <tr><td>Legacy refactoring</td><td><span class="badge badge-premium">Premium</span></td><td>Behavioral preservation</td></tr>
+            <tr><td>Short docs / ADR notes</td><td><span class="badge badge-either">Either</span></td><td>Premium for complex systems</td></tr>
+            <tr><td>PR description / work items</td><td><span class="badge badge-free">Free</span></td><td>Text summarisation task</td></tr>
+          </tbody></table></div>
+        </div>
+        <div class="divider"></div>
+        <div class="gsec" id="g3">
+          <div class="gsec-label">03 — Guidelines</div>
+          <h2>Dos &amp; Don'ts.</h2>
+          <div class="dd-grid">
+            <div class="dd-p dd-dos"><div class="dd-hd">✓ Best Practices</div><ul class="dd-list">
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Review every suggestion</strong> — you own what ships.</span></li>
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Give context</strong> — framework, pattern, constraints in every prompt.</span></li>
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Use specialist agents</strong> — don't use general chat when an agent exists for it.</span></li>
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Premium for critical paths</strong> — auth, payments, data pipelines.</span></li>
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Run AI review before peer review</strong> — let the pipeline handle style.</span></li>
+              <li class="dd-item"><div class="ddm">✓</div><span><strong>Iterate: interface → impl → tests → review.</strong></span></li>
+            </ul></div>
+            <div class="dd-p dd-donts"><div class="dd-hd">✕ Anti-Patterns</div><ul class="dd-list">
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Never paste secrets or PII</strong> — zero tolerance, use Key Vault.</span></li>
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Don't accept without understanding</strong> — can't explain it? don't commit it.</span></li>
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Free model for security</strong> — always premium + specialist agent.</span></li>
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Vague prompts</strong> — "write a service" gives generic output.</span></li>
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Generate entire features in one shot</strong> — bugs compound.</span></li>
+              <li class="dd-item"><div class="ddm">✕</div><span><strong>Share proprietary algorithms verbatim</strong> — rephrase generically.</span></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="gsec" id="g4">
+          <div class="gsec-label">04 — Prompting</div>
+          <h2>Talk to Copilot like a senior dev.</h2>
+          <div class="tips-grid">
+            <div class="tip-card"><div class="tip-hd"><div class="tip-n">01</div><div class="tip-title">Name the pattern and framework</div></div><div class="tip-body"><p>Always state which pattern and version. Context eliminates ambiguity.</p><div class="cblock" style="margin:0"><div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div></div><pre style="padding:10px 14px;font-size:11.5px"><span class="c-cmt">// ❌ Write a user service
+// ✓ IUserRepository.GetAsync() EF Core async,
+//   Repository pattern, returns UserDto not entity,
+//   CancellationToken required, AsNoTracking</span></pre></div></div></div>
+            <div class="tip-card"><div class="tip-hd"><div class="tip-n">02</div><div class="tip-title">Use slash commands</div></div><div class="tip-body"><p>Built-in commands are optimised for specific intents — use before free-text.</p><div class="cblock" style="margin:0"><div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div></div><pre style="padding:10px 14px;font-size:11.5px"><span class="c-kw">/fix</span>      <span class="c-cmt">Fix this code</span>
+<span class="c-kw">/explain</span>  <span class="c-cmt">Explain this code</span>
+<span class="c-kw">/tests</span>    <span class="c-cmt">Generate tests</span>
+<span class="c-kw">/doc</span>      <span class="c-cmt">Generate docs</span></pre></div></div></div>
+            <div class="tip-card"><div class="tip-hd"><div class="tip-n">03</div><div class="tip-title">Scope with #file and #selection</div></div><div class="tip-body"><p>Reference the exact file so Copilot doesn't guess scope.</p><div class="cblock" style="margin:0"><div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div></div><pre style="padding:10px 14px;font-size:11.5px"><span class="c-va">#file</span>:UserService.cs
+<span class="c-str">Refactor email logic into
+IEmailNotificationService.</span></pre></div></div></div>
+            <div class="tip-card"><div class="tip-hd"><div class="tip-n">04</div><div class="tip-title">Ask it to explain its own output</div></div><div class="tip-body"><p>Before accepting, ask Copilot to walk through the generated code.</p><div class="cblock" style="margin:0"><div class="cblock-hd"><div class="cb-dots"><div class="cbd cbd-r"></div><div class="cbd cbd-y"></div><div class="cbd cbd-g"></div></div></div><pre style="padding:10px 14px;font-size:11.5px"><span class="c-str">"Walk through this line by line.
+What could go wrong? What edge
+cases does it miss?"</span></pre></div></div></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="gsec" id="g5">
+          <div class="gsec-label">05 — Shortcuts</div>
+          <h2>Keyboard shortcuts.</h2>
+          <div class="sc-grid">
+            <div class="sc-p"><div class="sc-hd"><div class="sc-ide-icon" style="background:#f3ebff">💜</div><div><div class="sc-name">Visual Studio 2026</div><div class="sc-ver">Enterprise / Professional</div></div></div>
+              <ul class="sc-list">
+                <li class="sc-row"><span class="sc-d">Accept suggestion</span><div class="kbd-row"><kbd>Tab</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Next / Prev</span><div class="kbd-row"><kbd>Alt</kbd><span class="kp">+</span><kbd>]</kbd><span class="kp">/</span><kbd>[</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Open Copilot Chat</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>\\</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Explain code</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>Shift</kbd><span class="kp">+</span><kbd>E</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Fix with Copilot</span><div class="kbd-row"><kbd>Alt</kbd><span class="kp">+</span><kbd>F8</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Generate tests</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>Shift</kbd><span class="kp">+</span><kbd>T</kbd></div></li>
+              </ul>
+            </div>
+            <div class="sc-p"><div class="sc-hd"><div class="sc-ide-icon" style="background:#e8f0fe">🔵</div><div><div class="sc-name">VS Code</div><div class="sc-ver">+ GitHub Copilot Extension</div></div></div>
+              <ul class="sc-list">
+                <li class="sc-row"><span class="sc-d">Accept suggestion</span><div class="kbd-row"><kbd>Tab</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Accept word</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>→</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Open Chat panel</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>Alt</kbd><span class="kp">+</span><kbd>I</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Inline chat</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>I</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Cycle suggestions</span><div class="kbd-row"><kbd>Alt</kbd><span class="kp">+</span><kbd>]</kbd><span class="kp">/</span><kbd>[</kbd></div></li>
+                <li class="sc-row"><span class="sc-d">Completions panel</span><div class="kbd-row"><kbd>Ctrl</kbd><span class="kp">+</span><kbd>Enter</kbd></div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SUBMIT PAGE
+══════════════════════════════════ -->
+<div class="page" id="page-submit">
+  <div class="wrap">
+    <div class="submit-wrap">
+      <div class="submit-hero">
+        <div class="hero-label" style="margin-bottom:14px">✦ Contribute</div>
+        <h2>Submit an AI Asset</h2>
+        <p>Share an agent, prompt, skill, or instruction with the team. Submissions are reviewed by the AI Champions team before appearing in the catalog.</p>
+      </div>
+      <div class="form-card">
+        <div style="margin-bottom:14px">
+          <div class="fl" style="margin-bottom:8px">Asset Type <span>*</span></div>
+          <div class="type-grid">
+            <div class="topt sel" data-t="agent" onclick="selT(this)" tabindex="0" role="radio" aria-checked="true"><span class="topt-em">🤖</span>Agent</div>
+            <div class="topt" data-t="prompt" onclick="selT(this)" tabindex="0" role="radio" aria-checked="false"><span class="topt-em">💬</span>Prompt</div>
+            <div class="topt" data-t="skill" onclick="selT(this)" tabindex="0" role="radio" aria-checked="false"><span class="topt-em">🛠</span>Skill</div>
+            <div class="topt" data-t="instruction" onclick="selT(this)" tabindex="0" role="radio" aria-checked="false"><span class="topt-em">📋</span>Instruction</div>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="fg"><label class="fl" for="sf-name">Name <span>*</span></label><input class="fi" id="sf-name" type="text" placeholder="e.g. Auth Flow Reviewer"></div>
+          <div class="fg"><label class="fl" for="sf-team">Team <span>*</span></label><input class="fi" id="sf-team" type="text" placeholder="e.g. Platform Engineering"></div>
+        </div>
+        <div class="fg"><label class="fl" for="sf-desc">Description <span>*</span></label><textarea class="ft" id="sf-desc" rows="3" placeholder="What does it do? When should developers use it?"></textarea></div>
+        <div class="fg"><label class="fl" for="sf-inv">Invocation / Usage <span>*</span></label><input class="fi fmono" id="sf-inv" type="text" placeholder="@agent-name describe the task here"><div class="fhint">The exact command or prompt pattern</div></div>
+        <div class="form-row-2">
+          <div class="fg"><label class="fl" for="sf-model">Recommended Model</label><select class="fs" id="sf-model"><option value="free">⚡ Free</option><option value="premium" selected>🔥 Premium</option><option value="either">💛 Either</option></select></div>
+          <div class="fg"><label class="fl" for="sf-tags">Tags (comma separated)</label><input class="fi" id="sf-tags" type="text" placeholder="security, c#, azure"></div>
+        </div>
+        <div class="fg"><label class="fl" for="sf-path">File Path (optional)</label><input class="fi fmono" id="sf-path" type="text" placeholder=".github/agents/my-agent.agent.md"><div class="fhint">Path to the asset file in your repo</div></div>
+        <button class="btn-submit-form" onclick="doSubmit()" type="button">Submit for Review</button>
+        <p class="fnote">Reviewed by the AI Champions team · Questions? Ping <a href="#">#ai-champions</a> on Teams</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-text">Team AI Assets Catalog · Engineering Excellence · v2026 · Internal use only</span>
+    <div class="footer-links">
+      <a href="#" onclick="goPage('workflow',null)">Developer Workflow</a>
+      <a href="#" onclick="goPage('guide',null)">Guide</a>
+      <a href="#" onclick="goPage('submit',null)">Contribute</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ════════════════════════════════════
+// DATA
+// ════════════════════════════════════
+const DATA=[
+  {id:1,type:'agent',em:'🔍',name:'Code Review Agent',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'premium',tags:['quality','solid','patterns','pr','c#'],
+   desc:'Structured code reviews covering logic correctness, SOLID principles, design patterns, naming conventions, and error handling quality.',
+   inv:'@code-review review this PR diff for quality issues',
+   content:`# Code Review Agent\n\n## Overview\nPerforms structured, opinionated code reviews covering logic correctness, SOLID principles, design patterns, naming conventions, and error handling quality.\n\n## When to Use\n- Before raising a PR to self-review your changes\n- After a major refactor to verify behavioural preservation\n- When you want a structured second opinion\n\n## Invocation\n\`\`\`\n@code-review review this PR diff for quality issues\n@code-review check this service class for SOLID violations\n\`\`\`\n\n## What It Checks\n| Category | Details |\n|---|---|\n| **SOLID** | SRP, OCP, LSP, ISP, DIP violations |\n| **Error Handling** | Missing null checks, swallowed exceptions |\n| **Naming** | Meaningful names, team consistency |\n| **Patterns** | Anti-patterns, unnecessary complexity |\n\n## Model Requirement\n🔥 **Premium only** — deep cross-method reasoning required.`},
+  {id:2,type:'agent',em:'🛡️',name:'Security Review Agent',team:'Security Guild',ti:'SG',tc:'#cf222e',model:'premium',tags:['security','checkmarx','owasp','cx'],
+   desc:'Maps Checkmarx findings to your code, explains vulnerabilities in plain English, and generates OWASP-aligned fixes.',
+   inv:'@security-cx fix this SQL injection finding in #file:UserRepo.cs',
+   content:`# Security Review Agent — Checkmarx\n\n## Overview\nMaps Checkmarx (CX) scan findings to your source code, explains the vulnerability in plain English, and generates OWASP-aligned remediation.\n\n## Invocation\n\`\`\`\n@security-cx fix this SQL injection finding\n@security-cx review this controller for auth vulnerabilities\n\`\`\`\n\n## Coverage\n- Injection (SQL, LDAP, command, XML)\n- Authentication & session management\n- Cryptography (weak algorithms, insecure random)\n- Sensitive data exposure\n- Missing authorization checks\n\n## Example Fix\n\`\`\`csharp\n// ❌ BEFORE\nstring q = $"SELECT * FROM Users WHERE name = '{input}'";\n\n// ✓ AFTER\nstring q = "SELECT * FROM Users WHERE name = @name";\ncmd.Parameters.AddWithValue("@name", input);\n\`\`\`\n\n## Model Requirement\n🔥 **Premium mandatory** — security requires precision reasoning.`},
+  {id:3,type:'agent',em:'📊',name:'SonarQube Agent',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'premium',tags:['sonar','quality','code-smell'],
+   desc:'Resolves SonarQube issues by understanding full method context — not just the flagged line — and produces passing code.',
+   inv:'@sonar fix the cognitive complexity issue in this method',
+   content:`# SonarQube Agent\n\n## Overview\nResolves SonarQube-flagged issues by understanding the full method and class context. Generates clean replacements that address the root cause.\n\n## Invocation\n\`\`\`\n@sonar fix the cognitive complexity issue in this method\n@sonar resolve the null reference warning at UserService.cs:142\n\`\`\`\n\n## Issue Types\n| Rule | Fix Approach |\n|---|---|\n| Cognitive Complexity | Decompose into smaller methods |\n| Null Dereference | Add null guards, ?. operators |\n| Code Duplication | Extract shared methods |\n| Missing error handling | Add try/catch with logging |\n| Hardcoded credentials | Move to config/Key Vault |\n\n## Model Requirement\n🔥 **Premium** — understanding code smell context requires reading beyond the flagged line.`},
+  {id:4,type:'agent',em:'🧪',name:'Test Generation Agent',team:'QA Engineering',ti:'QA',tc:'#8250df',model:'either',tags:['testing','xunit','mocking','moq'],
+   desc:'Generates comprehensive xUnit/NUnit test suites with edge cases, mocking strategies, and coverage targets.',
+   inv:'@test-gen generate full xUnit test suite for this service class',
+   content:`# Test Generation Agent\n\n## Overview\nGenerates test suites with happy paths, edge cases, and failure scenarios. Supports xUnit, NUnit, MSTest with Moq for mocking.\n\n## Invocation\n\`\`\`\n@test-gen generate full xUnit test suite for this service class\n@test-gen create integration tests for this repository\n@test-gen add edge case tests for null inputs and boundary conditions\n\`\`\`\n\n## Generated Test Types\n- Happy path — standard expected behaviour\n- Edge cases — nulls, empty collections, boundary values\n- Failure cases — exceptions, DB errors, service unavailability\n- Async patterns — proper async/await with CancellationToken\n\n## Example\n\`\`\`csharp\n[Fact]\npublic async Task GetUserAsync_WhenUserExists_ReturnsUserDto()\n{\n    var userId = Guid.NewGuid();\n    _mockRepo.Setup(r => r.GetByIdAsync(userId, It.IsAny<CancellationToken>()))\n             .ReturnsAsync(new User { Id = userId, Name = "Test" });\n    \n    var result = await _sut.GetUserAsync(userId, CancellationToken.None);\n    \n    result.Should().NotBeNull();\n    result.Id.Should().Be(userId);\n}\n\`\`\``},
+  {id:5,type:'agent',em:'📝',name:'Doc Writer Agent',team:'All Teams',ti:'AT',tc:'#8250df',model:'either',tags:['docs','adr','confluence','openapi'],
+   desc:'Produces Confluence-ready docs, API references, architecture decision records, and inline code comments.',
+   inv:'@doc-writer create an ADR for this design decision',
+   content:`# Doc Writer Agent\n\n## Overview\nGenerates Confluence-ready documentation, API references, ADRs, and inline documentation.\n\n## Invocation\n\`\`\`\n@doc-writer create an ADR for this design decision\n@doc-writer generate OpenAPI docs for these endpoints\n@doc-writer write a Confluence page for this service\n\`\`\`\n\n## Output Formats\n| Format | Usage |\n|---|---|\n| Confluence Wiki | Team knowledge base |\n| ADR Markdown | Architecture decisions |\n| OpenAPI YAML | API docs |\n| XML Doc Comments | Inline C# docs |\n| README | Service onboarding |\n\n## ADR Template\n\`\`\`markdown\n# ADR-001: [Decision Title]\n**Status:** Accepted | **Date:** 2026-MM-DD\n\n## Context\n[Problem being solved]\n\n## Decision\n[What was decided]\n\n## Consequences\n[Trade-offs and implications]\n\`\`\``},
+  {id:6,type:'agent',em:'⚡',name:'Performance Review Agent',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'premium',tags:['performance','n+1','async','ef-core'],
+   desc:'Analyzes N+1 queries, async bottlenecks, memory leaks, and inefficient loops with concrete optimization fixes.',
+   inv:'@perf-review find performance issues in this data layer',
+   content:`# Performance Review Agent\n\n## Overview\nAnalyzes code for common performance anti-patterns and provides concrete optimization suggestions.\n\n## Invocation\n\`\`\`\n@perf-review find performance issues in this data layer\n@perf-review check this EF Core query for N+1 problems\n\`\`\`\n\n## What It Detects\n- **N+1 queries** — lazy loading inside loops\n- **Over-fetching** — selecting full entities unnecessarily\n- **Async bottlenecks** — .Result, .Wait(), missing async/await\n- **Memory allocations** — unnecessary object creation in hot paths\n- **Caching opportunities** — repeated identical queries\n\n## Example Fix\n\`\`\`csharp\n// ❌ N+1 Problem\nvar orders = await dbContext.Orders.ToListAsync();\nforeach (var o in orders)\n    Console.WriteLine(o.Customer.Name); // N+1!\n\n// ✓ Eager loading\nvar orders = await dbContext.Orders\n    .Include(o => o.Customer)\n    .Select(o => new { o.Id, Name = o.Customer.Name })\n    .AsNoTracking()\n    .ToListAsync();\n\`\`\``},
+  {id:7,type:'agent',em:'🔄',name:'Azure DevOps Agent',team:'DevOps',ti:'DO',tc:'#9a6700',model:'free',tags:['ado','work-items','release-notes'],
+   desc:'Drafts work items, generates release notes from commits, summarises PRs, and links to Jira stories.',
+   inv:'@ado-agent draft release notes from these commits',
+   content:`# Azure DevOps Agent\n\n## Overview\nAutomates common Azure DevOps tasks: drafting work items, generating release notes, and creating structured PR descriptions.\n\n## Invocation\n\`\`\`\n@ado-agent draft release notes from these commits\n@ado-agent create a work item description for: [feature]\n@ado-agent generate a PR description from this diff\n\`\`\`\n\n## Model Recommendation\n⚡ **Free** — text summarisation and generation tasks.`},
+  {id:8,type:'prompt',em:'🔁',name:'SOLID Refactor Prompt',team:'All Teams',ti:'AT',tc:'#8250df',model:'premium',tags:['solid','refactoring','c#','patterns'],
+   desc:'Refactors a class to comply with SOLID principles, separating concerns and injecting dependencies cleanly.',
+   inv:'Refactor this class to comply with SOLID. Inject deps. Keep signatures stable.',
+   content:`# SOLID Refactor Prompt\n\n## Template\n\`\`\`\nRefactor this [class/method] to comply with SOLID principles.\nSpecifically:\n- Extract [concern] into a separate service/interface\n- Constructor injection only\n- Keep existing public method signatures stable (non-breaking)\n- Follow our Repository + Service pattern\n- Use C# 12 features where applicable\n\`\`\`\n\n## When to Use\n- Classes that have grown beyond a single responsibility\n- God classes during code review\n- SonarQube tight coupling issues\n\n## Model\n🔥 **Premium** — architecture reasoning requires full codebase context.`},
+  {id:9,type:'prompt',em:'📋',name:'Jira Story Creator',team:'All Teams',ti:'AT',tc:'#8250df',model:'free',tags:['jira','planning','acceptance-criteria','bdd'],
+   desc:'Creates a structured Jira story with title, user story, BDD acceptance criteria, story points, and definition of done.',
+   inv:'Create a Jira story for: [feature]. Include ACs in BDD format, story points, DoD.',
+   content:`# Jira Story Creator Prompt\n\n## Template\n\`\`\`\nCreate a Jira story for: [feature description]\n\nRequired sections:\n- **Title**: Action-oriented, max 80 chars\n- **Type**: Story / Bug / Task / Spike\n- **Epic**: [name if known]\n- **Description**: "As a [role], I want [goal] so that [benefit]"\n- **Acceptance Criteria**: BDD format (Given/When/Then), min 3 ACs\n- **Technical Notes**: Known constraints, dependencies\n- **Story Points**: Fibonacci (1/2/3/5/8/13)\n- **Definition of Done**: Code review ✓, tests ✓, security scan ✓, docs ✓\n\`\`\`\n\n## Example\n> **Title:** Add email verification to registration\n> **Story Points:** 5\n>\n> **As a** new user\n> **I want** to verify my email\n> **So that** the platform is protected from fake accounts\n>\n> **ACs:**\n> - Given I register with valid email, When submitted, Then verification email arrives within 2 min\n> - Given I click the link, When token is valid, Then account is marked verified\n\n## Model\n⚡ **Free** — text generation, no code reasoning needed.`},
+  {id:10,type:'prompt',em:'🔍',name:'EF Core Query Analyser',team:'Data Engineering',ti:'DE',tc:'#bc4c00',model:'premium',tags:['ef-core','performance','sql','n+1'],
+   desc:'Finds N+1 patterns, over-fetching, and missing indexes in EF Core queries. Returns an optimised version.',
+   inv:'Analyse this EF Core query for N+1 and over-fetching. Return optimised version.',
+   content:`# EF Core Query Analyser Prompt\n\n## Template\n\`\`\`\nAnalyse this EF Core query for:\n1. N+1 query problems (lazy loading in loops)\n2. Over-fetching (full entities vs projections)\n3. Missing .AsNoTracking() for read-only queries\n4. Opportunities for compiled queries on hot paths\n5. Split query candidates for large collections\n\nReturn:\n- Analysis of each issue\n- Optimised query\n- Estimated improvement\n\`\`\`\n\n## Common Fixes\n\`\`\`csharp\n.AsNoTracking()                    // read-only\n.Select(u => new UserDto {...})   // project, don't load entity\n.Include(o => o.Items)            // eager load\n.AsSplitQuery()                   // large collections\n\`\`\``},
+  {id:11,type:'prompt',em:'🐛',name:'Bug Root Cause Prompt',team:'All Teams',ti:'AT',tc:'#8250df',model:'premium',tags:['debugging','rca','diagnosis'],
+   desc:'Structured RCA prompt — provide error, stack trace, and code to get a root cause diagnosis and targeted fix.',
+   inv:'Diagnose this bug. Error: [paste]. Stack: [paste]. Root cause + targeted fix.',
+   content:`# Bug Root Cause Analysis Prompt\n\n## Template\n\`\`\`\nDiagnose this bug:\n\n**Error:** [full error message]\n**Stack trace:** [paste]\n**Code:** [relevant methods]\n**Context:** [what triggered it, input data, environment]\n\nPlease:\n1. Identify the root cause (not just the symptom)\n2. Explain why this occurs in plain English\n3. Suggest a targeted fix that doesn't break existing behaviour\n4. Recommend a test case that would have caught this\n\`\`\`\n\n## Model\n🔥 **Premium** — cross-frame root cause analysis.`},
+  {id:12,type:'prompt',em:'📖',name:'Confluence Doc Generator',team:'All Teams',ti:'AT',tc:'#8250df',model:'free',tags:['confluence','documentation','wiki'],
+   desc:'Converts design notes or code into a Confluence-formatted page with headings, tables, and decision rationale.',
+   inv:'Create a Confluence wiki page from these notes. H2 sections, tables, decision rationale.',
+   content:`# Confluence Doc Generator\n\n## Template\n\`\`\`\nCreate a Confluence wiki page for: [topic]\n\nSource: [paste notes / code / decisions]\n\nFormat:\n- H1 page title, H2 sections\n- Overview (2-3 sentences)\n- Tables for comparisons\n- Code blocks with language annotation\n- "Decision Rationale" for architectural choices\n- "Next Steps" or "Related Pages" at end\n- Confluence-compatible markdown only\n\`\`\`\n\n## Model\n⚡ **Free** — formatting and text task.`},
+  {id:13,type:'prompt',em:'🔐',name:'Auth Flow Reviewer',team:'Security Guild',ti:'SG',tc:'#cf222e',model:'premium',tags:['auth','security','jwt','oauth'],
+   desc:'Reviews authentication and authorisation code for missing checks, insecure defaults, and token handling issues.',
+   inv:'Review this auth code: missing authz checks, insecure defaults, token handling.',
+   content:`# Auth Flow Reviewer Prompt\n\n## Template\n\`\`\`\nReview this auth/authorization code for:\n\n1. Missing [Authorize] or role checks on endpoints\n2. Insecure defaults — weak expiry, no refresh rotation, no HTTPS enforcement\n3. JWT — algorithm confusion, missing signature validation, PII in claims\n4. Session management — missing invalidation on logout, no absolute timeout\n5. OAuth/OIDC — missing PKCE, state parameter, redirect URI validation\n\nFor each issue:\n- Severity (Critical/High/Medium/Low)\n- Code location\n- Recommended fix with example code\n\`\`\`\n\n## Model\n🔥 **Premium mandatory**.`},
+  {id:14,type:'skill',em:'⚙️',name:'C# Async/Await Patterns',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'either',tags:['c#','async','dotnet','cancellationtoken'],
+   desc:'Correct async/await patterns: CancellationToken, ConfigureAwait, avoiding .Result/.Wait() deadlocks.',
+   inv:'Apply correct CancellationToken and ConfigureAwait(false) to this async class.',
+   content:`# C# Async/Await Patterns Skill\n\n## Method Signature\n\`\`\`csharp\npublic async Task<UserDto> GetUserAsync(\n    Guid userId,\n    CancellationToken cancellationToken = default)\n\`\`\`\n\n## ConfigureAwait in Library Code\n\`\`\`csharp\nvar user = await _repo.GetByIdAsync(userId, ct)\n    .ConfigureAwait(false);\n\`\`\`\n\n## Never Block on Async\n\`\`\`csharp\n// ❌ Never\nvar r = GetDataAsync().Result;\n\n// ✓ Always await\nvar r = await GetDataAsync(ct);\n\`\`\`\n\n## async void is Forbidden\n\`\`\`csharp\n// ❌\npublic async void ProcessAsync() { }\n\n// ✓\npublic async Task ProcessAsync() { }\n\`\`\``},
+  {id:15,type:'skill',em:'☁️',name:'Azure SDK Integration',team:'Cloud Engineering',ti:'CE',tc:'#0969da',model:'free',tags:['azure','blob','service-bus','key-vault'],
+   desc:'Standard patterns for Azure SDK v12+: Blob Storage, Service Bus, Key Vault, App Config with Managed Identity.',
+   inv:'Generate Service Bus consumer with retry policy using the azure-sdk skill.',
+   content:`# Azure SDK Integration Skill\n\n## Service Bus Consumer\n\`\`\`csharp\nvar processor = new ServiceBusProcessor(client, queue, new ServiceBusProcessorOptions\n{\n    MaxConcurrentCalls = 5,\n    AutoCompleteMessages = false\n});\n\nprocessor.ProcessMessageAsync += async args =>\n{\n    var body = args.Message.Body.ToObjectFromJson<MyMessage>();\n    await _handler.HandleAsync(body, args.CancellationToken);\n    await args.CompleteMessageAsync(args.Message);\n};\n\`\`\`\n\n## Blob Storage (Managed Identity)\n\`\`\`csharp\nvar client = new BlobServiceClient(\n    new Uri($"https://{account}.blob.core.windows.net"),\n    new DefaultAzureCredential()); // Always Managed Identity\n\`\`\`\n\n## Key Vault in Program.cs\n\`\`\`csharp\nbuilder.Configuration.AddAzureKeyVault(\n    new Uri($"https://{vault}.vault.azure.net/"),\n    new DefaultAzureCredential());\n\`\`\``},
+  {id:16,type:'skill',em:'🌐',name:'REST API Design Skill',team:'API Guild',ti:'AG',tc:'#1a7f37',model:'free',tags:['rest','api','swagger','versioning'],
+   desc:'Scaffolds REST endpoints following team conventions: versioning, response envelopes, error models, Swagger annotations.',
+   inv:'Scaffold CRUD endpoints for UserResource following our REST conventions.',
+   content:`# REST API Design Skill\n\n## Response Envelope\n\`\`\`csharp\npublic record ApiResponse<T>\n{\n    public bool Success { get; init; }\n    public T? Data { get; init; }\n    public string? Error { get; init; }\n    public string? TraceId { get; init; }\n}\n\`\`\`\n\n## Controller Template\n\`\`\`csharp\n[ApiController]\n[ApiVersion("1.0")]\n[Route("api/v{version:apiVersion}/[controller]")]\npublic class UsersController : ControllerBase\n{\n    [HttpGet("{id:guid}")]\n    [ProducesResponseType(typeof(ApiResponse<UserDto>), 200)]\n    [ProducesResponseType(typeof(ApiResponse<object>), 404)]\n    public async Task<IActionResult> GetById(\n        Guid id, CancellationToken ct)\n    {\n        var user = await _service.GetUserAsync(id, ct);\n        return user is null\n            ? NotFound(ApiResponse.Fail("User not found"))\n            : Ok(ApiResponse.Ok(user));\n    }\n}\n\`\`\``},
+  {id:17,type:'skill',em:'🧱',name:'Repository Pattern Skill',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'free',tags:['repository','uow','ef-core','patterns'],
+   desc:'Interface and implementation templates for the Repository and Unit of Work patterns with EF Core.',
+   inv:'Implement a repository for the Order entity following the Repository pattern skill.',
+   content:`# Repository Pattern Skill\n\n## Interface\n\`\`\`csharp\npublic interface IRepository<T> where T : BaseEntity\n{\n    Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default);\n    Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default);\n    Task<T> AddAsync(T entity, CancellationToken ct = default);\n    Task UpdateAsync(T entity, CancellationToken ct = default);\n    Task DeleteAsync(Guid id, CancellationToken ct = default);\n}\n\`\`\`\n\n## Implementation\n\`\`\`csharp\npublic class UserRepository : IUserRepository\n{\n    private readonly AppDbContext _ctx;\n    public UserRepository(AppDbContext ctx) => _ctx = ctx;\n\n    public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)\n        => await _ctx.Users\n            .AsNoTracking()\n            .FirstOrDefaultAsync(u => u.Id == id, ct)\n            .ConfigureAwait(false);\n}\n\`\`\``},
+  {id:18,type:'instruction',em:'📐',name:'C# 12 Coding Standards',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'either',tags:['c#','standards','dotnet','nullable'],
+   desc:'Custom instruction enforcing C# 12, team naming conventions, nullable types, and preferred patterns in .github/copilot-instructions.md.',
+   inv:'# Place in .github/copilot-instructions.md — auto-applied to all suggestions',
+   content:`# C# 12 Coding Standards\n\n**File:** \`.github/copilot-instructions.md\`\n\n\`\`\`markdown\n## C# Coding Standards\n\n- Use C# 12 features: primary constructors, collection expressions, using aliases\n- Enable nullable reference types; all params/returns must be annotated\n- All async methods must accept CancellationToken as last param (default = default)\n- Use record types for DTOs and value objects; class for entities and services\n- Follow Repository + Service + Controller layered architecture\n- Never return domain entities from API controllers; always map to DTOs\n- Use FluentValidation for all input validation; never validate in controllers\n- Use Result<T> for service layer return values instead of throwing exceptions\n- All EF Core reads must use .AsNoTracking()\n- Constructor injection only; no property injection, no service locator\n\`\`\``},
+  {id:19,type:'instruction',em:'🛡️',name:'Error Handling Standards',team:'Platform Eng',ti:'PE',tc:'#0969da',model:'either',tags:['error-handling','logging','result'],
+   desc:'Ensures Result<T>, structured logging, and no swallowed exceptions throughout generated code.',
+   inv:'# Place in .github/copilot-instructions.md — enforces error handling standards',
+   content:`# Error Handling Standards\n\n**File:** \`.github/copilot-instructions.md\`\n\n\`\`\`markdown\n## Error Handling\n\n- Use Result<T, TError> for expected failures; exceptions for truly exceptional conditions\n- Never swallow exceptions in empty catch blocks\n- All exceptions must be logged with structured logging before handling:\n  \`_logger.LogError(ex, "Failed for UserId: {UserId}", userId);\`\n- Use global exception middleware; do not try/catch in controllers\n- Domain validation returns 400 with structured error model\n- Not-found returns Result.NotFound(), not exceptions\n- Infrastructure failures (DB, HTTP) use Polly retry policies\n- Always include trace IDs in error responses\n\`\`\``},
+  {id:20,type:'instruction',em:'📡',name:'API Response Standards',team:'API Guild',ti:'AG',tc:'#1a7f37',model:'either',tags:['api','http','response','envelope'],
+   desc:'Enforces the response envelope, HTTP status codes, and validation error format in all generated controllers.',
+   inv:'# Place in .github/copilot-instructions.md — enforces API response standards',
+   content:`# API Response Standards\n\n**File:** \`.github/copilot-instructions.md\`\n\n\`\`\`markdown\n## API Standards\n\n- Wrap all responses in ApiResponse<T>: { success, data, error, traceId }\n- Status codes: 200 OK, 201 Created, 400 Validation, 401 Auth, 403 Forbidden, 404 Not Found, 409 Conflict\n- Validation errors: 400 with field-level errors { field, message }\n- Use ProblemDetails (RFC 7807) for error responses\n- Never expose stack traces to clients\n- All endpoints must have [ProducesResponseType] for Swagger\n- Pagination returns: { items, totalCount, pageNumber, pageSize }\n\`\`\``},
+  {id:21,type:'instruction',em:'🏗️',name:'Azure Naming Conventions',team:'Cloud Engineering',ti:'CE',tc:'#0969da',model:'either',tags:['azure','iac','naming','terraform'],
+   desc:'Enforces Azure resource naming patterns, environment prefixes, and tag requirements in generated IaC code.',
+   inv:'# Place in .github/copilot-instructions.md — enforces Azure naming',
+   content:`# Azure Naming Conventions\n\n**File:** \`.github/copilot-instructions.md\`\n\n\`\`\`markdown\n## Azure Naming: {env}-{app}-{resource}-{region}\n\nExamples:\n- prod-myapp-rg-aue   (Resource Group, Australia East)\n- dev-myapp-func-ase  (Function App)\n- stg-myapp-sql-aue   (SQL MI)\n\n## Required Tags\n- Environment: dev | stg | prod\n- Application: [name]\n- CostCenter: [team code]\n- Owner: [team email]\n\n## Short Codes\nrg=ResourceGroup, func=FunctionApp, app=AppService,\nsql=SQLServer, kv=KeyVault, sb=ServiceBus, sa=Storage\n\`\`\``}
+];
+
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let activeType='all', activeSearch='', sortBy='name', curAsset=null, curView='render';
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+function init(){
+  updateCounts(); renderList();
+}
+
+function updateCounts(){
+  const types=['agent','prompt','skill','instruction'];
+  document.getElementById('st-total').textContent=DATA.length;
+  document.getElementById('ct-all').textContent=DATA.length;
+  types.forEach(t=>{
+    const n=DATA.filter(a=>a.type===t).length;
+    document.getElementById('st-'+t.replace('instruction','instr')).textContent=n;
+    document.getElementById('ct-'+t.replace('instruction','instr')).textContent=n;
+  });
+}
+
+// ════════════════════════════════════
+// RENDER LIST
+// ════════════════════════════════════
+function renderList(){
+  const q=activeSearch.toLowerCase();
+  let list=DATA.filter(a=>{
+    const mt=activeType==='all'||a.type===activeType;
+    const ms=!q||a.name.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)||a.tags.some(t=>t.includes(q))||a.team.toLowerCase().includes(q);
+    return mt&&ms;
+  });
+  if(sortBy==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortBy==='type') list.sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name));
+  else if(sortBy==='model') list.sort((a,b)=>a.model.localeCompare(b.model));
+
+  document.getElementById('rcount').textContent=`${list.length} of ${DATA.length} assets`;
+
+  const el=document.getElementById('asset-list');
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><div class="empty-em">🔍</div><p>No assets match "${activeSearch}"</p></div>`;
+    return;
+  }
+  el.innerHTML=list.map(a=>`
+    <div class="asset-item" role="listitem" tabindex="0" onclick="openModal(${a.id})" onkeydown="if(event.key==='Enter')openModal(${a.id})" aria-label="View ${esc(a.name)}">
+      <div class="ai-top">
+        <div>
+          <div class="ai-title-row">
+            <span class="ai-name">${esc(a.name)}</span>
+            <span class="type-badge tb-${a.type}">${a.type}</span>
+            <span class="ai-model-badge mb-${a.model}">${modelLabel(a.model)}</span>
+          </div>
+        </div>
+        <div class="ai-team"><div class="team-dot" style="background:${a.tc}">${a.ti}</div>${a.team}</div>
+      </div>
+      <div class="ai-desc">${esc(a.desc)}</div>
+      <div class="ai-tags">${a.tags.map(t=>`<span class="ai-tag">#${t}</span>`).join('')}</div>
+      <div class="ai-inv" onclick="e=>{e.stopPropagation()}" title="Copy invocation">
+        <span class="ai-inv-text">${esc(a.inv)}</span>
+        <button class="copy-iv" onclick="event.stopPropagation();cp('${a.inv.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}');event.currentTarget.textContent='✓';setTimeout(()=>event.currentTarget.textContent='⎘',1500)" aria-label="Copy">⎘</button>
+      </div>
+      <div class="ai-footer">
+        <div class="ai-actions">
+          <button class="btn-install" onclick="event.stopPropagation();mInstallId(${a.id})">↓ Install</button>
+          <button class="btn-vscode" onclick="event.stopPropagation();mVSCodeId(${a.id})">VS Code</button>
+          <button class="btn-vscode ins" onclick="event.stopPropagation();mVSCodeId(${a.id},true)">VS Code Insiders</button>
+        </div>
+        <span class="ai-updated">View asset →</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function modelLabel(m){return m==='free'?'⚡ Free':m==='premium'?'🔥 Premium':'💛 Either'}
+
+// ════════════════════════════════════
+// FILTER / SORT
+// ════════════════════════════════════
+function setType(t,btn){
+  activeType=t;
+  document.querySelectorAll('.ctab').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-selected','false')});
+  btn.classList.add('on');btn.setAttribute('aria-selected','true');
+  renderList();
+}
+function doFilter(){activeSearch=document.getElementById('cat-search').value;renderList()}
+function doSort(v){sortBy=v;renderList()}
+
+// ════════════════════════════════════
+// MODAL
+// ════════════════════════════════════
+function openModal(id){
+  curAsset=DATA.find(a=>a.id===id);if(!curAsset)return;
+  curView='render';
+  document.getElementById('m-title').textContent=curAsset.name;
+  document.getElementById('m-meta').innerHTML=`<span class="type-badge tb-${curAsset.type}">${curAsset.type}</span><span class="ai-model-badge mb-${curAsset.model}">${modelLabel(curAsset.model)}</span><span style="font-size:11px;color:var(--gray-500)">${curAsset.team}</span>`;
+  renderModalBody();
+  document.getElementById('overlay').classList.add('on');
+  document.body.style.overflow='hidden';
+  document.querySelectorAll('.vt').forEach(v=>v.classList.remove('on'));
+  document.getElementById('vt-render').classList.add('on');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('on');document.body.style.overflow=''}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+function setView(v){
+  curView=v;
+  document.querySelectorAll('.vt').forEach(t=>t.classList.remove('on'));
+  document.getElementById('vt-'+v).classList.add('on');
+  renderModalBody();
+}
+function renderModalBody(){
+  const el=document.getElementById('modal-body');
+  if(curView==='render'){
+    el.innerHTML=`<div class="md">${marked.parse(curAsset.content)}</div>`;
+  } else {
+    el.innerHTML=`<div class="raw-view"><pre>${curAsset.content.replace(/</g,'&lt;')}</pre></div>`;
+  }
+}
+function mCopy(){cp(curAsset.content)}
+function mDownload(){
+  const slug=curAsset.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  const ext={agent:'agent.md',prompt:'prompt.md',skill:'skill.md',instruction:'instructions.md'}[curAsset.type]||'md';
+  const b=new Blob([curAsset.content],{type:'text/markdown'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`${slug}.${ext}`;a.click();
+  showToast(`Downloaded ${slug}.${ext}`);
+}
+function mVSCode(ins=false){showToast(`Open in VS Code${ins?' Insiders':''}: copy .github/${curAsset.type}s/ and reload`)}
+function mInstall(){showToast(`Install: copy to .github/${curAsset.type}s/ in your repo`)}
+function mInstallId(id){const a=DATA.find(x=>x.id===id);if(a)showToast(`Install: copy to .github/${a.type}s/ in your repo`)}
+function mVSCodeId(id,ins=false){const a=DATA.find(x=>x.id===id);if(a)showToast(`VS Code${ins?' Insiders':''}: install from .github/${a.type}s/`)}
+
+// ════════════════════════════════════
+// SEARCH
+// ════════════════════════════════════
+function openSearch(){document.getElementById('so').classList.add('on');setTimeout(()=>document.getElementById('so-in').focus(),50);soSearch()}
+function closeSearch(){document.getElementById('so').classList.remove('on');document.getElementById('so-in').value=''}
+function soSearch(){
+  const q=document.getElementById('so-in').value.toLowerCase();
+  const res=document.getElementById('so-results');
+  if(!q){res.innerHTML='<div class="so-empty">Type to search all assets…</div>';return}
+  const hits=DATA.filter(a=>a.name.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)||a.tags.some(t=>t.includes(q)));
+  if(!hits.length){res.innerHTML=`<div class="so-empty">No results for "${q}"</div>`;return}
+  res.innerHTML=hits.map(a=>`
+    <div class="so-item" onclick="closeSearch();goPage('catalog',null);openModal(${a.id})" role="option" tabindex="0" onkeydown="if(event.key==='Enter'){closeSearch();goPage('catalog',null);openModal(${a.id})}">
+      <div class="so-icon" style="background:${a.type==='agent'?'#dbeafe':a.type==='prompt'?'#dafbe1':a.type==='skill'?'#fbefff':'#fff8c5'}">${a.em}</div>
+      <div><div class="so-n">${esc(a.name)}</div><div class="so-sub">${a.type} · ${a.team}</div></div>
+    </div>
+  `).join('');
+}
+document.getElementById('so').addEventListener('click',function(e){if(e.target===this)closeSearch()});
+
+// ════════════════════════════════════
+// NAV
+// ════════════════════════════════════
+function goPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  document.querySelectorAll('.nt,.mob-item').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  document.querySelectorAll(`[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMob(){const n=document.getElementById('mob-menu'),h=document.getElementById('ham');const o=n.classList.toggle('open');h.classList.toggle('open',o);h.setAttribute('aria-expanded',o)}
+function closeMob(){document.getElementById('mob-menu').classList.remove('open');document.getElementById('ham').classList.remove('open','aria-expanded','false')}
+
+// ════════════════════════════════════
+// COPY & TOAST
+// ════════════════════════════════════
+function cp(text){navigator.clipboard?.writeText(text)||fb(text);showToast('Copied to clipboard!')}
+function fb(t){const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x)}
+function showToast(msg){const t=document.getElementById('toast');t.querySelector?t.childNodes[t.childNodes.length-1].textContent=msg:null;t.textContent='✓ '+(msg||'Copied!');t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+
+// ════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════
+function selT(el){document.querySelectorAll('.topt').forEach(o=>{o.classList.remove('sel');o.setAttribute('aria-checked','false')});el.classList.add('sel');el.setAttribute('aria-checked','true')}
+function doSubmit(){
+  const n=document.getElementById('sf-name').value.trim(),t=document.getElementById('sf-team').value.trim(),d=document.getElementById('sf-desc').value.trim(),i=document.getElementById('sf-inv').value.trim();
+  if(!n||!t||!d||!i){alert('Please fill in all required fields.');return}
+  alert(`✅ "${n}" submitted for review!\n\nThe AI Champions team will add it to the catalog. Ping #ai-champions on Teams.`);
+  ['sf-name','sf-team','sf-desc','sf-inv','sf-tags','sf-path'].forEach(id=>document.getElementById(id).value='');
+  goPage('catalog',document.querySelector('[data-p="catalog"]'));
+}
+
+// ════════════════════════════════════
+// KEYBOARD
+// ════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModal();closeSearch()}
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openSearch()}
+});
+
+// ════════════════════════════════════
+// BOOT
+// ════════════════════════════════════
+init();
+</script>
+</body>
+</html>

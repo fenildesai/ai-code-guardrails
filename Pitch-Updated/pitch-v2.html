@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Context Engineering — IT Platform All Hands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#04070f}
+:root{
+  --ink:#04070f;
+  --bg:#04070f;
+  --blue:#2563eb;
+  --blue-l:#3b82f6;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#8b5cf6;
+  --text:#f0f4ff;
+  --dim:#7c8db0;
+  --muted:#3a4560;
+  --border:rgba(255,255,255,.07);
+  --ff:'Bricolage Grotesque',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--ff);color:var(--text)}
+
+/* deck */
+.deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  opacity:0;transform:translateX(48px);
+  transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;overflow:hidden;
+}
+.slide.prev{opacity:0;transform:translateX(-48px);transition:opacity .45s,transform .45s}
+.slide.active{opacity:1;transform:none;pointer-events:all}
+
+/* controls */
+.ctrl{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(4,7,15,.85);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:40px;padding:9px 18px;
+}
+.dots{display:flex;gap:6px;align-items:center}
+.d{width:6px;height:6px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s}
+.d.on{background:var(--blue-l);width:20px;border-radius:3px}
+.cbtn{background:none;border:1px solid var(--border);border-radius:20px;color:var(--dim);padding:4px 13px;font-size:12px;font-family:var(--ff);cursor:pointer;transition:all .2s}
+.cbtn:hover{background:var(--blue-l);color:#fff;border-color:var(--blue-l)}
+.cn{font-size:11px;color:var(--muted);font-family:var(--mono);min-width:36px;text-align:center}
+
+/* hint */
+.hint{position:fixed;top:14px;right:14px;z-index:200;display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);background:rgba(4,7,15,.7);border:1px solid var(--border);border-radius:6px;padding:5px 10px}
+kbd{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:10px;color:var(--dim)}
+.fsbtn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0;line-height:1}
+
+/* progress bar */
+.prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-l),var(--cyan));transition:width .4s;z-index:300}
+
+/* ── GLOBAL ELEMENTS ── */
+.grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);
+  background-size:56px 56px;pointer-events:none;
+}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+
+/* fade-up animation */
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes counter{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.slide.active .a1{animation:fu .5s ease both .1s}
+.slide.active .a2{animation:fu .5s ease both .25s}
+.slide.active .a3{animation:fu .5s ease both .4s}
+.slide.active .a4{animation:fu .5s ease both .55s}
+.slide.active .a5{animation:fu .5s ease both .7s}
+.slide.active .ac{animation:counter .5s cubic-bezier(.34,1.56,.64,1) both .3s}
+
+
+/* ══════════════════════════════════
+   S1 — TITLE
+══════════════════════════════════ */
+#s1{background:radial-gradient(ellipse 100% 80% at 50% 0%,#091832 0%,#04070f 70%)}
+#s1 .g1{width:700px;height:500px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(37,99,235,.22),transparent 70%)}
+#s1 .g2{width:300px;height:300px;bottom:0;left:10%;background:radial-gradient(circle,rgba(6,182,212,.1),transparent 70%)}
+.s1-stat{font-size:clamp(100px,16vw,180px);font-weight:800;line-height:1;letter-spacing:-.06em;color:var(--red);margin-bottom:4px}
+.s1-stat-label{font-size:clamp(16px,2vw,22px);color:var(--dim);letter-spacing:.02em;margin-bottom:32px}
+.s1-main{font-size:clamp(28px,4.5vw,56px);font-weight:800;letter-spacing:-.035em;line-height:1.1;text-align:center;margin-bottom:12px}
+.s1-main .hi{background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s1-sub{font-size:16px;color:var(--dim);text-align:center}
+
+/* ══════════════════════════════════
+   S2 — THE PROBLEM
+══════════════════════════════════ */
+#s2{background:#04070f;padding:48px 60px}
+.s2-top{text-align:center;margin-bottom:36px}
+.s2-top h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.personas{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1080px;width:100%}
+.persona{
+  border-radius:16px;padding:22px 18px;border:1px solid var(--border);
+  background:rgba(255,255,255,.02);overflow:hidden;position:relative;
+}
+.persona::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.p1::after{background:var(--blue-l)}
+.p2::after{background:var(--cyan)}
+.p3::after{background:var(--purple)}
+.p4::after{background:var(--amber)}
+.persona-emoji{font-size:36px;margin-bottom:10px;display:block}
+.persona-role{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.p1 .persona-role{color:var(--blue-l)}
+.p2 .persona-role{color:var(--cyan)}
+.p3 .persona-role{color:var(--purple)}
+.p4 .persona-role{color:var(--amber)}
+.persona-prompt{font-family:var(--mono);font-size:11px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:6px;padding:8px 10px;color:#fca5a5;margin-bottom:10px;line-height:1.5}
+.persona-fail{font-size:11.5px;color:var(--dim);line-height:1.6}
+.persona-fail .x{color:var(--red);font-weight:700;margin-right:4px}
+
+/* ══════════════════════════════════
+   S3 — ROOT CAUSE
+══════════════════════════════════ */
+#s3{background:radial-gradient(ellipse 80% 60% at 50% 60%,#0a1428 0%,#04070f 80%);text-align:center}
+#s3 .g1{width:600px;height:400px;top:40%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.15),transparent 70%)}
+.s3-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+.s3-headline{font-size:clamp(36px,6vw,82px);font-weight:800;letter-spacing:-.04em;line-height:1.0;margin-bottom:28px}
+.s3-headline .no{color:var(--red)}
+.s3-headline .yes{color:var(--blue-l)}
+.analogy-row{display:flex;gap:16px;justify-content:center;align-items:center;margin-bottom:28px}
+.analogy-box{padding:14px 22px;border-radius:10px;border:1px solid;text-align:center}
+.ab-cpu{background:rgba(255,255,255,.03);border-color:var(--border)}
+.ab-ram{background:rgba(37,99,235,.08);border-color:rgba(59,130,246,.3)}
+.ab-os{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.25)}
+.ab-top{font-size:22px;margin-bottom:4px}
+.ab-mid{font-size:13px;font-weight:700}
+.ab-bot{font-size:11px;color:var(--dim)}
+.analogy-eq{font-size:16px;color:var(--muted)}
+.karpathy-quote{max-width:640px;font-size:14px;font-style:italic;color:var(--dim);line-height:1.7;border-left:2px solid var(--blue-l);padding-left:16px;text-align:left;margin:0 auto}
+.kq-attr{font-size:11px;color:var(--muted);margin-top:6px;font-style:normal;font-weight:600}
+
+/* ══════════════════════════════════
+   S4 — BEFORE / AFTER
+══════════════════════════════════ */
+#s4{background:#04070f;padding:40px 60px}
+.s4-h{text-align:center;margin-bottom:28px}
+.s4-h h2{font-size:clamp(26px,3.5vw,44px);font-weight:800;letter-spacing:-.03em}
+.compare{display:grid;grid-template-columns:1fr 64px 1fr;gap:0;align-items:center;max-width:1040px;width:100%}
+.side{border-radius:14px;padding:24px;border:1px solid;overflow:hidden}
+.side-bad{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.2)}
+.side-good{background:rgba(16,185,213,.04);border-color:rgba(16,185,129,.25)}
+.side-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.side-bad .side-lbl{color:var(--red)}
+.side-good .side-lbl{color:var(--green)}
+.side-prompt{font-family:var(--mono);font-size:12px;border-radius:8px;padding:12px 14px;margin-bottom:14px;line-height:1.6}
+.sp-bad{background:rgba(239,68,68,.07);color:#fca5a5;border:1px solid rgba(239,68,68,.15)}
+.sp-good{background:rgba(16,185,129,.07);color:#6ee7b7;border:1px solid rgba(16,185,129,.15)}
+.ctx-token{display:inline-block;margin:2px 2px;padding:1px 7px;border-radius:3px;font-size:11px;background:rgba(6,182,212,.15);color:#67e8f9;border:1px solid rgba(6,182,212,.2)}
+.outcome{font-size:12.5px;line-height:1.7;color:var(--dim)}
+.outcome .bad-r{color:var(--red);font-weight:600}
+.outcome .good-r{color:var(--green);font-weight:600}
+.compare-mid{display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--blue-l)}
+
+/* ══════════════════════════════════
+   S5 — CONTEXT ENGINEERING
+══════════════════════════════════ */
+#s5{background:radial-gradient(ellipse 90% 70% at 50% 50%,#060f24 0%,#04070f 80%);text-align:center;padding:48px}
+#s5 .g1{width:500px;height:400px;top:0;right:-100px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%)}
+#s5 .g2{width:400px;height:400px;bottom:0;left:-80px;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 70%)}
+.evolution{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:32px}
+.evo{border-radius:14px;padding:20px 32px;border:1px solid;min-width:220px}
+.evo-old{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.2)}
+.evo-new{background:rgba(37,99,235,.1);border-color:rgba(59,130,246,.4);box-shadow:0 0 48px rgba(37,99,235,.2)}
+.evo-era{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;color:var(--dim)}
+.evo-old .evo-era{color:var(--dim)}
+.evo-new .evo-era{color:#93c5fd}
+.evo-name{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.evo-old .evo-name{color:var(--dim);text-decoration:line-through}
+.evo-new .evo-name{color:var(--text)}
+.evo-desc{font-size:12px;color:var(--muted);margin-top:4px}
+.evo-new .evo-desc{color:#93c5fd}
+.evo-arr{font-size:28px;color:var(--blue-l)}
+.quote-card{
+  max-width:700px;margin:0 auto 28px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;
+  padding:22px 26px;text-align:left;position:relative;
+}
+.quote-card::before{content:'"';position:absolute;top:-8px;left:18px;font-size:72px;color:rgba(59,130,246,.2);font-family:Georgia,serif;line-height:1}
+.q-text{font-size:15px;line-height:1.75;color:var(--dim);padding-top:12px}
+.q-att{font-size:11px;color:var(--muted);margin-top:8px;font-weight:700}
+.q-att span{color:#93c5fd}
+.ctx-components{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ccomp{
+  display:flex;align-items:center;gap:7px;padding:9px 16px;
+  border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);
+  font-size:13px;font-weight:600;
+}
+.ccomp-icon{font-size:18px}
+
+/* ══════════════════════════════════
+   S6 — 5 TECHNIQUES
+══════════════════════════════════ */
+#s6{background:#04070f;padding:40px 60px}
+.s6-h{text-align:center;margin-bottom:28px}
+.s6-h h2{font-size:clamp(24px,3.5vw,42px);font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.s6-h p{font-size:14px;color:var(--dim)}
+.techniques{display:flex;gap:14px;max-width:1100px;width:100%}
+.tech{
+  flex:1;border-radius:14px;padding:22px 16px 18px;border:1px solid var(--border);
+  background:rgba(255,255,255,.02);position:relative;overflow:hidden;
+  transition:transform .25s,border-color .25s;cursor:default;
+}
+.tech:hover{transform:translateY(-5px)}
+.tech::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tech:nth-child(1)::before{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.tech:nth-child(2)::before{background:linear-gradient(90deg,#06b6d4,#22d3ee)}
+.tech:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.tech:nth-child(4)::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.tech:nth-child(5)::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.tech-num{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tech-icon{font-size:32px;margin-bottom:8px}
+.tech-name{font-size:15px;font-weight:800;margin-bottom:4px}
+.tech-file{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px}
+.tech-desc{font-size:11.5px;color:var(--dim);line-height:1.6;margin-bottom:10px}
+.tech-examples{display:flex;flex-direction:column;gap:3px}
+.te{font-size:10.5px;color:var(--muted);display:flex;gap:4px;align-items:flex-start}
+.te::before{content:'→';color:var(--blue-l);flex-shrink:0;font-size:10px}
+
+/* ══════════════════════════════════
+   S7 — WHAT WE BUILT
+══════════════════════════════════ */
+#s7{background:#04070f;padding:40px 60px}
+.s7-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;align-items:center;max-width:1100px;width:100%}
+.s7-txt .eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#93c5fd;margin-bottom:14px}
+.s7-txt h2{font-size:clamp(28px,3.5vw,50px);font-weight:900;letter-spacing:-.04em;line-height:1.1;margin-bottom:14px}
+.s7-txt h2 em{font-style:normal;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s7-txt p{font-size:14px;color:var(--dim);line-height:1.7;margin-bottom:20px}
+.counters{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ctr{border-radius:10px;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.ctr-n{font-size:30px;font-weight:800;font-family:var(--mono);color:var(--blue-l);line-height:1}
+.ctr-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* mock browser */
+.browser{border-radius:14px;border:1px solid rgba(255,255,255,.1);overflow:hidden;box-shadow:0 0 60px rgba(37,99,235,.15)}
+.br-bar{background:rgba(255,255,255,.05);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;gap:8px}
+.br-dots{display:flex;gap:5px}
+.brd{width:9px;height:9px;border-radius:50%}
+.brd-r{background:#ef4444}.brd-y{background:#f59e0b}.brd-g{background:#10b981}
+.br-url{flex:1;background:rgba(255,255,255,.04);border-radius:4px;padding:4px 10px;font-family:var(--mono);font-size:10px;color:var(--muted);margin:0 8px}
+.br-body{background:rgba(4,7,15,.6);padding:14px}
+.br-search{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+.br-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-size:11px;color:var(--dim)}
+.br-count{font-size:10px;color:var(--muted);white-space:nowrap}
+.br-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:10px}
+.br-tab{font-size:10px;padding:5px 10px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer}
+.br-tab.on{color:var(--blue-l);border-bottom-color:var(--blue-l);font-weight:600}
+.br-asset{
+  border-radius:8px;border:1px solid var(--border);padding:10px 12px;margin-bottom:7px;
+  background:rgba(255,255,255,.02);display:flex;align-items:center;justify-content:space-between;
+}
+.bra-l{display:flex;align-items:center;gap:8px}
+.bra-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.bra-name{font-size:12px;font-weight:600;color:var(--text)}
+.bra-team{font-size:10px;color:var(--muted)}
+.bra-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase;margin-left:5px}
+.bb-a{background:rgba(59,130,246,.15);color:#93c5fd}
+.bb-p{background:rgba(16,185,129,.15);color:#6ee7b7}
+.bb-s{background:rgba(139,92,246,.15);color:#c4b5fd}
+.bb-i{background:rgba(245,158,11,.12);color:#fcd34d}
+.bra-r{display:flex;gap:5px}
+.bra-btn{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;border:none;cursor:pointer;font-family:var(--ff)}
+.bb-install{background:#10b981;color:#fff}
+.bb-vsc{background:#2563eb;color:#fff}
+
+/* ══════════════════════════════════
+   S8 — WORKFLOW
+══════════════════════════════════ */
+#s8{background:#04070f;padding:36px 50px}
+.s8-h{text-align:center;margin-bottom:24px}
+.s8-h h2{font-size:clamp(22px,3.2vw,40px);font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.s8-h p{font-size:13px;color:var(--dim)}
+
+.wf-strip{
+  display:flex;align-items:flex-start;max-width:1120px;width:100%;
+  overflow-x:auto;padding-bottom:4px;gap:0;
+}
+.wf-node{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:96px;flex-shrink:0}
+.wf-circ{
+  width:46px;height:46px;border-radius:50%;border:2px solid;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  position:relative;z-index:1;flex-shrink:0;
+}
+.wf-title{font-size:9.5px;font-weight:700;text-align:center;line-height:1.4;color:var(--dim);max-width:80px}
+.wf-pill{font-size:8.5px;font-weight:600;padding:2px 6px;border-radius:20px;border:1px solid;white-space:nowrap;text-align:center}
+.wf-line{flex:1;height:2px;margin:0 -3px;position:relative;top:23px;min-width:14px;flex-shrink:0}
+
+.wf1 .wf-circ{border-color:#3b82f6;color:#3b82f6}
+.wf1 .wf-pill{background:rgba(59,130,246,.12);color:#93c5fd;border-color:rgba(59,130,246,.3)}
+.wf1 .wf-line{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+
+.wf2 .wf-circ{border-color:#475569;color:#94a3b8}
+.wf2 .wf-pill{background:rgba(71,85,105,.12);color:#94a3b8;border-color:rgba(71,85,105,.3)}
+.wf2 .wf-line{background:linear-gradient(90deg,#06b6d4,#10b981)}
+
+.wf3 .wf-circ{border-color:#10b981;color:#10b981}
+.wf3 .wf-pill{background:rgba(16,185,129,.1);color:#6ee7b7;border-color:rgba(16,185,129,.3)}
+.wf3 .wf-line{background:linear-gradient(90deg,#10b981,#8b5cf6)}
+
+.wf4 .wf-circ{border-color:#8b5cf6;color:#8b5cf6}
+.wf4 .wf-pill{background:rgba(139,92,246,.1);color:#c4b5fd;border-color:rgba(139,92,246,.3)}
+.wf4 .wf-line{background:linear-gradient(90deg,#8b5cf6,#3b82f6)}
+
+.wf5 .wf-circ{border-color:#3b82f6;color:#3b82f6}
+.wf5 .wf-pill{background:rgba(59,130,246,.1);color:#93c5fd;border-color:rgba(59,130,246,.3)}
+.wf5 .wf-line{background:linear-gradient(90deg,#3b82f6,#ef4444)}
+
+.wf6 .wf-circ{border-color:#ef4444;color:#ef4444}
+.wf6 .wf-pill{background:rgba(239,68,68,.1);color:#fca5a5;border-color:rgba(239,68,68,.3)}
+.wf6 .wf-line{background:linear-gradient(90deg,#ef4444,#f59e0b)}
+
+.wf7 .wf-circ{border-color:#f59e0b;color:#f59e0b}
+.wf7 .wf-pill{background:rgba(245,158,11,.1);color:#fcd34d;border-color:rgba(245,158,11,.3)}
+.wf7 .wf-line{background:linear-gradient(90deg,#f59e0b,#8b5cf6)}
+
+.wf8 .wf-circ{border-color:#8b5cf6;color:#8b5cf6;background:rgba(139,92,246,.1)}
+.wf8 .wf-pill{background:rgba(139,92,246,.15);color:#c4b5fd;border-color:rgba(139,92,246,.4)}
+.wf8 .wf-line{background:linear-gradient(90deg,#8b5cf6,#10b981)}
+
+.wf9 .wf-circ{border-color:#10b981;color:#10b981}
+.wf9 .wf-pill{background:rgba(16,185,129,.1);color:#6ee7b7;border-color:rgba(16,185,129,.3)}
+
+.pr-panel{
+  max-width:860px;width:100%;margin-top:20px;
+  border:1px solid rgba(139,92,246,.3);border-radius:12px;overflow:hidden;
+  background:rgba(139,92,246,.04);
+}
+.pr-head{
+  background:rgba(139,92,246,.08);border-bottom:1px solid rgba(139,92,246,.2);
+  padding:9px 16px;display:flex;align-items:center;gap:8px;
+  font-size:11.5px;font-weight:600;color:#c4b5fd;
+}
+.pr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}
+.pr-rule{border-radius:8px;padding:10px 12px;border:1px solid;display:flex;flex-direction:column;gap:3px}
+.pr-rule.err{background:rgba(239,68,68,.05);border-color:rgba(239,68,68,.2)}
+.pr-rule.warn{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.2)}
+.pr-sev{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.err .pr-sev{color:var(--red)}.warn .pr-sev{color:var(--amber)}
+.pr-name{font-size:11px;font-weight:700;color:var(--text)}
+.pr-note{font-size:10px;color:var(--muted)}
+
+/* ══════════════════════════════════
+   S9 — BENEFITS
+══════════════════════════════════ */
+#s9{background:radial-gradient(ellipse 80% 70% at 50% 60%,#04111f 0%,#04070f 80%);padding:40px 60px}
+#s9 .g1{width:600px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)}
+.s9-h{text-align:center;margin-bottom:28px}
+.s9-h h2{font-size:clamp(26px,3.8vw,48px);font-weight:800;letter-spacing:-.035em;margin-bottom:6px}
+.s9-h p{font-size:14px;color:var(--dim)}
+.bene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:920px;width:100%;margin-bottom:20px}
+.bene{border-radius:14px;padding:20px 18px;border:1px solid var(--border);background:rgba(255,255,255,.02);transition:all .25s}
+.bene:hover{transform:translateY(-4px);border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.03)}
+.bene-icon{font-size:26px;margin-bottom:10px}
+.bene-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.bene-desc{font-size:11.5px;color:var(--dim);line-height:1.6}
+.bene-desc strong{color:var(--green)}
+.roles-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.role-tag{padding:5px 13px;border-radius:20px;font-size:11.5px;font-weight:600;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--dim)}
+
+/* ══════════════════════════════════
+   S10 — CTA + LINKS
+══════════════════════════════════ */
+#s10{background:radial-gradient(ellipse 90% 80% at 50% 50%,#060d20 0%,#04070f 80%);text-align:center}
+#s10 .g1{width:800px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.2),transparent 70%)}
+.s10-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;border:1px solid rgba(16,185,129,.3);background:rgba(16,185,129,.08);color:#6ee7b7;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:20px}
+.s10-h{font-size:clamp(36px,6vw,82px);font-weight:900;letter-spacing:-.05em;line-height:.95;margin-bottom:16px}
+.s10-h .l1{background:linear-gradient(135deg,#f0f4ff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s10-h .l2{background:linear-gradient(135deg,#3b82f6,#06b6d4,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.s10-sub{font-size:16px;color:var(--dim);max-width:480px;margin:0 auto 28px;line-height:1.7}
+.link-cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.link-card{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 24px;border-radius:12px;border:1px solid;
+  text-decoration:none;transition:all .25s;cursor:pointer;
+  min-width:200px;
+}
+.lc-catalog{background:rgba(37,99,235,.08);border-color:rgba(59,130,246,.3);color:var(--text)}
+.lc-catalog:hover{background:rgba(37,99,235,.15);border-color:rgba(59,130,246,.6);transform:translateY(-3px);box-shadow:0 12px 40px rgba(37,99,235,.25)}
+.lc-workflow{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.3);color:var(--text)}
+.lc-workflow:hover{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.5);transform:translateY(-3px);box-shadow:0 12px 40px rgba(16,185,129,.2)}
+.lc-guide{background:rgba(139,92,246,.06);border-color:rgba(139,92,246,.3);color:var(--text)}
+.lc-guide:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.5);transform:translateY(-3px);box-shadow:0 12px 40px rgba(139,92,246,.2)}
+.lc-contribute{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.3);color:var(--text)}
+.lc-contribute:hover{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.5);transform:translateY(-3px);box-shadow:0 12px 40px rgba(245,158,11,.15)}
+.lc-icon{font-size:26px;flex-shrink:0}
+.lc-name{font-size:14px;font-weight:700;margin-bottom:2px;text-align:left}
+.lc-desc{font-size:11px;color:var(--dim);text-align:left}
+.team-credit{display:flex;align-items:center;justify-content:center;gap:10px}
+.tc-label{font-size:12px;color:var(--muted)}
+.tc-avs{display:flex;gap:5px}
+.tc-av{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="hint">
+  <kbd>←</kbd><kbd>→</kbd> navigate
+  <kbd>F</kbd> fullscreen
+  <span id="hnum">1/10</span>
+  <button class="fsbtn" onclick="fs()" title="Fullscreen">⛶</button>
+</div>
+
+<div class="prog" id="prog"></div>
+
+<div class="deck">
+
+<!-- ══ S1: TITLE ══ -->
+<div class="slide active" id="s1">
+  <div class="grid"></div>
+  <div class="glow g1" style="width:700px;height:500px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(37,99,235,.22),transparent 70%)"></div>
+  <div class="glow g2" style="width:300px;height:300px;bottom:0;left:10%;background:radial-gradient(circle,rgba(6,182,212,.1),transparent 70%)"></div>
+
+  <div class="s1-stat a1 ac">77%</div>
+  <div class="s1-stat-label a2">of developers don't trust their AI-generated code output</div>
+  <h1 class="s1-main a3">We've been using AI wrong.<br><span class="hi">Here's how we fixed it.</span></h1>
+  <p class="s1-sub a4">IT Platform · All Hands · 5-Minute Pitch</p>
+</div>
+
+<!-- ══ S2: THE PROBLEM ══ -->
+<div class="slide" id="s2">
+  <div class="s2-top a1">
+    <h2>🙋 <span style="color:var(--red)">Sound familiar?</span></h2>
+    <p style="font-size:14px;color:var(--dim);margin-top:6px">Every role. Every day. The same frustration.</p>
+  </div>
+  <div class="personas">
+    <div class="persona p1 a2">
+      <span class="persona-emoji">👨‍💻</span>
+      <div class="persona-role">Developer</div>
+      <div class="persona-prompt">"Fix this function"</div>
+      <div class="persona-fail"><span class="x">✗</span> Got JavaScript. You're on C# .NET 8. Wrong patterns. No async. No CancellationToken.</div>
+    </div>
+    <div class="persona p2 a3">
+      <span class="persona-emoji">📋</span>
+      <div class="persona-role">Scrum Master</div>
+      <div class="persona-prompt">"Write story acceptance criteria"</div>
+      <div class="persona-fail"><span class="x">✗</span> Generic Gherkin template. Ignores your DoD format, Jira conventions, sprint goals.</div>
+    </div>
+    <div class="persona p3 a4">
+      <span class="persona-emoji">🧪</span>
+      <div class="persona-role">QA / Tester</div>
+      <div class="persona-prompt">"Generate test cases"</div>
+      <div class="persona-fail"><span class="x">✗</span> Textbook test scenarios. Misses all your domain rules, edge cases, and platform specifics.</div>
+    </div>
+    <div class="persona p4 a5">
+      <span class="persona-emoji">📊</span>
+      <div class="persona-role">Project Manager</div>
+      <div class="persona-prompt">"Write sprint status update"</div>
+      <div class="persona-fail"><span class="x">✗</span> Corporate boilerplate. Wrong RAG format, no stakeholder names, wrong risk language.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S3: ROOT CAUSE ══ -->
+<div class="slide" id="s3">
+  <div class="grid" style="opacity:.5"></div>
+  <div class="glow g1" style="width:600px;height:400px;top:40%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.15),transparent 70%)"></div>
+  <div class="s3-label a1">The real diagnosis</div>
+  <h2 class="s3-headline a2">The AI isn't <span class="no">broken.</span><br>The context is <span class="yes">missing.</span></h2>
+  <div class="analogy-row a3">
+    <div class="analogy-box ab-cpu"><div class="ab-top">🤖</div><div class="ab-mid">The LLM</div><div class="ab-bot">= the CPU</div></div>
+    <div class="analogy-eq">+</div>
+    <div class="analogy-box ab-ram"><div class="ab-top">📦</div><div class="ab-mid">Context Window</div><div class="ab-bot">= the RAM</div></div>
+    <div class="analogy-eq">+</div>
+    <div class="analogy-box ab-os"><div class="ab-top">⚙️</div><div class="ab-mid">You</div><div class="ab-bot">= the OS</div></div>
+  </div>
+  <blockquote class="karpathy-quote a4">
+    "Context engineering is the delicate art of filling the context window with exactly the right information for the task to be plausibly solvable."
+    <div class="kq-attr">— Andrej Karpathy, Co-Founder OpenAI · June 2025</div>
+  </blockquote>
+</div>
+
+<!-- ══ S4: BEFORE / AFTER ══ -->
+<div class="slide" id="s4">
+  <div class="s4-h a1">
+    <h2>Same task. Same AI. <span style="background:linear-gradient(135deg,#ef4444,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Completely different result.</span></h2>
+    <p style="font-size:13px;color:var(--dim);margin-top:6px">The only variable: context.</p>
+  </div>
+  <div class="compare">
+    <div class="side side-bad a2">
+      <div class="side-lbl">✗ Without context</div>
+      <div class="side-prompt sp-bad">"Write a method to get users"</div>
+      <div class="outcome"><span class="bad-r">Result:</span> Generic synchronous method. Wrong language. Wrong patterns. No async, no error handling, no null guards. Developer rewrites from scratch.</div>
+    </div>
+    <div class="compare-mid a3">→</div>
+    <div class="side side-good a4">
+      <div class="side-lbl">✓ With context engineering</div>
+      <div class="side-prompt sp-good"><span class="ctx-token">IUserRepository</span> <span class="ctx-token">EF Core async</span> <span class="ctx-token">CancellationToken</span> <span class="ctx-token">List&lt;UserDto&gt;</span> <span class="ctx-token">AsNoTracking</span> <span class="ctx-token">isActive=true</span></div>
+      <div class="outcome"><span class="good-r">Result:</span> Production-ready. Correct patterns. Our naming conventions. XML docs. Ready to commit. First time, every time.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S5: CONTEXT ENGINEERING ══ -->
+<div class="slide" id="s5">
+  <div class="glow g1" style="width:500px;height:400px;top:0;right:-100px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%)"></div>
+  <div class="glow g2" style="width:400px;height:400px;bottom:0;left:-80px;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 70%)"></div>
+  <div class="evolution a1">
+    <div class="evo evo-old"><div class="evo-era">Yesterday</div><div class="evo-name">Prompt Engineering</div><div class="evo-desc">"What you say"</div></div>
+    <div class="evo-arr">→</div>
+    <div class="evo evo-new"><div class="evo-era">Now & Future</div><div class="evo-name">Context Engineering</div><div class="evo-desc">"Everything the model sees"</div></div>
+  </div>
+  <div class="quote-card a2">
+    <p class="q-text">"I really like 'context engineering' over prompt engineering. It describes the core skill better: providing all the context for the task to be plausibly solvable by the LLM."</p>
+    <div class="q-att"><span>Tobi Lütke</span>, CEO Shopify &nbsp;·&nbsp; Endorsed by <span>Andrej Karpathy</span>, Co-Founder OpenAI · June 2025</div>
+  </div>
+  <div class="ctx-components a3">
+    <div class="ccomp"><span class="ccomp-icon">📐</span> Instructions</div>
+    <div class="ccomp"><span class="ccomp-icon">💬</span> Prompts</div>
+    <div class="ccomp"><span class="ccomp-icon">🤖</span> Agents</div>
+    <div class="ccomp"><span class="ccomp-icon">🛠</span> Skills</div>
+    <div class="ccomp"><span class="ccomp-icon">🔌</span> MCP Plugins</div>
+  </div>
+</div>
+
+<!-- ══ S6: 5 TECHNIQUES ══ -->
+<div class="slide" id="s6">
+  <div class="s6-h a1">
+    <h2>5 ways to engineer context in Copilot</h2>
+    <p>Inspired by <strong style="color:#93c5fd">github.com/github/awesome-copilot</strong></p>
+  </div>
+  <div class="techniques">
+    <div class="tech a2">
+      <div class="tech-num">01</div>
+      <div class="tech-icon">📐</div>
+      <div class="tech-name">Instructions</div>
+      <div class="tech-file">.github/copilot-instructions.md</div>
+      <div class="tech-desc">Permanent rules applied to every suggestion. Your "always on" layer.</div>
+      <div class="tech-examples">
+        <div class="te">C# 12 + nullable refs</div>
+        <div class="te">Repository + Service pattern</div>
+      </div>
+    </div>
+    <div class="tech a3">
+      <div class="tech-num">02</div>
+      <div class="tech-icon">💬</div>
+      <div class="tech-name">Prompts</div>
+      <div class="tech-file">.github/prompts/</div>
+      <div class="tech-desc">Reusable templates — same great output every time.</div>
+      <div class="tech-examples">
+        <div class="te">Jira story creator</div>
+        <div class="te">PR description generator</div>
+      </div>
+    </div>
+    <div class="tech a4">
+      <div class="tech-num">03</div>
+      <div class="tech-icon">🤖</div>
+      <div class="tech-name">Agents</div>
+      <div class="tech-file">.github/agents/</div>
+      <div class="tech-desc">Specialist modes — invoked with @agent-name in chat.</div>
+      <div class="tech-examples">
+        <div class="te">@code-review, @security-cx</div>
+        <div class="te">@sonar, @test-gen</div>
+      </div>
+    </div>
+    <div class="tech a5">
+      <div class="tech-num">04</div>
+      <div class="tech-icon">🛠</div>
+      <div class="tech-name">Skills</div>
+      <div class="tech-file">.github/skills/</div>
+      <div class="tech-desc">Shared pattern libraries Copilot references on demand.</div>
+      <div class="tech-examples">
+        <div class="te">Async/await patterns</div>
+        <div class="te">Azure SDK integration</div>
+      </div>
+    </div>
+    <div class="tech" style="animation:fu .5s ease both .85s">
+      <div class="tech-num">05</div>
+      <div class="tech-icon">🔌</div>
+      <div class="tech-name">MCP Plugins</div>
+      <div class="tech-file">Model Context Protocol</div>
+      <div class="tech-desc">Live data from Jira, ADO, Confluence fed into context.</div>
+      <div class="tech-examples">
+        <div class="te">Query live work items</div>
+        <div class="te">Fetch Confluence docs</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S7: WHAT WE BUILT ══ -->
+<div class="slide" id="s7">
+  <div class="s7-wrap">
+    <div class="s7-txt">
+      <div class="eyebrow a1">What our team built</div>
+      <h2 class="a2">Our own<br><em>AI Assets</em><br>Catalog.</h2>
+      <p class="a3">Inspired by the official GitHub awesome-copilot — built for our teams. Searchable, installable, shareable.</p>
+      <div class="counters a4">
+        <div class="ctr"><div class="ctr-n">21+</div><div class="ctr-l">AI Assets</div></div>
+        <div class="ctr"><div class="ctr-n">7</div><div class="ctr-l">Agents</div></div>
+        <div class="ctr"><div class="ctr-n">6</div><div class="ctr-l">Prompts</div></div>
+        <div class="ctr"><div class="ctr-n">4</div><div class="ctr-l">Skill Libraries</div></div>
+      </div>
+    </div>
+    <div class="browser a5">
+      <div class="br-bar">
+        <div class="br-dots"><div class="brd brd-r"></div><div class="brd brd-y"></div><div class="brd brd-g"></div></div>
+        <div class="br-url">team-ai-assets / catalog</div>
+      </div>
+      <div class="br-body">
+        <div class="br-search">
+          <div class="br-input">🔍 Search agents, prompts, skills…</div>
+          <div class="br-count">21 assets</div>
+        </div>
+        <div class="br-tabs">
+          <div class="br-tab on">All</div>
+          <div class="br-tab">🤖 Agents</div>
+          <div class="br-tab">💬 Prompts</div>
+          <div class="br-tab">🛠 Skills</div>
+          <div class="br-tab">📋 Instructions</div>
+        </div>
+        <div class="br-asset">
+          <div class="bra-l"><div class="bra-icon" style="background:rgba(59,130,246,.15)">🔍</div><div><div style="display:flex;align-items:center"><div class="bra-name">Code Review Agent</div><div class="bra-badge bb-a">Agent</div></div><div class="bra-team">Platform Eng · 🔥 Premium</div></div></div>
+          <div class="bra-r"><button class="bra-btn bb-install">↓ Install</button><button class="bra-btn bb-vsc">VS Code</button></div>
+        </div>
+        <div class="br-asset">
+          <div class="bra-l"><div class="bra-icon" style="background:rgba(239,68,68,.12)">🛡️</div><div><div style="display:flex;align-items:center"><div class="bra-name">Security Agent (Checkmarx)</div><div class="bra-badge bb-a">Agent</div></div><div class="bra-team">Security Guild · 🔥 Premium</div></div></div>
+          <div class="bra-r"><button class="bra-btn bb-install">↓ Install</button><button class="bra-btn bb-vsc">VS Code</button></div>
+        </div>
+        <div class="br-asset">
+          <div class="bra-l"><div class="bra-icon" style="background:rgba(16,185,129,.12)">📋</div><div><div style="display:flex;align-items:center"><div class="bra-name">Jira Story Creator</div><div class="bra-badge bb-p">Prompt</div></div><div class="bra-team">All Teams · ⚡ Free</div></div></div>
+          <div class="bra-r"><button class="bra-btn bb-install">↓ Install</button><button class="bra-btn bb-vsc">VS Code</button></div>
+        </div>
+        <div class="br-asset">
+          <div class="bra-l"><div class="bra-icon" style="background:rgba(139,92,246,.12)">⚙️</div><div><div style="display:flex;align-items:center"><div class="bra-name">C# Async/Await Skill</div><div class="bra-badge bb-s">Skill</div></div><div class="bra-team">Platform Eng · 💛 Either</div></div></div>
+          <div class="bra-r"><button class="bra-btn bb-install">↓ Install</button><button class="bra-btn bb-vsc">VS Code</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S8: WORKFLOW ══ -->
+<div class="slide" id="s8">
+  <div class="s8-h a1">
+    <h2>From Story to <span style="background:linear-gradient(135deg,#10b981,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Merged PR</span></h2>
+    <p>AI at every step of the developer journey — Jira through Azure DevOps</p>
+  </div>
+  <div class="wf-strip a2">
+    <div class="wf-node wf1"><div class="wf-circ">📋</div><div class="wf-title">Jira Story</div><div class="wf-pill">@jira-story</div></div>
+    <div class="wf-line wf1"></div>
+    <div class="wf-node wf2"><div class="wf-circ">🌿</div><div class="wf-title">Branch Setup</div><div class="wf-pill">auto-instructions</div></div>
+    <div class="wf-line wf2"></div>
+    <div class="wf-node wf3"><div class="wf-circ">💻</div><div class="wf-title">Develop</div><div class="wf-pill">skills + free</div></div>
+    <div class="wf-line wf3"></div>
+    <div class="wf-node wf4"><div class="wf-circ">🧪</div><div class="wf-title">Test</div><div class="wf-pill">@test-gen</div></div>
+    <div class="wf-line wf4"></div>
+    <div class="wf-node wf5"><div class="wf-circ">🔍</div><div class="wf-title">Code Review</div><div class="wf-pill">@code-review</div></div>
+    <div class="wf-line wf5"></div>
+    <div class="wf-node wf6"><div class="wf-circ">🛡️</div><div class="wf-title">Security</div><div class="wf-pill">@security-cx</div></div>
+    <div class="wf-line wf6"></div>
+    <div class="wf-node wf7"><div class="wf-circ">📤</div><div class="wf-title">Create PR (ADO)</div><div class="wf-pill">@ado-agent</div></div>
+    <div class="wf-line wf7"></div>
+    <div class="wf-node wf8"><div class="wf-circ">🤖</div><div class="wf-title">AI Pipeline</div><div class="wf-pill">automated</div></div>
+    <div class="wf-line wf8"></div>
+    <div class="wf-node wf9"><div class="wf-circ">✅</div><div class="wf-title">Peer Review & Merge</div><div class="wf-pill">@doc-writer</div></div>
+  </div>
+  <div class="pr-panel a3">
+    <div class="pr-head">🤖 AI PR Pipeline — auto-runs on every Azure DevOps pull request</div>
+    <div class="pr-grid">
+      <div class="pr-rule err"><div class="pr-sev">Error</div><div class="pr-name">Null Checks</div><div class="pr-note">Missing guards on params</div></div>
+      <div class="pr-rule err"><div class="pr-sev">Error</div><div class="pr-name">Async/Await</div><div class="pr-note">.Result, async void, no CT</div></div>
+      <div class="pr-rule err"><div class="pr-sev">Error</div><div class="pr-name">Hardcoded Secrets</div><div class="pr-note">Keys/passwords in source</div></div>
+      <div class="pr-rule warn"><div class="pr-sev">Warning</div><div class="pr-name">Magic Numbers + TODOs</div><div class="pr-note">Untracked tech debt</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9: BENEFITS ══ -->
+<div class="slide" id="s9">
+  <div class="glow g1" style="width:600px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)"></div>
+  <div class="s9-h a1">
+    <h2>What this means for <span style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">everyone</span></h2>
+    <p>Not just developers. Every role on every team.</p>
+  </div>
+  <div class="bene-grid">
+    <div class="bene a2"><div class="bene-icon">⚡</div><div class="bene-title">First-time-right output</div><div class="bene-desc">Context-rich prompts produce code that fits your codebase <strong>immediately</strong> — no rewrites.</div></div>
+    <div class="bene a3"><div class="bene-icon">🔁</div><div class="bene-title">Team knowledge scales</div><div class="bene-desc">Assets live in the repo. <strong>Senior knowledge flows to every developer automatically</strong>.</div></div>
+    <div class="bene a4"><div class="bene-icon">🛡️</div><div class="bene-title">Quality baked in</div><div class="bene-desc">AI pipeline catches issues <strong>before peer review</strong> — not after deployment.</div></div>
+    <div class="bene a5"><div class="bene-icon">🤝</div><div class="bene-title">Relevant for every role</div><div class="bene-desc">Dev, tester, SM, PM — <strong>all get AI outputs built for their specific workflows</strong>.</div></div>
+    <div class="bene" style="animation:fu .5s ease both .7s"><div class="bene-icon">📈</div><div class="bene-title">Contribute & compound</div><div class="bene-desc">What one team builds, <strong>every team benefits from</strong>. Upload your own assets.</div></div>
+    <div class="bene" style="animation:fu .5s ease both .85s"><div class="bene-icon">🎯</div><div class="bene-title">Consistency at scale</div><div class="bene-desc">Same standards, <strong>enforced automatically</strong> across every PR, every sprint.</div></div>
+  </div>
+  <div class="roles-row" style="animation:fu .5s ease both 1s">
+    <div class="role-tag">👨‍💻 Developers</div>
+    <div class="role-tag">🧪 QA / Testers</div>
+    <div class="role-tag">📋 Scrum Masters</div>
+    <div class="role-tag">📊 Project Managers</div>
+    <div class="role-tag">🏗️ Architects</div>
+    <div class="role-tag">☁️ Cloud Engineers</div>
+    <div class="role-tag">🔒 Security</div>
+  </div>
+</div>
+
+<!-- ══ S10: CTA + LINKS ══ -->
+<div class="slide" id="s10">
+  <div class="grid" style="opacity:.3"></div>
+  <div class="glow g1" style="width:800px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.2),transparent 70%)"></div>
+  <div class="s10-badge a1">✦ Built by your team. For every team.</div>
+  <h1 class="s10-h a2">
+    <span class="l1">The AI was always ready.</span>
+    <span class="l2">Now — so are we.</span>
+  </h1>
+  <p class="s10-sub a3">Everything your team needs is live, tested, and ready. Browse the catalog, follow the workflow, and contribute your own assets.</p>
+
+  <div class="link-cards a4">
+    <div class="link-card lc-catalog" onclick="open('C:\Users\fenil\Downloads\catalog-v3.html','_blank')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')open('catalog-v3.html','_blank')">
+      <div class="lc-icon">📦</div>
+      <div><div class="lc-name">AI Assets Catalog</div><div class="lc-desc">Browse &amp; install all agents, prompts, skills</div></div>
+    </div>
+    <div class="link-card lc-workflow" onclick="open('catalog-v3.html#workflow','_blank')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')open('catalog-v3.html#workflow','_blank')">
+      <div class="lc-icon">🔄</div>
+      <div><div class="lc-name">Developer Workflow</div><div class="lc-desc">Story to merged PR — step by step</div></div>
+    </div>
+    <div class="link-card lc-guide" onclick="open('catalog-v3.html#guide','_blank')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')open('catalog-v3.html#guide','_blank')">
+      <div class="lc-icon">📖</div>
+      <div><div class="lc-name">Developer Guide</div><div class="lc-desc">Model selection, dos &amp; don'ts, shortcuts</div></div>
+    </div>
+    <div class="link-card lc-contribute" onclick="open('catalog-v3.html#contribute','_blank')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')open('catalog-v3.html#contribute','_blank')">
+      <div class="lc-icon">✦</div>
+      <div><div class="lc-name">Contribute</div><div class="lc-desc">Upload your team's agents &amp; prompts</div></div>
+    </div>
+  </div>
+
+  <div class="team-credit a5">
+    <div class="tc-label">Built with ❤️ by</div>
+    <div class="tc-avs">
+      <div class="tc-av" style="background:linear-gradient(135deg,#2563eb,#1d4ed8)">PE</div>
+      <div class="tc-av" style="background:linear-gradient(135deg,#dc2626,#b91c1c)">SG</div>
+      <div class="tc-av" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">QA</div>
+      <div class="tc-av" style="background:linear-gradient(135deg,#059669,#047857)">AG</div>
+      <div class="tc-av" style="background:linear-gradient(135deg,#d97706,#b45309)">DO</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Platform Eng · Security · QA · API Guild · DevOps</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- controls -->
+<div class="ctrl">
+  <button class="cbtn" onclick="prev()">←</button>
+  <div class="dots" id="dots"></div>
+  <button class="cbtn" onclick="next()">→</button>
+  <div class="cn" id="cn">1/10</div>
+</div>
+
+<script>
+const IDS=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+let cur=0;
+
+function show(){
+  IDS.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('active','prev');
+    if(i===cur)el.classList.add('active');
+    else if(i<cur)el.classList.add('prev');
+  });
+  // dots
+  document.getElementById('dots').innerHTML=IDS.map((_,i)=>
+    `<div class="d${i===cur?' on':''}" onclick="go(${i})"></div>`
+  ).join('');
+  const t=`${cur+1}/${IDS.length}`;
+  document.getElementById('cn').textContent=t;
+  document.getElementById('hnum').textContent=t;
+  document.getElementById('prog').style.width=`${((cur+1)/IDS.length)*100}%`;
+}
+
+function next(){if(cur<IDS.length-1){cur++;show()}}
+function prev(){if(cur>0){cur--;show()}}
+function go(i){cur=i;show()}
+
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','Space',' '].includes(e.key)){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev()}
+  else if(e.key==='f'||e.key==='F')fs();
+  else if(e.key==='Escape'&&document.fullscreenElement)document.exitFullscreen();
+});
+
+// touch
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50)d>0?next():prev()},{passive:true});
+
+function fs(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+// Wire S10 link cards — update href if catalog file is renamed
+document.querySelectorAll('.link-card').forEach(c=>{
+  c.addEventListener('click',function(){
+    const href=this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+    if(href)window.open(href,'_blank');
+  });
+});
+
+show();
+</script>
+</body>
+</html>
